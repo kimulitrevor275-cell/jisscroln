@@ -1,0 +1,140 @@
+#head1{
+  postion:fixed;
+  border: solid,10px,blue;
+  border-radius: 39px;
+  background-color: black;
+  border-top-color: wheat;
+  border-bottom-color: wheat;
+  border-block-start-color: wheat;
+  border-inline-start: red;
+  border-inline-end: red;
+  box-shadow: 0 4px 120x rgba(0,0,0,0.4);
+  font-size: 49px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+body {
+  background-color: black;
+  font-family: Arial, sans-serif;
+  color: gold;
+  text-align: left;
+  margin: 28px;
+}
+h1{
+  color: gold;
+}
+.box {
+  border: 10px solid red;
+  border-inline-end: red;
+  border-inline-start: gold;
+  border-bottom-color: wheat;
+  border-top-color: black;
+  width:  515px;
+  height: 30px;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 100px;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.7);
+  margin-bottom: 100px;
+}
+p{
+  text-align: left;
+  margin: 1px;
+  font-size: 30px;
+  font-family: monospace;
+  color: bisque;
+}
+img {
+  float: left 2px;
+  width:  500px;
+  height:auto;
+}
+
+
+h1 {
+  color: white;
+  font-size: 60px;
+  
+}
+
+h2 {
+  color: gray;
+  margin-top: 59px;
+  font-size: 59;
+}
+
+p {
+  font-size: 59px;
+  color: white;
+}
+
+#a{
+  text-decoration: none;
+  font-size: 40px;
+  color: gold;
+  font-family: bold;  display: inline-block;      
+  text-decoration: none;       
+  white-space: normal;        
+  word-wrap: break-word;       
+  background: maroon;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: none;
+  font-family: monospace;
+  text-align: center;
+  width: auto;                 
+  max-width: 90%;              
+  box-sizing: border-box;    
+}
+
+#a:hover {
+  text-decoration: underline;
+}
+.navbar {
+    position: absolute;       
+    text-combine-upright: : 0px;          
+    left : 45px;  
+    top: 220px;
+    display: flex;
+    flex-direction: horizontal; 
+    gap: 20px;              
+}
+
+.navbar button {
+    position: relative;
+    padding: 15px 15px;
+    font: monospace;
+    font-size: 30px;
+    color: dimgrey;
+    background: wheat;
+    border: solid;
+    border-radius: 40px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: background 0.3s;
+}
+
+.navbar button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.5s ease;
+}
+
+.navbar button:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.navbar button:hover {
+    background: black;
+    font-size: 40px;
+    border-color: red;l
+}
