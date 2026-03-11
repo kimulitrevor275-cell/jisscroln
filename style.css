@@ -1,1 +1,135 @@
-i
+#head1{
+  postion:fixed;
+  border: solid,10px,blue;
+  border-radius: 39px;
+  background-color: black;
+  border-top-color: wheat;
+  border-bottom-color: wheat;
+  border-block-start-color: wheat;
+  border-inline-start: red;
+  border-inline-end: red;
+  box-shadow: 0 4px 120x rgba(0,0,0,0.4);
+  font-size: 49px;
+  margin-bottom: 20px;
+  text-align: center;
+  
+}
+
+body {
+  background-color: black;  
+  font-family: Arial, sans-serif;
+  color: brown;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.box {
+  border: 10px solid red;
+  border-inline-end: red;
+  border-inline-start: gold;
+  border-bottom-color: wheat;
+  border-top-color: black;
+  width:  515px;
+  height: 30px;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 100px;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.7);
+  margin-bottom: 100px;
+}
+p{
+  text-align: left;
+  margin: 1px;
+  font-size: 30px;
+  font-family: monospace;
+  color: white;
+}
+h1 {
+  
+  color: dimgrey;
+  font-size: 60px;
+  
+  
+}
+h3{
+  color: white;
+  font-size: 40px;
+  border-radius: 20px;
+  
+}
+#trends{
+  border: 10px,solid,dimgrey;
+  border-radius: 39px;
+  border-inline-start: red;
+  border-inline-end: red;
+  font-size: 30px;
+  background-color: black;
+  color: black;
+  margin-bottom: 100px;
+  margin-top: 100px;
+  
+}
+#breaking{
+    border: 10px,solid, dimgrey;
+  border-radius: 39px;
+  border-inline-start: red;
+  border-inline-end: red;
+  font-size: 30px;
+  background-color: black;
+  color: black;
+}
+img{
+  float: ;
+  width: 200px;
+  height: auto;
+}
+.navbar {
+    position: absolute;
+    text-combine-upright: : 50px;          
+    left :43px;
+  top: 195px;
+    display: flex;
+    flex-direction: horizontal; 
+    gap: 20px;              
+}
+
+
+.navbar button {
+  text-decoration: none;
+    position: relative;
+    padding: 15px 15px;
+    font: monospace;
+    font-size: 30px;
+    color: dimgrey;
+    background: wheat;
+    border: solid;
+    border-radius: 40px;
+    cursor: pointer;
+    overflow: hidden;
+    transition:color 0.8s ease;
+}
+
+.navbar button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: black;
+    border-radius: 100%;
+    transform: translate(-50%, -50%) scale(0);
+    transition:  color 0.5s ease;
+}
+
+.navbar button:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.navbar button:hover {
+    background: blue;
+  color: white;
+}
+.navbar::active{
+  font-size: 10px;
+  
+}
