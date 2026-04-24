@@ -47,7 +47,7 @@ trendsSection.innerHTML = `
       
        <div class="song">
     <span id="rank">2<b id="neutral">●</b></span>
-    <img src="pics/20.jpg"><span id="songname">Dracula</span><b>Jennie & Tame impala</b>
+    img.src="https://res.cloudinary.com/dvxl03ips/image/upload/v1776955966/blackpink-go_reewuf.jpg"><span id="songname">Dracula</span><b>Jennie & Tame impala</b>
       <span class="days">14d</span>
     </div><hr>
       
