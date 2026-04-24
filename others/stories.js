@@ -19,7 +19,7 @@
 const DATA = [
 
   {
-    img      : 'pics/12.jpg',
+    img      : 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776956041/sddefault_mr6epx.jpg ',
     cat      : 'Money & Family',
     cc       : 'cc-money',
     badge    : 'Trending',
