@@ -1,23 +1,165 @@
 <!DOCTYPE html>
 <html>
-<head>  
- <link rel="stylesheet" href="others.css">
+<head> 
+ <meta charset="UTF-8">
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://res.cloudinary.com">
+ <link rel="stylesheet" href="other.css">
+ <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+
   <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
-  <title>The Jisports</title>
- 
- <header id="head1">
-   <nav class="navbar">
-  <a href="/index.html"><button class="button" >Home</button></a>
-  <a href="/trends/"> <button class="button">Trends</button></a>
-  <a href="/sports/"><button class="button">sports</button></a>
-  <a href="/others/"><button class="button" >Others</button></a>
-    </nav>
-      <h1>The JisScroL</h1>
- </header>
-  <div class="box"></div>
+  <title>The JisScroL</title>
 </head>
 <body>
+ 
+ 
+   <header id="head1"> 
+   <h1 class="logo"><img id="logo"src="pics/m.png"></h1>
+   <nav class="navbar">
+     
+    <a  href="index.html" class="button">Home</a>
+    <a  href="newpage.html" class="button ">Trends</a>
+    <a  href="sports.html" class="button">Sports</a>
+    <a  href="others.html" class="button  active">Explore</a>
+   </nav><hr>
+
   
+  </header>
+    
+ 
+<!-- CHARTS SECTION -->
+<section class="charts-section">
+ <div class="section-label">JisScroL COVERS</div>
+ <div class="charts-scroll">
+
+    <!-- CARD 1 -->
+    <div class="chart-card">
+      <div id="chart-cover1">
+ 
+    </div>
+
+      <div class="chart-info">
+        <h3 class="chart-name">Trending 20</h3>
+        <p class="chart-type">Chart · Uganda</p>
+      </div>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="chart-card">
+      <div id="chart-cover2">
+      </div>
+      <div class="chart-info">
+        <h3 class="chart-name">Daily Top Videos</h3>
+        <p class="chart-type">Chart · Uganda</p>
+      </div>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="chart-card">
+      <div id="chart-cover3">
+      </div>
+      <div class="chart-info">
+        <h3 class="chart-name">Top 15</h3>
+        <p class="chart-type">Chart · Uganda</p>
+      </div>
+    </div>
+
+    <!-- CARD 4 -->
+    <div class="chart-card">
+      <div id="chart-cover4">
+      </div>
+
+      <div class="chart-info">
+        <h3 class="chart-name">Hot 50 Africa</h3>
+        <p class="chart-type">Chart · Regional</p>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+ <div class="chart-dots" id="chartDots">
+  <div class="dot active"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+</div>
+ 
+ 
+ 
+ 
+ <div class="section-label">JisScroL GLOBAL MUSIC CHARTS</div>
+ <div class="musiccharts">  
+    <div class="polls">
+    <div>
+        <section id="poll1"></section> 
+      </div>
+    <div> 
+         <section id="poll2"></section>
+      </div>
+    <div>
+        
+       <section id="poll3"></section>
+      </div>
+     <div>
+        <section id="poll4"></section>
+      </div>
+    </div>
+  </div>
+ 
+ <div class="chart-dots" id="musicDots">
+  <div class="dot active" data-page="poll1"></div>
+  <div class="dot" data-page="poll2"></div>
+  <div class="dot" data-page="poll3"></div>
+  <div class="dot" data-page="poll4"></div>
+</div>
+ 
+ 
+ 
+ 
+
+
+
+<div class="section-header">
+  <span class="section-title">Random Stories</span>
+  <a href="#" class="see-all">See all</a>
+</div>
+
+<div id="feed"></div>
+
+<script src="stories.js"></script>
+
+ 
+    
+    
+ 
   
+ <script src="others.js"> </script>
+  <footer class="about_us">
+   <h2 id="Email"> ©JisScroL <br>
+     Email: thejisscrol.gmail.com<br><br>
+      <a id="icon" href="about.html">Terms of use</a><br><br></h2>
+   <br>
+     <h4 id="icon">
+     <a  href="https://x.com/boyslovepor" target="_blank" rel="noopener">
+     <svg viewBox= "0 0 24 24" width="90" height="90" fill="white" xmlns="http://www.w3.org/2000/svg">
+     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+     </svg>
+     </a>
+
+    <a  href="https://wa.me/256765247503" target="_blank">
+    <svg viewBox="0 0 24 24" width="90" height="90" fill="#25D366" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.38 1.26 4.8L2 22l5.43-1.37c1.37.73 2.93 1.15 4.61 1.15 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm4.96 13.06c-.21.59-1.22 1.13-1.67 1.19-.45.06-.87.21-2.94-.61-2.47-1-4.03-3.51-4.15-3.67-.12-.16-.99-1.32-.99-2.52s.63-1.79.85-2.03c.22-.24.48-.3.64-.3h.46c.15 0 .35-.06.55.42.21.49.71 1.73.77 1.86.06.12.1.27.02.43-.08.16-.12.26-.24.4-.12.14-.25.31-.36.42-.12.12-.24.24-.1.48.14.24.62.99 1.32 1.6.9.8 1.66 1.05 1.9 1.17.24.12.38.1.52-.06.14-.16.6-.7.76-.94.16-.24.32-.2.54-.12.22.08 1.39.66 1.63.78.24.12.4.18.46.28.06.1.06.56-.15 1.15z"/>
+    </svg>
+    </a>
+  
+    <a href="https://tiktok.com/@yourhandle" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" width="90" height="90" fill="white" xmlns="http://www.w3.org/2000/svg">
+    <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.05a8.2 8.2 0 004.79 1.52V7.13a4.85 4.85 0 01-1.02-.44z"/>
+    </svg>
+    </a></h4>
+    <div></div><br>    
+ </footer>
 </body>
-</html>
+
+ </html>
