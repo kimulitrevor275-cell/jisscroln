@@ -3,7 +3,7 @@ const trendsSection = document.getElementById('chart-cover1');
 trendsSection.innerHTML = ` 
     <a href="https://music.youtube.com/watch?v=xiZUf98A1Ts&si=tLu9tvhV9Q10hw0c">
 <img src="https://res.cloudinary.com/demo/image/upload/sample.jpg"  class="chart-img">
-     <a>     
+     </a>     
 `;
 });
 
