@@ -1,263 +1,179 @@
-document.addEventListener('DOMContentLoaded', function() {
-const trendsSection = document.getElementById('chart-cover1');
-trendsSection.innerHTML = ` 
-    <a href="https://music.youtube.com/watch?v=xiZUf98A1Ts&si=tLu9tvhV9Q10hw0c">
-<img src="https://res.cloudinary.com/demo/image/upload/sample.jpg"  class="chart-img">
-     </a>     
-`;
-});
+// ─────────────────────────────────────────
+//  CHARTS DATA
+// ─────────────────────────────────────────
 
+const charts = [
+  {
+    id  : 'chart-cover1',
+    img : 'https://res.cloudinary.com/dvxl03ips/image/upload/v1776955711/250px-Tyla_-_Chanel_tnljs5.jpg',
+    link: 'https://music.youtube.com/watch?v=xiZUf98A1Ts&si=tLu9tvhV9Q10hw0c',
+  },
+  {
+    id  : 'chart-cover2',
+    img : 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776956041/sddefault_mr6epx.jpg',
+    link: '',
+  },
+  {
+    id  : 'chart-cover3',
+    img : 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg',
+    link: '',
+  },
+  {
+    id  : 'chart-cover4',
+    img : 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg', // replace with real URL
+    link: '',
+  },
+{
+    id  : 'chart-cover5',
+    img : 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg', // replace with real URL
+    link: '',
+  },
 
-document.addEventListener('DOMContentLoaded', function() {
-const trendsSection = document.getElementById('chart-cover2');
-trendsSection.innerHTML = ` 
-    
-<img src="https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776956041/sddefault_mr6epx.jpg" alt="Trending 20" class="chart-img">
-          
-`;
-});
-document.addEventListener('DOMContentLoaded', function() {
-const trendsSection = document.getElementById('chart-cover3');
-trendsSection.innerHTML = ` 
-    
-<img src="https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg" alt="Trending 20" class="chart-img">
-          
-`;
-});document.addEventListener('DOMContentLoaded', function() {
-const trendsSection = document.getElementById('chart-cover4');
-trendsSection.innerHTML = ` 
-    
-<img src="pics/11.jpg" alt="Trending 20" class="chart-img">
-          
-`;
-});
+];
 
+// ─────────────────────────────────────────
+//  SONGS DATA
+// ─────────────────────────────────────────
 
+const songs = [
+  { rank: '1',  trend: 'up',      name: 'Go',               artist: 'Blackpink',           days: '4d',  img: 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg' },
+  { rank: '2',  trend: 'neutral', name: 'Dracula',           artist: 'Jennie & Tame Impala',days: '14d', img: 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg' },
+  { rank: '3',  trend: 'down',    name: 'Mariam',            artist: 'Liam Voice',          days: '1d',  img: 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg' },
+  { rank: '4',  trend: 'neutral', name: 'She did it again',  artist: 'Tyla',                days: '4d',  img: 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg' },
+  { rank: '5',  trend: 'neutral', name: 'Rude',              artist: 'Hearts2Hearts',       days: '14d', img: 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg' },
+  { rank: '5',  trend: 'up',      name: 'Pinky Up',          artist: 'Katseye',             days: '12d', img: 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg' },
+  { rank: '6',  trend: 'down',    name: 'Risk it all',       artist: 'Bruno Mars',          days: '16d', img: 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg' },
+  { rank: '7',  trend: 'up',      name: 'London',            artist: 'Kapeke',              days: '2d',  img: 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg' },
+  { rank: '8',  trend: 'down',    name: 'Swim',              artist: 'BTS',                 days: '40d', img: 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg' },
+  { rank: '9',  trend: 'up',      name: 'Gundi',             artist: 'Mimi Kampala',        days: '1d',  img: 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg' },
+  { rank: '10', trend: 'down',    name: 'Click Clack Sympthon', artist: 'Raye',             days: '4d',  img: 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg' },
+  { rank: '11', trend: 'up',      name: 'Die for me',        artist: 'Zayn Malik',          days: '21d', img: 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg' },
+  { rank: '12', trend: 'neutral', name: 'Midnight Sun',      artist: 'Zara Larsson',        days: '4d',  img: 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg' },
+  { rank: '13', trend: 'neutral', name: 'End of Beginning',  artist: 'DJO',                 days: '46d', img: 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg' },
+  { rank: '14', trend: 'up',      name: 'Like Jennie',       artist: 'Jennie',              days: '70d', img: 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg' },
+  { rank: '15', trend: 'down',    name: 'Jump',              artist: 'Blackpink',           days: '41d', img: 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg' },
+  { rank: '16', trend: 'down',    name: 'Jump',              artist: 'Blackpink',           days: '41d', img: 'https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg' },
 
-document.addEventListener('DOMContentLoaded', function() {
-const trendsSection = document.getElementById('poll1');
-trendsSection.innerHTML = `
-    
-      <div class="song">
-    <span id="rank">1<b id="up">⌃</b></span>
-    <img src="https://res.cloudinary.com/dvxl03ips/image/upload/q_auto/f_auto/v1776955966/blackpink-go_reewuf.jpg">
-      <span id="songname">Go</span><b>blackpink</b>
-      <span class="days">4d</span>
-    </div><hr>
-      
-       <div class="song">
-    <span id="rank">2<b id="neutral">●</b></span>
-    img.src="https://res.cloudinary.com/dvxl03ips/image/upload/v1776955966/blackpink-go_reewuf.jpg"><span id="songname">Dracula</span><b>Jennie & Tame impala</b>
-      <span class="days">14d</span>
-    </div><hr>
-      
-       <div class="song">
-    <span id="rank">3<b id="down">⌄</b></span>
-    <img src="pics/20.jpg"><span id="songname">Mariam</span><b>liam voice</b>
-      <span class="days">1d</span>
-    </div><hr>
-      
-       <div class="song">
-    <span id="rank">4<b id="neutral">●</b></span>
-    <img src="pics/20.jpg"><span id="songname">She did it again</span><b>tyla</b>
-   <span class="days">4d</span>
-    </div><hr>
-   
-    
-`;
-});
-document.addEventListener('DOMContentLoaded', function() {
-const trendsSection = document.getElementById('poll2');
-trendsSection.innerHTML = `
-    
-     
-    <div class="song">
-    <span id="rank">5<b id="neutral">●</b></span>
-    <img src="pics/20.jpg"><span id="songname">Rude</span><b>hearts2hearts</b>
-      <span class="days">14d</span>
-    </div><hr>
-      
-       <div class="song">
-    <span id="rank">5<b id="up">⌃</b></span>
-    <img src="pics/20.jpg"><span id="songname">pinky up</span><b>Katseye</b>
-      <span class="days">12d</span>
-    </div><hr>
-      
-       <div class="song">
-    <span id="rank">6<b id="down">⌄</b></span>
-    <img src="pics/20.jpg"><span id="songname">Risk it all</span><b>bruno mars</b>
-      <span class="days">16d</span>
-    </div><hr>
-      
-       <div class="song">
-    <span id="rank">7<b id="up">⌃</b></span>
-    <img src="pics/20.jpg"><span id="songname">london</span><b>kapeke</b>
-   <span class="days">2d</span>
-    </div><hr>
-  
- 
-    
-`;
-});
-document.addEventListener('DOMContentLoaded', function() {
-const trendsSection = document.getElementById('poll3');
-trendsSection.innerHTML = `
-    
-      <div class="song">
-    <span id="rank">8<b id="down">⌄</b></span>
-    <img src="pics/20.jpg"><span id="songname">swim</span><b>BTS</b>
-      <span class="days">40d</span>
-    </div><hr>
-      
-       <div class="song">
-    <span id="rank">9<b id="up">⌃</b></span>
-    <img src="pics/20.jpg"><span id="songname">Gundi</span><b>Mimi kampala</b>
-      <span class="days">1d</span>
-    </div><hr>
-      
-       <div class="song">
-    <span id="rank">10<b id="down">⌄</b></span>
-    <img src="pics/20.jpg"><span id="songname">click clack sympthon</span><b>raye</b>
-      <span class="days">4d</span>
-    </div><hr>
-      
-       <div class="song">
-    <span id="rank">11<b id="up">⌃</b></span>
-    <img src="pics/20.jpg"><span id="songname">Die for me</span><b>Zayn Malik</b>
-   <span class="days">21d</span>
-    </div><hr>
-  
-      
-      
-`;
-});
+];
 
+// ─────────────────────────────────────────
+//  STORIES DATA
+// ─────────────────────────────────────────
 
+const stories = [
+  {
+    title : 'Money made me hate my parents.',
+    body  : 'During high school I had a boyfriend who used to give me money. But my parents insisted on burning it, I agreed. Later that night I dug the hole to find that my mom took it and surprised dad.',
+    author: 'Nankya Joleen',
+  },
+  {
+    title : "Lilian Narrated how k'la night life treated her",
+    body  : "In 2015, we were once out at a night club with my friends who were boozing. A friend of mine had two beers tanked and wanted to fight. He said \"Munkwate, I'm sober I can beat this guy.\" To him sober meant he's too drunk and impaired 😂🙈",
+    author: 'Lilian Max',
+  },
+  {
+    title : 'My dad called one morning to tell me that he had a cute story to share.',
+    body  : "He stopped off at his favorite little bakery on the way to the harbor park. He arrived just as they were taking lemon berry scones out of the oven. On a lark, he bought a bunch to give to folks down at the park. Eight dogs were waiting for him by his parking spot. As he handed out treats, one owner joked, \"So all the dogs get a treat, but what about the people?\" Everyone laughed, but my dad went back to the car, emerged with the scones, and handed them out. \"You should have seen their faces,\" he said. Then after a beat he added, \"It really is fun to be kind.\"",
+    author: 'Anonymous',
+  },
+];
 
-document.addEventListener('DOMContentLoaded', function() {
-const trendsSection = document.getElementById('poll4');
-trendsSection.innerHTML = `
-    
-      <div class="song">
-    <span id="rank">12<b id="neutral">●</b></span>
-    <img src="pics/20.jpg"><span id="songname">Midnight sun</span><b>Zara larson</b>
-      <span class="days">4d</span>
-    </div><hr>
-      
-       <div class="song">
-    <span id="rank">13<b id="neutral">●</b></span>
-    <img src="pics/20.jpg"><span id="songname">End of begining</span><b>DJO</b>
-      <span class="days">46d</span>
-    </div><hr>
-      
-       <div class="song">
-    <span id="rank">14<b id="up">⌃</b></span>
-    <img src="pics/20.jpg"><span id="songname">Like jennie</span><b>Jennie</b>
-      <span class="days">70d</span>
-    </div><hr>
-      
-       <div class="song">
-    <span id="rank">15<b id="down">⌄</b></span>
-    <img src="pics/20.jpg"><span id="songname">jump</span><b>blackpink</b>
-   <span class="days">41d</span>
-    </div><hr>
-  
-    
-`;
-});
+// ─────────────────────────────────────────
+//  RENDER ENGINE
+// ─────────────────────────────────────────
 
+const trendIcon = { up: '⌃', down: '⌄', neutral: '●' };
+const trendId   = { up: 'up', down: 'down', neutral: 'neutral' };
 
+// Poll containers in order
+const pollIds = ['poll1', 'poll2', 'poll3', 'poll4'];
+const songsPerPoll = 4;
 
+function render() {
 
-
-
-document.addEventListener('DOMContentLoaded', function() {
-const trendsSection = document.getElementById('random');
-trendsSection.innerHTML = `
-    <div class="section-label">Random stories</div>
-
-    
-         
-    <div id="parahead"><b>Money made me hate my parents.<b></div>
-    <p>During highshool
-   i had a boyfriend who used to give me money.<p>
-    But my parents insisted on burning it,i agreed.<p>
-    Later that night i dug the hole on to find that my mom took it abd suprised dad
-    Money made me hate my parents.During highshool
-    i had a boyfriend who used to give me money.<p>
-    But my parents insisted on burning it,i agreed.<br>
-    Later that night i dug the hole on to find that my mom took it abd suprised dad
-    <br><b>Nankya Joleen</b></p></p></p><hr>
-      </p>
-    
-         
-    <div id="parahead"><b>Lilian Narrated how k'la night life treated her</b></div>
-    <p>In 2015, 
-    We were once out at a night club with my friends who were boozing. 
-    <p>A friend of mine had two beers tanked and wanted
-    to fight. He said “Munkwate, I’m sober I can beat this guy." <p>
-    To him sober meant he’s too drunk and impaired 😂🙈
-    <br><b>Lilian Max</b></p></p><hr>
-      </p>
-    
-   
-   <div id="parahead"> <b>My dad called one morning to tell me that he had a cute story to share.</b></div>
-    <p>I love my dad’s cute stories, so I was all ears.
-
-He told me that he had stopped off at his favorite little bakery that morning on the way to the harbor park. He had arrived just as they were taking a batch of their famous lemon berry scones out of the oven. 
-
-<p>Those scones were always good, but they were *outstanding* when they were hot, so, on a lark, he decided to buy a bunch to give to folks down at the park. 
-
-<p>When he got to the park, he said there were eight dogs waiting for him by his parking spot. “Literally EIGHT?” I asked. 
-
-“Eight,” he said, “I counted.” 
-
-<p>As he handed out treats to the dogs, one of the owners jokingly said, “So all the dogs get a treat, but what about the people?”
-
-Everyone laughed, but my dad went back into to the car, emerged with the bag of freshly baked scones, and handed them out to the crowd. 
-
-“You should have seen their faces,” he said. “They couldn’t believe it!”
-
-<p>I told him that I loved the story, and that I was sure that everyone, both human and canine, was delighted with their treats. 
-
-“They were,” he said. Then, after a beat, he added, “It really is fun to be kind.”
-
-<b>Anonymous</b><hr>
-    </p> 
-    
-    
-    
-`;
-});
-
-
-
-// Charts section dots
-const chartsScroll = document.querySelector('.charts-scroll');
-const chartDots = document.querySelectorAll('#chartDots .dot');
-
-chartsScroll.addEventListener('scroll', () => {
-  const idx = Math.round(chartsScroll.scrollLeft / chartsScroll.clientWidth);
-  chartDots.forEach((d, i) => d.classList.toggle('active', i === idx));
-});
-
-chartDots.forEach((d, i) => {
-  d.addEventListener('click', () => {
-    chartsScroll.scrollTo({ left: i * chartsScroll.clientWidth, behavior: 'smooth' });
+  // --- Charts ---
+  charts.forEach(function(chart) {
+    var el = document.getElementById(chart.id);
+    if (!el) return;
+    var wrap = document.createElement('div');
+    if (chart.link) {
+      wrap.innerHTML = '<a href="' + chart.link + '" target="_blank"><img src="' + chart.img + '" alt="chart" class="chart-img"></a>';
+    } else {
+      wrap.innerHTML = '<img src="' + chart.img + '" alt="chart" class="chart-img">';
+    }
+    el.appendChild(wrap);
   });
-});
 
-// Musiccharts section dots (your polls)
-const musiccharts = document.querySelector('.musiccharts');
-const musicDots = document.querySelectorAll('#musicDots .dot');
-
-musiccharts.addEventListener('scroll', () => {
-  const idx = Math.round(musiccharts.scrollLeft / musiccharts.clientWidth);
-  musicDots.forEach((d, i) => d.classList.toggle('active', i === idx));
-});
-
-musicDots.forEach((d, i) => {
-  d.addEventListener('click', () => {
-    musiccharts.scrollTo({ left: i * musiccharts.clientWidth, behavior: 'smooth' });
+  // --- Songs (split into polls of 4) ---
+  pollIds.forEach(function(pollId, pollIndex) {
+    var el = document.getElementById(pollId);
+    if (!el) return;
+    var slice = songs.slice(pollIndex * songsPerPoll, pollIndex * songsPerPoll + songsPerPoll);
+    slice.forEach(function(song) {
+      var div = document.createElement('div');
+      div.className = 'song';
+      div.innerHTML =
+        '<span id="rank">' + song.rank + '<b id="' + trendId[song.trend] + '">' + trendIcon[song.trend] + '</b></span>' +
+        '<img src="' + song.img + '" alt="' + song.name + '">' +
+        '<span id="songname">' + song.name + '</span>' +
+        '<b>' + song.artist + '</b>' +
+        '<span class="days">' + song.days + '</span>';
+      el.appendChild(div);
+      el.insertAdjacentHTML('beforeend', '<hr>');
+    });
   });
-});
+
+  // --- Stories ---
+  var randomEl = document.getElementById('random');
+  if (randomEl) {
+    var label = document.createElement('div');
+    label.className = 'section-label';
+    label.textContent = 'Random stories';
+    randomEl.appendChild(label);
+
+    stories.forEach(function(story) {
+      var div = document.createElement('div');
+      div.innerHTML =
+        '<div id="parahead"><b>' + story.title + '</b></div>' +
+        '<p>' + story.body + '</p>' +
+        '<b>' + story.author + '</b><hr>';
+      randomEl.appendChild(div);
+    });
+  }
+}
+
+render();
+
+// ─────────────────────────────────────────
+//  DOTS NAVIGATION
+// ─────────────────────────────────────────
+
+var chartsScroll = document.querySelector('.charts-scroll');
+var chartDots    = document.querySelectorAll('#chartDots .dot');
+
+if (chartsScroll) {
+  chartsScroll.addEventListener('scroll', function() {
+    var idx = Math.round(chartsScroll.scrollLeft / chartsScroll.clientWidth);
+    chartDots.forEach(function(d, i) { d.classList.toggle('active', i === idx); });
+  });
+  chartDots.forEach(function(d, i) {
+    d.addEventListener('click', function() {
+      chartsScroll.scrollTo({ left: i * chartsScroll.clientWidth, behavior: 'smooth' });
+    });
+  });
+}
+
+var musiccharts = document.querySelector('.musiccharts');
+var musicDots   = document.querySelectorAll('#musicDots .dot');
+
+if (musiccharts) {
+  musiccharts.addEventListener('scroll', function() {
+    var idx = Math.round(musiccharts.scrollLeft / musiccharts.clientWidth);
+    musicDots.forEach(function(d, i) { d.classList.toggle('active', i === idx); });
+  });
+  musicDots.forEach(function(d, i) {
+    d.addEventListener('click', function() {
+      musiccharts.scrollTo({ left: i * musiccharts.clientWidth, behavior: 'smooth' });
+    });
+  });
+}
