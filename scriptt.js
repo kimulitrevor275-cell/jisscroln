@@ -408,4 +408,108 @@ function updateRatingBar(postId) {
 
 function submitOpinion(postId) {
   var input = document.getElementById('oi-' + postId);
-  var btn   = document.getElementById('
+  var btn   = document.getElementById('ob-' + postId);
+  var text  = input.value.trim();
+  if (!text) return;
+
+  btn.disabled    = true;
+  btn.textContent = 'Posting...';
+
+  var username = window._cachedUsername || 'Anonymous';
+  fetch(API + '/opinions', {
+    method : 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body   : JSON.stringify({ post_id: postId, text: text, username: username }),
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.success) {
+      input.value     = '';
+      btn.textContent = 'Post';
+      btn.disabled    = true;
+      loadOpinions(postId);
+      showToast('Opinion posted!');
+    } else {
+      btn.disabled    = false;
+      btn.textContent = 'Post';
+      showToast('Failed to post');
+    }
+  })
+  .catch(function() {
+    btn.disabled    = false;
+    btn.textContent = 'Post';
+    showToast('No connection');
+  });
+}
+
+function loadOpinions(postId) {
+  fetch(API + '/opinions/' + postId)
+  .then(function(r) { return r.json(); })
+  .then(function(opinions) { renderOpinions(postId, opinions); })
+  .catch(function() {});
+}
+
+function renderOpinions(postId, opinions) {
+  var list     = document.getElementById('ol-'  + postId);
+  var empty    = document.getElementById('oe-'  + postId);
+  var showMore = document.getElementById('osm-' + postId);
+  var cards    = list.querySelectorAll('.opinion-card');
+  cards.forEach(function(c) { c.remove(); });
+
+  if (opinions.length === 0) {
+    empty.style.display = 'block';
+    showMore.classList.remove('visible');
+    return;
+  }
+  empty.style.display = 'none';
+
+  opinions.forEach(function(op, i) {
+    var card = document.createElement('div');
+    card.className     = 'opinion-card' + (i > 0 ? ' hidden' : '');
+    card.style.display = i > 0 ? 'none' : '';
+    card.innerHTML =
+      '<div class="opinion-user">' + escapeHtml(op.username || 'Anonymous') + (op.username && op.username !== 'Anonymous' ? ' <svg width="14" height="14" viewBox="0 0 24 24" style="margin-left:3px;vertical-align:middle;"><circle cx="12" cy="12" r="12" fill="#87ceeb"/><path d="M6.5 12.5l3.5 3.5 7-7" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>' : '') + '</div>' +
+      '<div class="opinion-text">' + escapeHtml(op.text) + '</div>' +
+      '<div class="opinion-time">' + formatTime(op.time) + '</div>';
+    list.appendChild(card);
+  });
+
+  if (opinions.length > 1) showMore.classList.add('visible');
+}
+
+// ─────────────────────────────────────────
+//  HELPERS
+// ─────────────────────────────────────────
+
+function formatTime(iso) {
+  var d = new Date(iso);
+  return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'2-digit' }) +
+         ' | ' + d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function showToast(msg) {
+  var toast = document.getElementById('toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast';
+    toast.style.cssText =
+      'position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(20px);' +
+      'background:#d0c7f2;color:black;font-family:monospace;font-size:24px;' +
+      'padding:12px 28px;border-radius:50px;opacity:0;transition:opacity 0.3s,transform 0.3s;' +
+      'pointer-events:none;white-space:nowrap;z-index:999;';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.opacity   = '1';
+  toast.style.transform = 'translateX(-50%) translateY(0)';
+  setTimeout(function() {
+    toast.style.opacity   = '0';
+    toast.style.transform = 'translateX(-50%) translateY(20px)';
+  }, 2500);
+}
+
+render();
