@@ -407,6 +407,7 @@ function updateRatingBar(postId) {
 // ─────────────────────────────────────────
 
 function submitOpinion(postId) {
+alert('cached: ' + window._cachedUsername);
   var input = document.getElementById('oi-' + postId);
   var btn   = document.getElementById('ob-' + postId);
   var text  = input.value.trim();
