@@ -10,13 +10,17 @@
 <body>
 <header id="head1"> 
   <img id="logo"src="pics/logo4.png">
-  <div id="user-greeting" style="font-family:inter;text-align:right;font-size:25px;color:#c9a96e;padding:4px 0;"></div>
-   <nav class="navbar">
+    
+  <div id="user-greeting" style="font-family:'outfit', serif;text-align:right;font-size:25px;color: white;padding:4px 0;"></div>
+   
+  <nav class="navbar">
     <a  href="index.html" class="button active">Home</a>
-    <a  href="/trends/" class="button">Trends</a>
-    <a  href="/sports/" class="button">Sports</a>
-    <a  href="/others/" class="button">Explore</a>
+    <a  href="newpage.html" class="button">Trends</a>
+    <a  href="sports.html" class="button">Sports</a>
+    <a  href="others.html" class="button">Explore</a>
    </nav>
+  <div id="user-greeting" style="font-family:'outfit', serif;text-align:right;font-size:25px;color: white;padding:4px 0;"></div>
+   
 </header>
  
   <div class="ticker-wrap">
@@ -78,54 +82,8 @@
   
   
    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-var sb = supabase.createClient(
-  'https://jzspezkljbxocqboqgtk.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6c3BlemtsamJ4b2NxYm9xZ3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMTU4MjMsImV4cCI6MjA5Mjg5MTgyM30.VXZ4ZX9_z33ZKrWUbhs2EXKruTi1kp5IpLuGLykF1y0'
-);
-
-function getGreeting() {
-  var h = new Date().getHours();
-  if (h < 12) return 'Good morning';
-  if (h < 17) return 'Good afternoon';
-  return 'Good evening';
-}
-
-// Set username BEFORE scriptt.js loads
-sb.auth.getSession().then(function(r) {
-  var el = document.getElementById('user-greeting');
-  if (r.data.session) {
-    var u = r.data.session.user;
-    var name = u.user_metadata.display_name || u.email;
-    window._cachedUsername = name;
-    fetch('https://jisscrol-opinions.onrender.com/visit', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ user_id: u.id })
-})
-.then(function(res) { return res.json(); })
-.then(function(data) {
-  var badge = '';
-   if (data.tier === 'veteran')      badge = '<svg width="40" height="40" viewBox="0 0 24 24" style="margin-left:5px;vertical-align:middle;"><circle cx="12" cy="12" r="12" fill="#c9a96e"/><path d="M6.5 12.5l3.5 3.5 7-7" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-else if (data.tier === 'loyal')   badge = '<svg width="40" height="40" viewBox="0 0 24 24" style="margin-left:5px;vertical-align:middle;"><circle cx="12" cy="12" r="12" fill="#4a90d9"/><path d="M6.5 12.5l3.5 3.5 7-7" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-else if (data.tier === 'regular') badge = '<svg width="40" height="40" viewBox="0 0 24 24" style="margin-left:5px;vertical-align:middle;"><circle cx="12" cy="12" r="12" fill="#87ceeb"/><path d="M6.5 12.5l3.5 3.5 7-7" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  el.innerHTML = getGreeting() + ', ' + name + badge + ' &nbsp; <a href="#" onclick="signOut()" style="color:gray;font-size:25px;">sign out</a>';
-});
-  } else {
-    el.innerHTML = '<a href="login.html" style="color:white;font-size:30px;text-decoration:none;letter-spacing:0.1em; font-weight:600;">Sign In</a>';
-  }
-});
-
-function signOut() {
-  sb.auth.signOut().then(function() {
-    window.location.reload();
-  });
-}
-</script>
-
+  <script src="auth.js"></script>
 <script src="scriptt.js"></script>    
-<script src="auth.js"></script>    
 
 </body>
 </html>
