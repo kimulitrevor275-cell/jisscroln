@@ -480,7 +480,7 @@ function showTickerSkeleton() {
 // inject search icon
   var icon = document.createElement('span');
   icon.id = 'jis-search-icon';
-  icon.innerHTML = '<img src="search.svg">';
+  icon.innerHTML = '<img src="/pics/search.svg">';
   icon.addEventListener('click', openSearch);
   document.body.appendChild(icon);
 })();
