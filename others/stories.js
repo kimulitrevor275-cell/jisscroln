@@ -51,7 +51,7 @@ function render(DATA) {
         '<div class="article-body">' + bodyHtml + '</div>' +
         '<div class="reactions">' +
           '<button class="like-btn" data-id="' + s.id + '">' +
-            '<img id="btn-good" src="pics/iconsthumbsup.png">' +
+            '<img id="btn-good" src="/pics/iconsthumbsup.png">' +
             '<span class="lcount">0</span>' +
           '</button>' +
           '<button class="show-less" data-id="' + s.id + '">Show less</button>' +
