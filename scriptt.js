@@ -36,7 +36,7 @@ function renderTrends(trends, tickers, polls) {
   
   var trendsEl = document.getElementById('trends');
   if (!trendsEl) return;
-  trendsEl.innerHTML = '<h1 id="forup">JisScroL Updates<a href="newpage.html"><img id="nxtp-icon" src="pics/nxtpage.png"></a></h1>';
+  trendsEl.innerHTML = '<h1 id="forup">JisScroL Updates<a href="/trends/"><img id="nxtp-icon" src="/pics/nxtpage.png"></a></h1>';
 
   trends.forEach(function(post) {
     var postId    = post.id;
@@ -54,10 +54,10 @@ function renderTrends(trends, tickers, polls) {
       '<div class="rate-box">' +
         '<div class="rate-btns">' +
           '<button class="btn-good" id="bg-' + postId + '">' +
-            '<img src="pics/iconsthumbsup.png" alt="good"> good' +
+            '<img src="/pics/iconsthumbsup.png" alt="good"> good' +
           '</button>' +
           '<button class="btn-bad" id="bb-' + postId + '">' +
-            '<img src="pics/iconsthumbsdown.png" alt="bad"> bad' +
+            '<img src="/pics/iconsthumbsdown.png" alt="bad"> bad' +
           '</button>' +
         '</div>' +
         '<div class="rate-bar-wrap">' +
@@ -71,7 +71,7 @@ function renderTrends(trends, tickers, polls) {
       '</div>' +
 
       '<button class="btn-engage" id="bte-' + postId + '">' +
-        '<img id="commentbtn" src="pics/commentbtn.png"> Comment <span>▾</span>' +
+        '<img id="commentbtn" src="/pics/commentbtn.png"> Comment <span>▾</span>' +
       '</button>' +
 
       '<div class="engage-panel" id="ep-' + postId + '">' +
