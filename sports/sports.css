@@ -1,0 +1,497 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  /* ── RESET ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: black;
+  font-family: 'outfit', serif;
+  color: whitesmoke;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  padding: 0 16px;
+}
+/* ── TIME ── */
+#time {
+  font-size: clamp(10px, 3vw, 20px);
+  color: gray;
+  border-radius: 10px;
+  display: inline-block;
+  padding: 4px 10px;
+  margin: 8px 0;
+}
+
+
+/* ── HEADER ── */
+header {
+  position: sticky;
+  top: 0;
+  width: 101%;
+  background-color: black;
+  z-index: 100;
+  padding: 8px 0;
+}
+
+/* ── LOGO ── */
+.logo {
+  background-color: black;
+  font-size: clamp(24px, 5vw, 56px);
+  font-family: Georgia, serif;
+  color: white;
+  text-align: center;
+  margin: 0;
+}
+
+#logo {
+  border: none;
+  margin: 0;
+  width: auto;
+  height: clamp(28px, 5vw, 48px);
+}
+.btn-good img, .btn-bad img {
+  width: 100px;
+  height: 50px;
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  display: inline;
+  vertical-align: middle;
+}
+.opinion-user {
+  font-size: 28px;
+  color: #717a74;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+#commentbtn{
+  border: none;
+  border-radius: 0;
+  width: 50px;
+  height: 50px;
+}
+/* ── NAVBAR (matches newpage.css) ── */
+.navbar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: clamp(4px, 2vw, 30px);
+  margin-top: 4px;
+}
+
+.navbar .button {
+  text-decoration: none;
+  padding: 8px 8px;
+  font-size: clamp(20px, 4vw, 46px);
+  color: gray;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease, background 0.3s ease;
+  font-family: poppins serif;
+  font-weight: 300;
+}
+
+.navbar a.active {
+  border-radius: 0;
+  border-bottom: 3px solid white;
+  color:white;
+}
+
+.navbar .button:hover {
+  background: black;
+  color: white;
+}
+
+/* ── DIVIDER ── */
+.box {
+  border-bottom: 4px solid white;
+  width: 100%;
+  opacity: 60%;
+  border-radius: 10px;
+  margin: 12px 0;
+}
+
+hr {
+  margin-bottom: 50px;
+  margin-top: 50px;
+  opacity: 0.3;
+  border-radius: 30px;
+}
+
+/* ── SPORTS SECTION ── */
+#sports {
+  background-color: black;
+  width: 100%;
+  margin-top: clamp(40px, 5vw, 100px);
+  margin-bottom: 60px;
+}
+
+/* ── HEADINGS ── */
+h1 {
+  line-height: 1.2;
+  color: white;
+  font-size: clamp(20px, 4vw, 44px);
+  text-align: center;
+  font-family: Georgia, serif;
+}
+
+h2 {
+  font-family: "outfit", serif;
+  border-radius: 5px;
+  color: white;
+  font-size: clamp(48px, 4.3vw, 34px);
+  margin: 6px 0;
+  line-height: 1.2;
+  text-align: left;
+  padding: 8px;
+  font-weight: 00;
+  margin-left: 0;
+}
+h2::first-letter{
+  font-family: poppins,serif;
+  font-size: clamp(61px,4.3vw,35px);
+  font-weight: 200;
+}
+
+/* ── PARAGRAPH ── */
+p {
+  margin-bottom: 20px;
+  max-width: 70%x;
+  margin: 30px;
+  font-family: 'outfit', serif;
+  text-align: left;
+  font-size: clamp(35px, 3.4vw, 45px);
+  color: white;
+  line-height: 1.5;
+}
+
+/* ── IMAGES ── */
+img {
+  width: 99%;
+  max-width: 100%;
+  height: auto;
+  margin: 10px ;
+  border-radius: 15px;
+  border: 1px solid white;
+  display: block;
+}
+
+/* single image full width */
+#p1 {
+  width: 100%;
+}
+
+/* two images side by side */
+.img-pair {
+  display: flex;
+  gap: 6px;
+  margin: 10px 0;
+}
+
+.img-pair img {
+  width: 50%;
+  flex-shrink: 0;
+  border-radius: 10px;
+  border: 1px solid white;
+  height: auto;
+  object-fit: cover;
+  margin: 0;
+}
+
+/* ── ICON ── */
+#icon {
+  font-size: clamp(24px, 5vw, 50px);
+  text-align: center;
+  width: 100%;
+  text-decoration: underline;
+  margin: 20px 0;
+  color: whitesmoke;
+  border-radius: 50px;
+  background-color: black;
+  gap: 100px;
+  display: block;
+}
+
+#icon:hover {
+  text-decoration-color: blue;
+}
+
+#icon a {
+  text-decoration: none;
+}
+
+/* ── EMAIL ── */
+#Email {
+  
+  font-size: clamp(18px, 3.5vw, 36px);
+  line-height: 2;
+  text-align: center;
+  width: 100%;
+  font-family: 'inter',serif;
+  margin: 6px ;
+  color: whitesmoke;
+  border-top: 1px solid white;
+  border-radius: 15px;
+  background-color: black;
+  display: block;
+}
+
+/* ── LINKS ── */
+a {
+  color: lightblue; 
+  text-decoration: none;
+  border-radius: 7px;
+  border: 1px solid gray;
+  padding: 3px;
+  font-size: clamp(20px,30px,40px);
+}
+
+#fo { margin-bottom: clamp(40px, 8vw, 100px); }
+
+/* ════════════════════════════════════════
+8ENGAGE BUTTON
+════════════════════════════════════════ */
+.btn-engage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 60px;
+  width: 100%;
+  margin: 16px 0 0 0;
+  padding: 14px;
+  background: #0f0f14;
+  border: 1px solid #2a2a2a;
+  border-radius: 26px;
+  color: #888;
+  font-family: monospace;
+  font-size: clamp(14px, 3vw, 24px);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  letter-spacing: 1px;
+}
+.btn-engage:hover { border-color: #d0c7f2; color: #d0c7f2; }
+.btn-engage span  { font-size: clamp(12px, 2.5vw, 20px); }
+
+/* ════════════════════════════════════════
+   ENGAGE PANEL
+════════════════════════════════════════ */
+.engage-panel {
+  display: none;
+  margin-top: 2px;
+  background: #0a0a0f;
+  border: 1px solid #1a1a1a;
+  border-radius: 0 0 16px 16px;
+  padding: 20px 16px;
+  animation: fadeIn 0.25s ease;
+}
+.engage-panel.open { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ════════════════════════════════════════
+   RATING BAR
+════════════════════════════════════════ */
+.rate-box {
+  margin: 16px 0;
+  padding: 16px;
+  background: black;
+  border: 1px solid #1a1a1a;
+  border-radius: 16px;
+}
+
+.rate-label {
+  font-family: monospace;
+  font-size: clamp(12px, 2.5vw, 20px);
+  color: white;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.rate-btns {
+  width: 70px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.btn-good, .btn-bad {
+  flex: 1;
+  font-family: monospace;
+  font-size: clamp(20px, 3vw, 25px);
+  padding: 10px;
+  border-radius: 30px;
+  border: 2px solid;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-good              { background: black; color: #5b9cf6; border-color: black; }
+.btn-good:hover,
+.btn-good.voted        { background: #5b9cf6; color: black; }
+.btn-bad               { background: black; color: #e07070; border-color: black; }
+.btn-bad:hover,
+.btn-bad.voted         { background: #e07070; color: black; }
+
+.rate-bar-wrap {
+  width: 100%;
+  height: 10px;
+  border-radius: 99px;
+  overflow: hidden;
+  display: flex;
+}
+.rate-bar-good { height: 100%; background: #5b9cf6; transition: width 0.6s ease; }
+.rate-bar-bad  { height: 100%; background: #e07070; transition: width 0.6s ease; }
+
+.rate-counts {
+  display: flex;
+  justify-content: space-between;
+  
+  font-size: clamp(15px, 2.2vw, 20px);
+  margin-top: 6px;
+}
+.rate-counts span:first-child { color: #5b9cf6; }
+.rate-counts span:last-child  { color: #e07070; }
+/* ════════════════════════════════════════
+   OPINION BOX
+════════════════════════════════════════ */
+.engage-divider {
+  border: none;
+  border-top: 1px solid #1e1e1e;
+  margin: 16px 0;
+}
+
+.opinion-label {
+  font-size: clamp(12px, 2.5vw, 20px);
+  color: #555;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.opinion-input {
+  width: 100%;
+  background: #0f0f14;
+  border: 1px solid white;
+  border-radius: 12px;
+  color: white;
+  font-family: 'outfit', serif;
+  font-size: clamp(30px, 3vw, 31px);
+  padding: 12px;
+  resize: none;
+  height: auto;
+  outline: none;
+  transition: border-color 0.2s;
+  line-height: 1.5;
+}
+.opinion-input:focus        { border-color: #d0c7f2; }
+.opinion-input::placeholder { color: #333; }
+
+.opinion-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.char-count {
+  font-size: clamp(11px, 2vw, 18px);
+  color: #444;
+}
+
+.btn-submit {
+  font-size: clamp(13px, 2.5vw, 22px);
+  background: black;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 70px;
+  border: 2px solid #d0c7f2;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-submit:hover    { background: #d0c7f2; color: black; }
+.btn-submit:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ════════════════════════════════════════
+   OPINIONS LIST
+════════════════════════════════════════ */
+.opinions-list { margin-top: 16px; }
+
+.opinions-title {
+  font-family: 'ouyfit', serif;
+  font-size: clamp(15px, 2.5vw, 25px);
+  color: white;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.opinion-card {
+  border-left: 2px solid #2a2a2a;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  animation: fadeIn 0.3s ease;
+}
+.opinion-card:first-of-type { border-left-color: #d0c7f2; }
+
+.hidden { display: none; }
+
+.opinion-text {
+  font-family: 'inter', serif;
+  font-size: clamp(30px, 3vw, 31px);
+  color: white;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.opinion-time {
+  font-family: 'outfit',serif;
+  font-size: clamp(11px, 2vw, 16px);
+  color: gray;
+  margin-top: 6px;
+}
+
+.no-opinions {
+  font-size: clamp(20px, 3vw, 25px);
+  color: white;
+  text-align: center;
+  padding: 14px 0;
+}
+
+/* ── SHOW MORE ── */
+.btn-show-more {
+  display: none;
+  width: 100%;
+  background: none;
+  border: none;
+  color: white;
+  font-size: clamp(15px, 2.8vw, 20px);
+  padding: 10px 0;
+  cursor: pointer;
+  text-align: center;
+  letter-spacing: 1px;
+}
+.btn-show-more:hover   { color: #d0c7f2; }
+.btn-show-more.visible { display: block; }
+
+
+
+
+
+
+
+/* ════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════ */
+@media (min-width: 600px) {
+  body { padding: 0 28px; }
+}
+
+@media (min-width: 1024px) {
+  body { max-width: 900px; margin: 0 auto; padding: 0 40px; }
+}
