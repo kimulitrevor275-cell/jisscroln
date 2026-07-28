@@ -238,7 +238,7 @@ if (musiccharts) {
 // inject search icon
   var icon = document.createElement('span');
   icon.id = 'jis-search-icon';
-  icon.innerHTML = '<img src="pics/search.svg" style="border:none;width:100px">';
+  icon.innerHTML = '<img src="/pics/search.svg" style="border:none;width:100px">';
   icon.addEventListener('click', openSearch);
   document.body.appendChild(icon);
 })();
