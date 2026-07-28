@@ -347,9 +347,15 @@ function showTickerSkeleton() {
   var style = document.createElement('style');
   style.textContent =
     '#jis-search-icon {' +
-      'cursor:pointer;font-size:62px; ' +
-      'margin-left: clamp(200px,3vw,120px); align:right;user-select:none;' +
-    '}' +
+  'position:fixed;bottom:50px;right:20px;' +
+  'width:78px;height:78px; border:none;' +
+  'background :none;color:#000;' +
+  'border-radius:50%; border:none; '  +
+  '0display:flex;align-items:center;justify-content:center;' +
+  'font-size:22px;cursor:pointer;' +
+  'box-shadow:0 4px 16px rgba(0,0,0,0.5);' +
+  'z-index:999;user-select:none;' +
+'}' +
   
     '#jis-search-overlay {' +
       'position:fixed;top:0;left:0;right:0;' +
