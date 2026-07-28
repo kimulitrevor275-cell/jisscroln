@@ -23,10 +23,10 @@ function renderPosts(posts) {
       '<div class="rate-box">' +
         '<div class="rate-btns">' +
           '<button class="btn-good" id="bg-' + postId + '">' +
-            '<img src="pics/iconsthumbsup.png" alt="good"> Like' +
+            '<img src="/pics/iconsthumbsup.png" alt="good"> Like' +
           '</button>' +
           '<button class="btn-bad" id="bb-' + postId + '">' +
-            '<img src="pics/iconsthumbsdown.png" alt="bad"> Dislike' +
+            '<img src="/pics/iconsthumbsdown.png" alt="bad"> Dislike' +
           '</button>' +
         '</div>' +
         '<div class="rate-bar-wrap">' +
@@ -40,7 +40,7 @@ function renderPosts(posts) {
       '</div>' +
 
       '<button class="btn-engage" id="bte-' + postId + '">' +
-        '<img id="commentbtn" src="pics/commentbtn.png"> Comment <span>▾</span>' +
+        '<img id="commentbtn" src="/pics/commentbtn.png"> Comment <span>▾</span>' +
       '</button>' +
 
       '<div class="engage-panel" id="ep-' + postId + '">' +
@@ -60,7 +60,7 @@ function renderPosts(posts) {
 
       '<div id="dlinks">' +
         (post.read_link ? '<a id="a" href="' + post.read_link + '" target="_blank">' + (post.read_text || 'Read more') + '</a>' : '') +
-        '<a id="a" href="index.html">Back to Home</a>' +
+        '<a id="a" href="/index.html/">Back to Home</a>' +
       '</div>' +
       (post.time ? '<b id="time">' + post.time + '</b>' : '') +
       '<hr><br>';
