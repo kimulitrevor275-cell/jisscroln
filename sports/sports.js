@@ -27,10 +27,10 @@ function renderSports(sports) {
       '<div class="rate-box">' +
         '<div class="rate-btns">' +
           '<button class="btn-good" id="bg-' + postId + '">' +
-            '<img src="pics/iconsthumbsup.png" alt="good"> Like' +
+            '<img src="/pics/iconsthumbsup.png" alt="good"> Like' +
           '</button>' +
           '<button class="btn-bad" id="bb-' + postId + '">' +
-            '<img src="pics/iconsthumbsdown.png" alt="bad"> dislike' +
+            '<img src="/pics/iconsthumbsdown.png" alt="bad"> dislike' +
           '</button>' +
         '</div>' +
         '<div class="rate-bar-wrap">' +
@@ -44,7 +44,7 @@ function renderSports(sports) {
       '</div>' +
 
       '<button class="btn-engage" id="bte-' + postId + '">' +
-        '<img id="commentbtn" src="pics/commentbtn.png"> Comment <span>▾</span>' +
+        '<img id="commentbtn" src="/pics/commentbtn.png"> Comment <span>▾</span>' +
       '</button>' +
 
       '<div class="engage-panel" id="ep-' + postId + '">' +
