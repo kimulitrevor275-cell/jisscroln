@@ -81,7 +81,7 @@ sb.auth.getSession().then(function(r) {
 
     var el = document.getElementById('user-greeting');
     if (el) {
-      el.innerHTML = '<a href="login.html" style="color:white;font-size:30px;text-decoration:none;letter-spacing:0.1em;font-weight:600;">Sign In</a>';
+      el.innerHTML = '<a href="/login/" style="color:white;font-size:30px;text-decoration:none;letter-spacing:0.1em;font-weight:600;">Sign In</a>';
     }
   }
 });
