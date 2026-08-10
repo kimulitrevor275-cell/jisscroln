@@ -270,10 +270,10 @@ b {
   flex-shrink: 0;
   scroll-snap-align: start;
   width: 90vw;
-  max-width: 900px;
+  max-width: auto;
   height: auto;
   border-radius: 20px;
-  border: 0.5px solid #b8cae6;
+  border: 0.5px solid #da7810;
   border-bottom: none;
   background-color: black;
   margin: 8px;
