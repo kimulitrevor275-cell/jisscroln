@@ -624,7 +624,7 @@ ENGAGE BUTTON
    RESPONSIVE
 ════════════════════════════════════════ */
 @media (min-width: 600px) {
-  body { padding: 0 28px; }
+  body { padding: 0 8px; }
   #poll1, #poll2, #poll3, #poll4 { width: 70vw; }
   #img{
     width: 100%;
