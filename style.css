@@ -27,7 +27,12 @@ body {
   z-index: 100;
   padding: 1px 0;
 }
-
+.article-body {
+  line-height: 1.6;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
 header {
   position: sticky;
   top: 0;

@@ -49,7 +49,7 @@ function renderTrends(trends, tickers, polls) {
       '</h2>' +
       (post.img ? '<img src="' + post.img + '" alt="photo"' + (singleImg ? ' id="p1"' : '') + '>' : '') +
   (post.img2 ? '<img src="' + post.img2 + '" alt="photo">' : '') +
-  (post.body ? '<p>' + post.body.split('\n').join('<br>') + '</p>' : '') +
+  (post.body ? '<p class="article-body">' + post.body.split('\n').join('<br>') + '</p>' : '') +
 
       '<div class="rate-box">' +
         '<div class="rate-btns">' +
