@@ -173,8 +173,8 @@ b {
 }
 
 .chart-card {
-  width: 95%; 
-  max-width: 700px; 
+  
+  max-width: 350px; 
   
   background: white;
   border-radius: 12px;
@@ -187,15 +187,15 @@ b {
 }
 
 #chart-cover1, #chart-cover2, #chart-cover3, #chart-cover4, #chart-cover5 {
-  height: clamp(200px, 30vw, 300px);
-  width: 100%;
+  height: 200px;
+  max-width: 100%;
   overflow: hidden;
 }
 
 .chart-img {
   border: none;
   width: 100%; 
-  height: 100%;
+  height: 200px;
   margin: 0;
   padding: 0;
   object-fit: cover; 
@@ -208,7 +208,7 @@ b {
 }
 
 .chart-name {
-  font-size: clamp(16px, 3.5vw, 36px);
+  font-size: clamp(12px, 3vw, 26px);
   margin: 0 0 4px 0;
   color: white; 
 }
@@ -301,7 +301,7 @@ b {
 
 .song img {
   width: clamp(36px, 8vw, 60px);
-  height: clamp(36px, 8vw, 60px);
+  height: 60px;
   object-fit: cover;
   border-radius: 6px;
   border: none;
@@ -672,9 +672,9 @@ b {
 ════════════════════════════════════════ */
 
 @media (min-width: 600px) {
-  body { padding: 0 32px; }
+  body { padding: 0 12px; }
   #poll1, #poll2, #poll3, #poll4 { width: 500 }
-  .chart-card { max-width: 340px; }
+  .chart-card { max-width: 350px; }
   
 }
 
@@ -682,7 +682,7 @@ b {
   body {
     max-width: 900px;
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 12px;
   }
-  #poll1, #poll2, #poll3, #poll4 { width: 400px; }
+  #poll1, #poll2, #poll3, #poll4 { width: 100%; }
 }
