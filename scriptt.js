@@ -155,3 +155,4 @@ Promise.all([
   renderTrends(trends, tickers, polls);
 })
 .catch(function() { renderTrends([], [], []); });
+clo
