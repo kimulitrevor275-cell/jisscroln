@@ -69,7 +69,7 @@ sb.auth.getSession().then(function(r) {
       var badge = _makeBadge(data.tier, 35);
       if (el) {
         el.innerHTML = getGreeting() + ', ' + name + badge +
-          ' &nbsp; <a href="#" onclick="signOut()" style="color:gray;font-size:25px;">sign out</a>';
+          ' &nbsp; <a href="#" onclick="signOut()" style="color:gray;font-size:20px;">sign out</a>';
       }
     })
     .catch(function() {});
@@ -81,7 +81,7 @@ sb.auth.getSession().then(function(r) {
 
     var el = document.getElementById('user-greeting');
     if (el) {
-      el.innerHTML = '<a href="/login/" style="color:white;font-size:30px;text-decoration:none;letter-spacing:0.1em;font-weight:600;">Sign In</a>';
+      el.innerHTML = '<a href="/login/" style="color:white;font-size:20px;text-decoration:none;letter-spacing:0.1em;font-weight:300; border: 1px solid white; border-radius: 4px; padding: 3px;">Sign In</a>';
     }
   }
 });
@@ -210,11 +210,8 @@ function renderOpinions(postId, opinions) {
 
   opinions.forEach(function(op, i) {
     var badge = '';
-    if (op.username && op.username !== 'Anonymous') {
-      badge = ' <svg width="30" height="30" viewBox="0 0 24 24" style="margin-left:3px;vertical-align:middle;">' +
-              '<circle cx="12" cy="12" r="12" fill="#87ceeb"/>' +
-              '<path d="M6.5 12.5l3.5 3.5 7-7" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' +
-              '</svg>';
+    if(op.username&& op.username != 'Anonymous') {
+      badge = _makeBadge(op.tier, 30);
     }
     var card = document.createElement('div');
     card.className     = 'opinion-card' + (i > 0 ? ' hidden' : '');

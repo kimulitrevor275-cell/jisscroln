@@ -127,13 +127,16 @@ p::first-letter{
 }
 /* ── IMAGES ── */
 img {
-  width: 99%;
+  width: 45.2%;
   max-width: 100%;
+  
   height: auto;
   border-radius: 16px;
-  margin: 10px 0;
+  margin: 6px;
 }
-
+#p1 {
+  width:99%;
+}
 
 /* ── LABEL ── */
 #label {
@@ -495,7 +498,7 @@ hr {
 
 /* Tablet */
 @media (min-width: 600px) {
-  body { padding: 0 32px; }
+  body { padding: 0 8px; }
   #dlinks { gap: 24px; }
   #a { font-size: 20px; }
 }
@@ -505,7 +508,7 @@ hr {
   body {
     max-width: 860px;
     margin: 0 auto;
-    padding: 0 40px;
+    padding: 0 10px;
   }
   h3 { font-size: 36px; }
   p  { font-size: 20px; }

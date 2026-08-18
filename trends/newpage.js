@@ -12,13 +12,13 @@ function renderPosts(posts) {
     var postId = post.id;
     var card   = document.createElement('div');
     card.className = 'post-card';
-
+const singleImg = !post.img2;
     card.innerHTML =
       '<b id="label">' + (post.label || '') + '</b>' +
       '<h3>' + post.headline + '</h3>' +
-      '<img src="' + post.img + '" alt="' + (post.label || '') + '">' +
-      (post.img2 ? '<img src="' + post.img2 + '" alt="' + (post.label || '') + '">' : '') +
-      (post.body ? '<p>' + post.body + '</p>' : '') +
+      (post.img ? '<img src="' + post.img + '" alt="' + (post.label || '') + '"' + (singleImg ? ' id="p1"' : '') + '>' : '') +
+(post.img2 ? '<img src="' + post.img2 + '" alt="' + (post.label || '') + '">' : '') +
+(post.body ? '<p>' + post.body + '</p>' : '') +
 
       '<div class="rate-box">' +
         '<div class="rate-btns">' +

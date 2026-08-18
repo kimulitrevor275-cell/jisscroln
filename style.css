@@ -14,7 +14,7 @@ body {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
-  padding: 0 14px;
+  padding: 0 8px;
   font-size: clamp(14px, 3vw, 22px);
 }
 
@@ -196,9 +196,9 @@ h1 {
   display:  flex;
   justify-content: space-between;
   align-items: center;
-  font-size: clamp(25px, 4.1vw, 49px);
+  font-size: clamp(16px, 3vw, 24px);
   
-  font-weight: 1000;
+  
   color: white;
   font-family: poppins,san-serif;
   margin: 14px;
@@ -232,13 +232,17 @@ h2::first-letter{
 }
 /* ── IMAGES ── */
 img {
-  width: 48.2%;
+  width: 45.2%;
   max-width: 100%;
   height: auto;
+  display: inline;
+  min-height: auto;
+  justify-content: center;
   margin: 6px ;
   border-radius: 10px;
-  border: 1px solid darkgrey;
-}.btn-good img, .btn-bad img {
+  border: 1px solid rgb(45, 43, 43);
+}
+.btn-good img, .btn-bad img {
   width: 100px;
   height: 50px;
   border: none;

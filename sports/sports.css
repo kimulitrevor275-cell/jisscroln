@@ -13,7 +13,7 @@ body {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
-  padding: 0 16px;
+  padding: 0 8px;
 }
 /* ── TIME ── */
 #time {
@@ -47,6 +47,7 @@ header {
 }
 
 #logo {
+
   border: none;
   margin: 0;
   width: auto;
@@ -172,18 +173,21 @@ p {
 
 /* ── IMAGES ── */
 img {
-  width: 99%;
+  width: 45.2%;
   max-width: 100%;
   height: auto;
-  margin: 10px ;
-  border-radius: 15px;
-  border: 1px solid white;
-  display: block;
+  display: inline;
+  min-height: auto;
+  
+  margin: 6px ;
+  border-radius: 10px;
+  border: 1px solid rgb(45, 43, 43);
 }
 
 /* single image full width */
 #p1 {
   width: 100%;
+  margin: 6px 0;
 }
 
 /* two images side by side */
@@ -489,9 +493,9 @@ a {
    RESPONSIVE
 ════════════════════════════════════════ */
 @media (min-width: 600px) {
-  body { padding: 0 28px; }
+  body { padding: 0 8px; }
 }
 
 @media (min-width: 1024px) {
-  body { max-width: 900px; margin: 0 auto; padding: 0 40px; }
+  body { max-width: 900px; margin: 0 auto; padding: 0 10px; }
 }

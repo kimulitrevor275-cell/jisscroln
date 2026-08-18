@@ -48,6 +48,7 @@ function renderTrends(trends, tickers, polls) {
         (post.link ? ' <a href="' + post.link + '" target="_blank">view</a>' : '') +
       '</h2>' +
       (post.img ? '<img src="' + post.img + '" alt="photo"' + (singleImg ? ' id="p1"' : '') + '>' : '') +
+      
   (post.img2 ? '<img src="' + post.img2 + '" alt="photo">' : '') +
   (post.body ? '<p class="article-body">' + post.body.split('\n').join('<br>') + '</p>' : '') +
 
