@@ -352,9 +352,9 @@ function showTickerSkeleton() {
     '#jis-search-icon {' +
   'position:fixed;bottom:50px;right:20px;' +
   'width:78px;height:78px; border:none;' +
-  'background :none;color:#000;' +
+  'background :none;' +
   'border-radius:50%; border:none; '  +
-  '0display:flex;align-items:center;justify-content:center;' +
+  'display:flex;align-items:center;justify-content:center;' +
   'font-size:22px;cursor:pointer;' +
   'box-shadow:0 4px 16px rgba(0,0,0,0.5);' +
   'z-index:999;user-select:none;' +
@@ -372,27 +372,27 @@ function showTickerSkeleton() {
   
     '#jis-search-input {' +
       'flex:1;background:#181818;border:1px solid #333;border-radius:8px;' +
-      'padding:11px 14px;color:#e8e8e8;font-family:Outfit,sans-serif;' +
-      'font-size:35px;outline:none;' +
+      'padding:8px 9px;color:#e8e8e8;width: 50px;font-family:Outfit,sans-serif;' +
+      'font-size:19px;outline:none;' +
     '}' +
     '#jis-search-input:focus { border-color: white; }' +
   
     '#jis-search-close { background:none;border:none;color: white ;font-size:35px;cursor:pointer;padding:4px 8px; }' +
   
-    '#jis-search-results { max-height:70vh;overflow-y:auto; }' +
+    '#jis-search-results { max-height:70vh;overflow-y:auto; scrollbar-width: none; }' +
   
-    '.jis-result-section { font-size:20px; text-transform:uppercase; letter-spacing:0.12em; color: white; margin:12px 0 6px; }' +
+    '.jis-result-section { font-size:20px; text-transform:uppercase; color: white; margin:12px 0 6px; }' +
   
-    '.jis-result-item { display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #1a1a1a;cursor:pointer; }' +
+    '.jis-result-item { display:flex;align-items:center;gap:12px; font-family:"outfit",serif;padding:10px 0;border-bottom:1px solid #344761;cursor:pointer; }' +
   
     '.jis-result-item:active { opacity:0.7; }' +
   
     '.jis-result-img { width: 55px;height:55px;object-fit:cover;border-radius:5px;flex-shrink:0;background:#1a1a1a; }' +
     '.jis-result-info { flex:1;min-width:0; }' +
   
-    '.jis-result-cat { font-size:20px;color:#c9a96e;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px; }' +
+    '.jis-result-cat { font-size:20px;color:lightgray;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px; }' +
   
-    '.jis-result-title { font-size:30px;color: white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }' +
+    '.jis-result-title { font-size:20px;color: white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }' +
   
     '.jis-no-results { text-align:center;color: white; font-size:30px;padding:32px 0; }';
   
@@ -489,7 +489,7 @@ function showTickerSkeleton() {
 // inject search icon
   var icon = document.createElement('span');
   icon.id = 'jis-search-icon';
-  icon.innerHTML = '<img src="/pics/search.svg">';
+  icon.innerHTML = '<img src="/pics/search.svg" style="background:none;width:40px;height:40px; border:none">';
   icon.addEventListener('click', openSearch);
   document.body.appendChild(icon);
 })();
