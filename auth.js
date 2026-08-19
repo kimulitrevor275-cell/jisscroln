@@ -160,11 +160,16 @@ function submitOpinion(postId) {
   btn.textContent = 'Posting...';
 
   var username = window._cachedUsername || sessionStorage.getItem('jis_username') || 'Anonymous';
+var userId = window._cachedUserId||null; 
 
   fetch(API + '/opinions', {
     method : 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body   : JSON.stringify({ post_id: postId, text: text, username: username }),
+    body   : JSON.stringify({ 
+      post_id: postId, 
+      text: text, 
+      username: username, 
+      user_id: userId }),
   })
   .then(function(r) { return r.json(); })
   .then(function(data) {
@@ -210,9 +215,10 @@ function renderOpinions(postId, opinions) {
 
   opinions.forEach(function(op, i) {
     var badge = '';
-    if(op.username&& op.username != 'Anonymous') {
-      badge = _makeBadge(op.tier, 30);
-    }
+    
+if (op.username && op.username !== 'Anonymous') {
+  badge = _makeBadge(op.tier, 30);  // ← This will render the blue "loyal" badge
+}
     var card = document.createElement('div');
     card.className     = 'opinion-card' + (i > 0 ? ' hidden' : '');
     card.style.display = i > 0 ? 'none' : '';
