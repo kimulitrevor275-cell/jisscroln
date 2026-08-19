@@ -189,7 +189,7 @@ b {
 
 #chart-cover1, #chart-cover2, #chart-cover3, #chart-cover4, #chart-cover5 {
   height: 200px;
-  max-width: 100%;
+  max-width: 580px;
   overflow: hidden;
 }
 
@@ -209,15 +209,17 @@ b {
 }
 
 .chart-name {
-  font-size: clamp(12px, 3vw, 26px);
+  font-size: clamp(15px, 3vw, 29px);
   margin: 0 0 4px 0;
-  color: white; 
+  color: rgb(36, 34, 34); 
+  background-color: hsl(0, 8%, 61%);
+  
 }
 
 .chart-type {
-  font-size: clamp(14px, 3vw, 32px);
-  color:  black;
-  margin: 0;
+  font-size: clamp(14px, 3.vw, 26px);
+  color:  rgb(63, 60, 60);
+  margin: 10px;
 }
 
 
