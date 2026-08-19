@@ -641,7 +641,7 @@ ENGAGE BUTTON
 }
 
 @media (min-width: 1024px) {
-  body { max-width: 900px; margin: 0 auto; padding: 0 40px; }
+  body { max-width: 900px; margin: 0 auto; padding: 0 10px; }
   #poll1, #poll2, #poll3, #poll4 { width: 420px; }
   #img{
     width:100%;
