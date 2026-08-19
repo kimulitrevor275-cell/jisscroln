@@ -188,7 +188,7 @@ b {
 }
 
 #chart-cover1, #chart-cover2, #chart-cover3, #chart-cover4, #chart-cover5 {
-  height: 200px;
+  height: 300px;
   max-width: 580px;
   overflow: hidden;
 }
@@ -196,7 +196,7 @@ b {
 .chart-img {
   border: none;
   width: 100%; 
-  height: 200px;
+  height: 300px;
   margin: 0;
   padding: 0;
   object-fit: cover; 
