@@ -175,7 +175,7 @@ b {
 
 .chart-card {
   
-  max-width: 350px; 
+  max-width: 480px; 
   
   background: white;
   border-radius: 12px;
@@ -274,7 +274,7 @@ b {
   max-width: auto;
   height: auto;
   border-radius: 20px;
-  border: 0.5px solid #da7810;
+  border: 0.5px solid #41403f;
   border-bottom: none;
   background-color: black;
   margin: 8px;
