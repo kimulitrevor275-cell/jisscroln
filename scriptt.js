@@ -45,6 +45,7 @@ function renderTrends(trends, tickers, polls) {
     var div       = document.createElement('div');
 
     div.innerHTML =
+    '<b id="label">' + (post.label || '') + '</b>' +
       '<h2>' + post.headline +
         (post.link ? ' <a href="' + post.link + '" target="_blank">view</a>' : '') +
       '</h2>' +

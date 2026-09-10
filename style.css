@@ -351,6 +351,15 @@ b{
 
 /* ── FOOTER ── */
 #fo { margin-bottom: clamp(40px, 8vw, 100px); }
+#label {
+  font-family: monospace;
+  background-color: hsla(214, 73%, 43%, 0.434);
+  font-size: clamp(18px, 4vw, 48px);
+  color: white;
+  border-radius: 4px;
+  padding: 2px 8px;
+  display: inline-block;
+}
 
 /* ── ICON ── */
 #icon {
