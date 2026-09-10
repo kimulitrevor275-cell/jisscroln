@@ -107,7 +107,7 @@ function submitRating(postId, vote) {
   })
   .then(function(r) { return r.json(); })
   .then(function(data) {
-    if (data.success) {
+    if (data.good !== undefined) {
       voted[postId] = vote;
       document.getElementById('bg-' + postId).className = 'btn-good' + (vote === 'good' ? ' voted' : '');
       document.getElementById('bb-' + postId).className = 'btn-bad'  + (vote === 'bad'  ? ' voted' : '');
