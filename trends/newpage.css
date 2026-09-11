@@ -148,7 +148,14 @@ img {
   padding: 2px 8px;
   display: inline-block;
 }
-
+.see-more {
+  color: #6eaec9;
+  cursor: pointer;
+  font-size: 30px;
+  display: inline;
+  margin-top: 4px;
+  font-family: 'outfit', sans-serif;
+}
 /* ── TIME ── */
 #time {
   background-color:  black;

@@ -4,7 +4,17 @@ fetch(API + '/').catch(function() {});
 setInterval(function() { fetch(API + '/').catch(function() {}); }, 5 * 60 * 1000);
 
 //  RENDER ENGINE
-
+function toggleBody(postId, encodedBody) {
+    var el = document.getElementById('body-' + postId);
+    var btn = document.getElementById('sm-' + postId);
+    if (btn.textContent === 'See More') {
+        el.innerHTML = decodeURIComponent(encodedBody).split('\n').join('<br>');
+        btn.textContent = 'See Less';
+    } else {
+        el.innerHTML = decodeURIComponent(encodedBody).substring(0, 300).split('\n').join('<br>') + '...';
+        btn.textContent = 'See More';
+    }
+}
 function renderTrends(trends, tickers, polls) {
   
   var tickerEl = document.getElementById('ticker');
@@ -45,15 +55,19 @@ function renderTrends(trends, tickers, polls) {
     var div       = document.createElement('div');
 
     div.innerHTML =
-    '<b id="label">' + (post.label || '') + '</b>' +
-      '<h2>' + post.headline +
-        (post.link ? ' <a href="' + post.link + '" target="_blank">view</a>' : '') +
-      '</h2>' +
-      (post.img ? '<img src="' + post.img + '" alt="photo"' + (singleImg ? ' id="p1"' : '') + '>' : '') +
-      
-  (post.img2 ? '<img src="' + post.img2 + '" alt="photo">' : '') +
-  (post.body ? '<p class="article-body">' + post.body.split('\n').join('<br>') + '</p>' : '')+
- 
+    '<h2>' + post.headline +
+  (post.link ? ' <a href="' + post.link + '" target="_blank">view</a>' : '') +
+'</h2>' +
+(post.img ? '<img src="' + post.img + '" alt="photo"' + (singleImg ? ' id="p1"' : '') + '>' : '') +
+(post.img2 ? '<img src="' + post.img2 + '" alt="photo">' : '') +
+(post.body ? 
+  '<p class="article-body" id="body-' + post.id + '">' + 
+    (post.body.length > 300 ? post.body.substring(0, 300).split('\n').join('<br>') + '...' : post.body.split('\n').join('<br>')) + 
+  '</p>' +
+  (post.body.length > 300 ? 
+    '<span class="see-more" id="sm-' + post.id + '" data-id="' + post.id + '" data-body="' + encodeURIComponent(post.body) + '">See More</span>' 
+  : '')
+: '') +
       '<div class="rate-box">' +
         '<div class="rate-btns">' +
           '<button class="btn-good" id="bg-' + postId + '">' +
@@ -105,6 +119,8 @@ function renderTrends(trends, tickers, polls) {
 //  ATTACH EVENTS
 
 function attachEvents(postId) {
+  var seeMore = document.getElementById('sm-' + postId);
+  
   var engageBtn = document.getElementById('bte-' + postId);
   var panel     = document.getElementById('ep-'  + postId);
   var input     = document.getElementById('oi-'  + postId);
@@ -138,6 +154,12 @@ function attachEvents(postId) {
     });
     showMore.classList.remove('visible');
   });
+ if (seeMore) {
+    seeMore.addEventListener('click', function() {
+        toggleBody(postId, seeMore.getAttribute('data-body'));
+    });
+}
+
 }
 
 showSkeleton('trends', 3);
@@ -156,4 +178,3 @@ Promise.all([
   renderTrends(trends, tickers, polls);
 })
 .catch(function() { renderTrends([], [], []); });
-clo

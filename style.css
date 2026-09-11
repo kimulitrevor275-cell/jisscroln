@@ -17,7 +17,14 @@ body {
   padding: 0 8px;
   font-size: clamp(14px, 3vw, 22px);
 }
-
+.see-more {
+  color: #6eaec9;
+  cursor: pointer;
+  font-size: 30px;
+  display: inline;
+  margin-top: 4px;
+  font-family: 'outfit', sans-serif;
+}
 /* ── HEADER ── */
 #head1 {
   position: sticky;
