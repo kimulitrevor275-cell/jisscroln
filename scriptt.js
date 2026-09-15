@@ -70,27 +70,32 @@ function renderTrends(trends, tickers, polls) {
 : '') +
       '<div class="rate-box">' +
         '<div class="rate-btns">' +
+
           '<button class="btn-good" id="bg-' + postId + '">' +
-            '<img src="pics/iconsthumbsup.png" alt="good"> Like' +
+            '<img src="pics/iconsthumbsup.png" alt="good"> ' +
+            '<span id="rgp-' + postId + '">0 </span>' +
           '</button>' +
-          '<button class="btn-bad" id="bb-' + postId + '">' +
-            '<img src="pics/iconsthumbsdown.png" alt="bad"> Dislike' +
-          '</button>' +
-        '</div>' +
-        '<div class="rate-bar-wrap">' +
+
+          '<div class="rate-bar-wrap">' +
           '<div class="rate-bar-good" id="rg-'  + postId + '" style="width:50%"></div>' +
           '<div class="rate-bar-bad"  id="rbd-' + postId + '" style="width:50%"></div>' +
         '</div>' +
-        '<div class="rate-counts">' +
-          '<span id="rgp-' + postId + '">0 (50%)</span>' +
-          '<span id="rbp-' + postId + '">(50%) 0</span>' +
-        '</div>' +
-      '</div>' +
 
-      '<button class="btn-engage" id="bte-' + postId + '">' +
+          '<button class="btn-bad" id="bb-' + postId + '">' +
+            '<img src="pics/iconsthumbsdown.png" alt="bad">' +
+            '<span id="rbp-' + postId + '">0 </span>' +
+          '</button>' +
+
+           '<button class="btn-engage" id="bte-' + postId + '">' +
         '<img id="commentbtn" src="pics/commentbtn.png"> Comment <span>▾</span>' +
       '</button>' +
+        '</div>' +
 
+
+        
+        
+
+     
       '<div class="engage-panel" id="ep-' + postId + '">' +
         '<div class="opinion-label">YOUR OPINION</div>' +
         '<textarea class="opinion-input" id="oi-' + postId + '" ' +

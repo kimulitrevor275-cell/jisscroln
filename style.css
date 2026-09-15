@@ -175,7 +175,7 @@ h4 {
   border-radius: 50px;
 }
 #commentbtn{
-  border: none;
+  
   border-radius: 0;
   width: 50px;
   height: 50px;
@@ -414,22 +414,17 @@ ENGAGE BUTTON
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  height: 60px;
-  width: 100%;
-  margin: 16px 0 0 0;
-  padding: 14px;
-  background: #0f0f14;
-  border: 1px solid #2a2a2a;
-  border-radius: 26px;
-  color: #888;
-  font-family: monospace;
+
+  border: 0px solid #1a1a1a;
+  width: auto;
+  
+  background-color: #0a0a0f;
   font-size: clamp(14px, 3vw, 24px);
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
+  
   letter-spacing: 1px;
 }
-.btn-engage:hover { border-color: #d0c7f2; color: #d0c7f2; }
+
 .btn-engage span  { font-size: clamp(12px, 2.5vw, 20px); }
 
 /* ════════════════════════════════════════
@@ -471,7 +466,10 @@ ENGAGE BUTTON
 }
 
 .rate-btns {
-  width: 70px;
+  width: 100%;
+  display: flex;
+  flex-direction: space-between;
+  width: auto;
   display: flex;
   gap: 10px;
   margin-bottom: 12px;
@@ -480,7 +478,7 @@ ENGAGE BUTTON
 .btn-good, .btn-bad {
   flex: 1;
   font-family: monospace;
-  font-size: clamp(14px, 3vw, 22px);
+  
   padding: 4px;
   border-radius: 20px;
   border: 2px solid;
@@ -657,7 +655,7 @@ ENGAGE BUTTON
 }
 
 @media (min-width: 1024px) {
-  body { max-width: 900px; margin: 0 auto; padding: 0 10px; }
+  body { max-width: 900px; margin: 0 auto; padding: 010px; }
   #poll1, #poll2, #poll3, #poll4 { width: 420px; }
   #img{
     width:100%;
