@@ -69,7 +69,7 @@ sb.auth.getSession().then(function(r) {
       var badge = _makeBadge(data.tier, 35);
       if (el) {
         el.innerHTML = getGreeting() + ', ' + name + badge +
-          ' &nbsp; <a href="#" onclick="signOut()" style="color:gray;font-size:20px;">sign out</a>';
+          ' &nbsp; <a href="profile.html" style="color:gray;font-size:20px;">👨</a>';
       }
     })
     .catch(function() {});
