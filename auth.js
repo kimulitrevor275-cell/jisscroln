@@ -69,7 +69,7 @@ sb.auth.getSession().then(function(r) {
       var badge = _makeBadge(data.tier, 35);
       if (el) {
         el.innerHTML = getGreeting() + ', ' + name + badge +
-          ' &nbsp; <a href="profile.html" style="color:gray;font-size:20px;">👨</a>';
+          ' &nbsp; <a href="profile.html" style="color:gray;font-size:20px;"><img src="/pics/user.png" style ="width:30px; border:none;"alt="Profile" style="width:20px;height:auto;margin-left:4px;"></a>';
       }
     })
     .catch(function() {});
