@@ -175,7 +175,7 @@ h4 {
   border-radius: 50px;
 }
 #commentbtn{
-  
+  justify-self: center;
   border-radius: 0;
   width: 50px;
   height: 50px;
@@ -410,20 +410,6 @@ b{
 /*════════════════════════════════════════
 ENGAGE BUTTON
 ════════════════════════════════════════ */
-.btn-engage {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 0px solid #1a1a1a;
-  width: auto;
-  
-  background-color: #0a0a0f;
-  font-size: clamp(14px, 3vw, 24px);
-  cursor: pointer;
-  
-  letter-spacing: 1px;
-}
 
 .btn-engage span  { font-size: clamp(12px, 2.5vw, 20px); }
 
@@ -457,34 +443,85 @@ ENGAGE BUTTON
   border-radius: 16px;
 }
 
-.rate-label {
-  font-family: monospace;
-  font-size: clamp(12px, 2.5vw, 20px);
-  color: white;
-  letter-spacing: 2px;
-  margin-bottom: 10px;
-}
-
 .rate-btns {
   width: 100%;
   display: flex;
-  flex-direction: space-between;
-  width: auto;
-  display: flex;
+  flex-direction: row;
   gap: 10px;
-  margin-bottom: 12px;
+  align-items: center;
 }
 
 .btn-good, .btn-bad {
-  flex: 1;
-  font-family: monospace;
-  
-  padding: 4px;
+  flex: 0 0 auto;
+  padding: 8px 12px;
   border-radius: 20px;
   border: 2px solid;
   cursor: pointer;
+  background: black;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   transition: background 0.2s, color 0.2s;
 }
+
+.btn-good {
+  color: #5b9cf6;
+  border-color: #5b9cf6;
+}
+.btn-good:hover,
+.btn-good.voted {
+  background: #5b9cf6;
+  color: black;
+}
+
+.btn-bad {
+  color: #e07070;
+  border-color: #e07070;
+}
+.btn-bad:hover,
+.btn-bad.voted {
+  background: #e07070;
+  color: black;
+}
+
+.rate-bar-wrap {
+  flex: 1;
+  height: 12px;
+  border-radius: 99px;
+  overflow: hidden;
+  display: flex;
+  min-width: 150px;
+}
+
+.rate-bar-good {
+  height: 100%;
+  background: #5b9cf6;
+  transition: width 0.6s ease;
+}
+
+.rate-bar-bad {
+  height: 100%;
+  background: #e07070;
+  transition: width 0.6s ease;
+}
+
+.btn-engage {
+  flex: 0 0 auto;
+  background: black;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+}
+
+#commentbtn {
+  width: 50px;
+  height: 50px;
+  border: none;
+  margin: 0;
+}
+
 .btn-good              { background: black; color: #5b9cf6; border-color: black; }
 .btn-good:hover,
 .btn-good.voted        { background: #5b9cf6; color: black; }
@@ -492,13 +529,7 @@ ENGAGE BUTTON
 .btn-bad:hover,
 .btn-bad.voted         { background: #e07070; color: black; }
 
-.rate-bar-wrap {
-  width: 100%;
-  height: 10px;
-  border-radius: 99px;
-  overflow: hidden;
-  display: flex;
-}
+
 .rate-bar-good { height: 100%; background: #5b9cf6; transition: width 0.6s ease; }
 .rate-bar-bad  { height: 100%; background: #e07070; transition: width 0.6s ease; }
 

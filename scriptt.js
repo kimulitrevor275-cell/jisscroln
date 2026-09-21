@@ -68,29 +68,24 @@ function renderTrends(trends, tickers, polls) {
     '<span class="see-more" id="sm-' + post.id + '" data-id="' + post.id + '" data-body="' + encodeURIComponent(post.body) + '">See More</span>' 
   : '')
 : '') +
-      '<div class="rate-box">' +
-        '<div class="rate-btns">' +
-
-          '<button class="btn-good" id="bg-' + postId + '">' +
-            '<img src="pics/iconsthumbsup.png" alt="good"> ' +
-            '<span id="rgp-' + postId + '">0 </span>' +
-          '</button>' +
-
-          '<div class="rate-bar-wrap">' +
-          '<div class="rate-bar-good" id="rg-'  + postId + '" style="width:50%"></div>' +
-          '<div class="rate-bar-bad"  id="rbd-' + postId + '" style="width:50%"></div>' +
-        '</div>' +
-
-          '<button class="btn-bad" id="bb-' + postId + '">' +
-            '<img src="pics/iconsthumbsdown.png" alt="bad">' +
-            '<span id="rbp-' + postId + '">0 </span>' +
-          '</button>' +
-
-           '<button class="btn-engage" id="bte-' + postId + '">' +
-        '<img id="commentbtn" src="pics/commentbtn.png"> Comment <span>▾</span>' +
-      '</button>' +
-        '</div>' +
-
+      
+  '<div class="rate-btns">' +
+    '<button class="btn-good" id="bg-' + postId + '">' +
+      '<img src="pics/iconsthumbsup.png" alt="good">' +
+      '<span id="rgp-' + postId + '">0</span>' +
+    '</button>' +
+    '<div class="rate-bar-wrap">' +
+      '<div class="rate-bar-good" id="rg-' + postId + '" style="width:50%"></div>' +
+      '<div class="rate-bar-bad" id="rbd-' + postId + '" style="width:50%"></div>' +
+    '</div>' +
+    '<button class="btn-bad" id="bb-' + postId + '">' +
+      '<img src="pics/iconsthumbsdown.png" alt="bad">' +
+      '<span id="rbp-' + postId + '">0</span>' +
+    '</button>' +
+    '<button class="btn-engage" id="bte-' + postId + '">' +
+      '<img id="commentbtn" src="pics/commentbtn.png">' +
+    '</button>' +
+  '</div>' +
 
         
         
