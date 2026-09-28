@@ -59,6 +59,15 @@ header {
   background: black;
   color: gray;
 }
+#label {
+  font-family: monospace;
+  background-color: #d0c7f2;
+  font-size: clamp(18px, 4vw, 48px);
+  color: white;
+  border-radius: 4px;
+  padding: 2px 8px;
+  display: inline-block;
+}
 /* ── ABOUT ── */
 .about_us {
   text-decoration: none;

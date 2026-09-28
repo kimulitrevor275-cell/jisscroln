@@ -87,15 +87,7 @@ img {
 }
 
 /* ── LABEL ── */
-#label {
-  font-family: monospace;
-  background-color: #d0c7f2;
-  font-size: clamp(18px, 4vw, 48px);
-  color: white;
-  border-radius: 4px;
-  padding: 2px 8px;
-  display: inline-block;
-}
+
 .see-more {
   color: #6eaec9;
   cursor: pointer;

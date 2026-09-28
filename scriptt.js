@@ -48,7 +48,7 @@ function renderTrends(trends, tickers, polls) {
   
   var trendsEl = document.getElementById('trends');
   if (!trendsEl) return;
-  trendsEl.innerHTML = '<h1 id="forup">JisScroL Updates<a href="newpage.html"><img id="nxtp-icon" src="pics/nxtpage.png"></a></h1>';
+  trendsEl.innerHTML = '<h1 id="forup">Updates<a href="/trends/"><img id="nxtp-icon" src="pics/nxtpage.png"></a></h1>';
 
   trends.forEach(function(post) {
     var postId    = post.id;
@@ -56,6 +56,7 @@ function renderTrends(trends, tickers, polls) {
     var div       = document.createElement('div');
 
     div.innerHTML =
+     '<b id="label">' + (post.label || '') + '</b>' +
     '<h2>' + post.headline +
   (post.link ? ' <a href="' + post.link + '" target="_blank">view</a>' : '') +
 '</h2>' +
