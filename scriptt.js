@@ -51,7 +51,7 @@ function renderPost(post) {
 
   return `
     <b id="label">${post.label || ""}</b>
-    <h2>${post.headline}${post.link ? ` <a href="${post.link}" target="_blank" rel="noopener">view</a>` : ""}</h2>
+    <h2>${post.headline}${post.link ? ` <a href="${post.link}" target="_blank" rel="noopener">view↗</a>` : ""}</h2>
     ${post.img ? `<img src="${post.img}" alt="photo"${singleImg ? ' id="p1"' : ""}>` : ""}
     ${post.img2 ? `<img src="${post.img2}" alt="photo">` : ""}
     ${renderBody(post)}
@@ -83,10 +83,6 @@ function renderTrends(trends, tickers, polls) {
   });
 }
 
-// ─────────────────────────────────────────
-//  FETCH AND RENDER
-// ─────────────────────────────────────────
-
 showSkeleton("trends", 3);
 
 Promise.all([
@@ -108,6 +104,8 @@ Promise.all([
     var trends = results[2];
     renderTrends(trends, tickers, polls);
   })
-  .catch(function () {
-    renderTrends([], [], []);
+  .catch(function (error) {
+    console.error("Failed to load trends:", error);
+    var trendsEl = document.getElementById("trends");
+    if (trendsEl) trendsEl.textContent = "Could not load trends. Please try again later.";
   });

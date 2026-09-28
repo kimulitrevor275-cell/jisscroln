@@ -1,104 +1,16 @@
+/* content.css — page-specific rules for sports.html / newpage.html.
+   Assumes style.css (shared: reset, body, hr, headings, paragraphs,
+   images, post-card, rate-box, engage-panel, opinion-card, etc.) is
+   loaded on the same page. Nothing here duplicates a rule that file
+   already covers — only what's unique to these pages lives below. */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-  /* ── RESET ── */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* ── BASE ── */
-body {
-  margin: 0;
-  background-color: black;
-  font-family: 'outfit', serif;
-  color: brown;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-  padding: 0 16px;
-}
-
-
-
-.btn-good img, .btn-bad img {
-  width: 100px;
-  height: 50px;
-  border: none;
-  border-radius: 0;
-  margin: 0;
-  display: inline;
-  vertical-align: middle;
-}
-
-
-/* ── CONTENT ── */
+/* ── CONTENT WRAPPER ── */
 #content {
   margin-top: clamp(40px, 5vw, 100px);
   width: 100%;
 }
 
-/* ── HEADINGS ── */
-h2{
-  font-family: "outfit", serif;
-  color: white;
-  font-size: clamp(20px, 3vw, 35px);
-  line-height: 1.4;
-  margin: 0px 0;
-  text-align: left;
-  font-weight: 200;
-}
-
-
-
-
-/* ── PARAGRAPH ── */
-p {
-  max-width: 70%x;
-  margin: 30px;
-  font-family: 'Outfit', san-serif;
-  text-align: left;
-  font-size: clamp(18px, 3vw, 35px);
-  color: white;
-  line-height: 1.5;
-  font-weight: 400;
-}
-
-/* ── IMAGES ── */
-img {
-  width: 45.2%;
-  max-width: 100%;
-  flex-shrink: none;
-  height: 100%;
-  border-radius: 16px;
-  margin: 6px;
-}
-#p1 {
-  width:99%;
-}
-
-/* ── LABEL ── */
-
-.see-more {
-  color: #6eaec9;
-  cursor: pointer;
-  font-size: 30px;
-  display: inline;
-  margin-top: 4px;
-  font-family: 'outfit', sans-serif;
-}
-/* ── TIME ── */
-#time {
-  background-color:  black;
-  font-size: clamp(12px, 3vw, 20px);
-  color: gray;
-  border-radius: 10px;
-  display: inline-block;
-  padding: 4px 10px;
-  margin: 8px 0;
-}
-
-/* ── DLINKS ── */
+/* ── READ-MORE / BACK-TO-HOME LINKS ── */
 #dlinks {
   display: flex;
   flex-wrap: wrap;
@@ -111,34 +23,18 @@ img {
   min-width: 120px;
   text-decoration: none;
   font-size: clamp(16px, 3vw, 20px);
-  background-color: black;
-  color:  gray;
-  padding: 6px 6px;
+  background-color: #0a0a0a;
+  color: gray;
+  padding: 6px;
   border-radius: 200px;
   border: 0.5px solid gray;
-  font-family: 'inter' serif;
+  font-family: 'Inter', sans-serif;
   text-align: center;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
+#a:hover { background-color: dimgray; color: white; }
 
-#a:hover {
-  background-color: dimgray;
-  color: white;
-}
-
-/* ── HR ── */
-hr {
-  margin-bottom: 50px;
-  margin-top: 50px;
-  margin: 30px 0;
-  border-color: #222;
-}
-.opinion-user {
-  font-size: clamp(40px,3vw,45px);
-  color: #717a74;
-  margin-bottom: 4px;
-  font-weight: 400;
-}
-/* ── TRENDING ── */
+/* ── TRENDING STRIP ── */
 #trending {
   padding: 10px;
   width: 100%;
@@ -149,34 +45,13 @@ hr {
   margin: 40px 0;
 }
 
-/* ── ICON ── */
-
-
-/* ── EMAIL ── */
-
- ── */
+/* ── FOOTER SPACING ── */
 #fo {
   margin-bottom: 60px;
 }
 
-
-
-
-/* Tablet */
-@media (min-width: 600px) {
-  body { padding: 0 8px; }
-  #dlinks { gap: 24px; }
-  #a { font-size: 20px; }
-}
-
 /* Desktop */
 @media (min-width: 1024px) {
-  body {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 0 10px;
-  }
-  h3 { font-size: 36px; }
-  p  { font-size: 20px; }
-  #label { font-size: 28px; }
+  #dlinks { gap: 24px; }
+  #a { font-size: 20px; }
 }
