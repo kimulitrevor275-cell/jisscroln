@@ -43,23 +43,27 @@ hr { margin-top: 50px;margin-bottom: 50px; border-color: #222}
 .ticker-wrap {
   width: 99.5%;
   overflow: hidden;
-  border-bottom: 4px solid #333;
+  
   padding: 6px 0;
 }
 
 #ticker {
   display: flex;
   gap: 20px;
+  border-radius: 20px;
   white-space: nowrap;
   animation: scroll 50s linear infinite;
 }
 
 #ticker span {
-  font-family: 'outfit' sans-serif;
-  border: 2px solid #444;
+  font-family: 'outfit',serif;
+  border: 2px solid #1f15a9;
+  background-color: hsla(212, 63%, 43%, 0.626);
   padding: 3px 10px;
+  border-radius: 20px;
+  padding:  8px;
   font-size: clamp(14px, 3vw, 26px);
-  color: #ccc;
+  color: white;
   flex-shrink: 0;
 }
 
@@ -130,10 +134,11 @@ hr { margin-top: 50px;margin-bottom: 50px; border-color: #222}
 h4 {
   
   padding: 4px 8px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "outfit" serif;
   font-size: clamp(14px, 3vw, 28px);
-  color: #ccc;
+  color: white;
   margin: 0;
+  font-weight: normal;
   text-align: center;
   border-radius: 50px;
 }
@@ -175,7 +180,7 @@ h1 {
   margin-left: 0;
 }
 #forup{
-  
+  font-weight:lighter ;
   margin-bottom: 12px;
   font-family: 'outfit', serif;
   font-size: clamp(18px, 4vw, 40px);
