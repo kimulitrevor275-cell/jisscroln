@@ -39,22 +39,18 @@ body {
 }
 
 /* ── HEADINGS ── */
-h3 {
+h2{
   font-family: "outfit", serif;
   color: white;
-  font-size: clamp(48px, 4.3vw, 35px);
+  font-size: clamp(20px, 3vw, 35px);
   line-height: 1.4;
   margin: 0px 0;
   text-align: left;
-  font-weight: 00;
+  font-weight: 200;
 }
 
 
-h2 {
-  color: gray;
-  margin-top: 20px;
-  font-size: clamp(16px, 4vw, 40px);
-}
+
 
 /* ── PARAGRAPH ── */
 p {
@@ -62,23 +58,18 @@ p {
   margin: 30px;
   font-family: 'Outfit', san-serif;
   text-align: left;
-  font-size: clamp(35px, 3.4vw, 45px);
+  font-size: clamp(18px, 3vw, 35px);
   color: white;
   line-height: 1.5;
   font-weight: 400;
 }
-p::first-letter{
-  margin-left: 0px;
-  font-size: 40px;
-  font-weight: 300;
-  font-family: monospace ;
-}
+
 /* ── IMAGES ── */
 img {
   width: 45.2%;
   max-width: 100%;
-  
-  height: auto;
+  flex-shrink: none;
+  height: 100%;
   border-radius: 16px;
   margin: 6px;
 }
@@ -163,253 +154,13 @@ hr {
 
 /* ── EMAIL ── */
 
-
-#commentbtn{
-  border: none;
-  border-radius: 0;
-  width: 50px;
-  height: 50px;
-}
-#good/badbtn{
-  width: 40px;
-  height: 40px;
-}
-
-/* ── FOOTER ── */
+ ── */
 #fo {
   margin-bottom: 60px;
 }
 
-/* ════════════════════════════════════════
-   ENGAGE BUTTON
-════════════════════════════════════════ */
-.btn-engage {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  height: 60px;
-  width: 100%;
-  margin: 16px 0 0 0;
-  padding: 14px;
-  background: #0f0f14;
-  border: 1px solid #2a2a2a;
-  border-radius: 26px;
-  color: #888;
-  font-family: monospace;
-  font-size: clamp(14px, 3vw, 24px);
-  cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
-  letter-spacing: 1px;
-}
-.btn-engage:hover { border-color: #d0c7f2; color: #d0c7f2; }
-.btn-engage span  { font-size: clamp(12px, 2.5vw, 20px); }
 
-/* ════════════════════════════════════════
-   ENGAGE PANEL
-════════════════════════════════════════ */
-.engage-panel {
-  display: none;
-  margin-top: 2px;
-  background: #0a0a0f;
-  border: 1px solid #1a1a1a;
-  border-radius: 0 0 16px 16px;
-  padding: 20px 16px;
-  animation: fadeIn 0.25s ease;
-}
-.engage-panel.open { display: block; }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ════════════════════════════════════════
-   RATING BAR
-════════════════════════════════════════ */
-.rate-box {
-  margin: 16px 0;
-  padding: 16px;
-  background: black;
-  border: 1px solid #1a1a1a;
-  border-radius: 16px;
-}
-
-.rate-label {
-  font-family: monospace;
-  font-size: clamp(12px, 2.5vw, 20px);
-  color: white;
-  letter-spacing: 2px;
-  margin-bottom: 10px;
-}
-
-.rate-btns {
-  width: 70px;
-  display: flex;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.btn-good, .btn-bad {
-  flex: 1;
-  font-family: monospace;
-  font-size: clamp(14px, 3vw, 22px);
-  padding: 10px;
-  border-radius: 30px;
-  border: 2px solid;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-.btn-good              { background: black; color: #5b9cf6; border-color: black; }
-.btn-good:hover,
-.btn-good.voted        { background: #5b9cf6; color: black; }
-.btn-bad               { background: black; color: #e07070; border-color: black; }
-.btn-bad:hover,
-.btn-bad.voted         { background: #e07070; color: black; }
-
-.rate-bar-wrap {
-  width: 100%;
-  height: 10px;
-  border-radius: 99px;
-  overflow: hidden;
-  display: flex;
-}
-.rate-bar-good { height: 100%; background: #5b9cf6; transition: width 0.6s ease; }
-.rate-bar-bad  { height: 100%; background: #e07070; transition: width 0.6s ease; }
-
-.rate-counts {
-  display: flex;
-  justify-content: space-between;
-  font-size: clamp(11px, 2vw, 18px);
-  margin-top: 6px;
-}
-.rate-counts span:first-child { color: #5b9cf6; }
-.rate-counts span:last-child  { color: #e07070; }
-
-/* ════════════════════════════════════════
-   OPINION BOX
-════════════════════════════════════════ */
-.engage-divider {
-  border: none;
-  border-top: 1px solid #1e1e1e;
-  margin: 16px 0;
-}
-
-.opinion-label {
-  font-size: clamp(12px, 2.5vw, 20px);
-  color: #555;
-  letter-spacing: 2px;
-  margin-bottom: 10px;
-}
-
-.opinion-input {
-  width: 100%;
-  background: #0f0f14;
-  border: 1px solid white;
-  border-radius: 12px;
-  color: white;
-  font-family: 'outfit', serif;
-  font-size: clamp(30px, 3vw, 31px);
-  padding: 12px;
-  resize: none;
-  height: 110px;
-  outline: none;
-  transition: border-color 0.2s;
-  line-height: 1.5;
-}
-.opinion-input:focus        { border-color: #d0c7f2; }
-.opinion-input::placeholder { color: #333; }
-
-.opinion-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.char-count {
-  font-size: clamp(11px, 2vw, 18px);
-  color: #444;
-}
-
-.btn-submit {
-  font-size: clamp(13px, 2.5vw, 22px);
-  background: black;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 70px;
-  border: 2px solid white;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-.btn-submit:hover    { background: #d0c7f2; color: black; }
-.btn-submit:disabled { opacity: 0.3; cursor: not-allowed; }
-
-/* ════════════════════════════════════════
-   OPINIONS LIST
-════════════════════════════════════════ */
-.opinions-list { margin-top: 16px; }
-
-.opinions-title {
-  font-family: 'outfit', serif;
-  font-size: clamp(11px, 2vw, 18px);
-  color: white;
-  margin-bottom: 10px;
-  letter-spacing: 1px;
-}
-
-.opinion-card {
-  border-left: 2px solid #2a2a2a;
-  padding: 10px 14px;
-  margin-bottom: 10px;
-  animation: fadeIn 0.3s ease;
-}
-.opinion-card:first-of-type { border-left-color: #d0c7f2; }
-
-.hidden { display: none; }
-
-.opinion-text {
-  font-family: 'inter', serif;
-  font-size: clamp(30px, 3vw, 31px);
-  color: #c5c9c9;
-  line-height: 1.6;
-  word-break: break-word;
-}
-
-.opinion-time {
-  font-size: clamp(11px, 2vw, 16px);
-  color: gray;
-  margin-top: 6px;
-}
-
-.no-opinions {
-  font-family: 'outfit',serif;
-  font-size: clamp(20px, 3vw, 25px);
-  color: white;
-  text-align: center;
-  padding: 14px 0;
-}
-
-/* ── SHOW MORE ── */
-.btn-show-more {
-  display: none;
-  width: 100%;
-  background: none;
-  border: none;
-  color: white;
-  font-family: 'outfit', serif;
-  font-size: clamp(20px, 3vw, 25px);
-  padding: 10px 0;
-  cursor: pointer;
-  text-align: center;
-  letter-spacing: 1px;
-}
-.btn-show-more:hover   { color: #d0c7f2; }
-.btn-show-more.visible { display: block; }
-
-/* ════════════════════════════════════════
-   RESPONSIVE BREAKPOINTS
-════════════════════════════════════════ */
 
 /* Tablet */
 @media (min-width: 600px) {

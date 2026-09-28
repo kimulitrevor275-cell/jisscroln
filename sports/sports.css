@@ -293,6 +293,36 @@ a {
 }
 .rate-counts span:first-child { color: #5b9cf6; }
 .rate-counts span:last-child  { color: #e07070; }
+
+#sports .rate-btns {
+  width: 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+#sports .rate-bar-wrap {
+  flex: 1 1 120px;
+  min-width: 80px;
+}
+
+#sports .btn-engage {
+  width: auto;
+  height: auto;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 4px;
+}
+
+#sports #commentbtn {
+  display: block;
+  width: 42px;
+  height: 42px;
+  max-width: none;
+  margin: 0;
+  object-fit: contain;
+}
+
 /* ════════════════════════════════════════
    OPINION BOX
 ════════════════════════════════════════ */
