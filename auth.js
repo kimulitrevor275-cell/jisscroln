@@ -40,7 +40,7 @@ function _makeBadge(tier, size) {
 // ─────────────────────────────────────────
 //  SESSION
 // ─────────────────────────────────────────
-
+var username = sessionStorage.getItem('jis_username') || 'Anonymous';
 sb.auth.getSession().then(function(r) {
   if (r.data.session) {
     var u    = r.data.session.user;
@@ -81,7 +81,7 @@ sb.auth.getSession().then(function(r) {
 
     var el = document.getElementById('user-greeting');
     if (el) {
-      el.innerHTML = '<a href="/login/" style="color:white;font-size:20px;text-decoration:none;letter-spacing:0.1em;font-weight:300; border: 1px solid white; border-radius: 4px; padding: 3px;">Sign In</a>';
+      el.innerHTML = '<a href="/login/" style="color:white;font-size:30px; display:inline-block;text-decoration:none;letter-spacing:0.1em;font-weight:300; border: 1px solid white; border-radius: 4px; padding: 3px;">Sign In</a>';
     }
   }
 });

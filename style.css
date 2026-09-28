@@ -25,54 +25,17 @@ body {
   margin-top: 4px;
   font-family: 'outfit', sans-serif;
 }
-/* ── HEADER ── */
-#head1 {
-  position: sticky;
-  top: 0;
-  width: 100%;
-  background-color: black;
-  z-index: 100;
-  padding: 1px 0;
-}
+
 .article-body {
   line-height: 1.6;
   white-space: normal;
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
-header {
-  position: sticky;
-  top: 0;
-  width: 101%;
-  background-color: black;
-  z-index: 100;
-}
 
-/* ── LOGO ── */
-.logo {
-  background-color: black;
-  font-size: clamp(18px, 3vw, 30px);
-  font-family: Georgia, serif;
-  margin: 0;
-  color: white;
-  text-align: left;
-}
 
-#logo {
-  border: none;
-  background-color: black;
-  width: auto;
-  height: clamp(20px, 5vw, 30px);
-}
 
-/* ── DIVIDER ── */
-.box {
-  border-bottom: 4px solid white;
-  width: 100%;
-  opacity: 0.5;
-  border-radius: 10px;
-  margin: 8px 0;
-}
+
 
 hr { margin-top: 50px;margin-bottom: 50px; border-color: #222}
 
@@ -314,99 +277,8 @@ p::first-letter{
 b{
   font-size: clamp(39px, 3.5vw, 48px);
 }
-/* ─ ─ NAVBAR ── */
-.navbar {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: clamp(8px, 2vw, 50px);
-  margin-top: 1px;
-}
 
-.navbar .button {
-  background-color: transparent;
-  text-decoration: none;
-  padding: 8px 8px;
-  font-size: clamp(20px, 4vw, 46px);
-  color: gray;
-  cursor: pointer;
-  transition: color 0.3s ease;
-  font-family: poppins serif;
-  font-weight: 600;
-}
 
-.navbar a.active {
-  border-bottom: 7px solid blue;
-  color: white;
-  font-weight: 800;
-}
-
-.navbar .button:hover {
-  background: black;
-  color: grey;
-  
-}
-/* ── ABOUT ── */
-.about_us {
-  text-decoration: none;
-  background-color: black;
-  border-radius: 28px;
-  font-size: clamp(16px, 3.5vw, 36px);
-  text-align: center;
-  color: rosybrown;
-}
-
-/* ── FOOTER ── */
-#fo { margin-bottom: clamp(40px, 8vw, 100px); }
-#label {
-  font-family: monospace;
-  background-color: hsla(214, 73%, 43%, 0.434);
-  font-size: clamp(18px, 4vw, 48px);
-  color: white;
-  border-radius: 4px;
-  padding: 2px 8px;
-  display: inline-block;
-}
-
-/* ── ICON ── */
-#icon {
-  border: none;
-  font-size: clamp(24px, 5vw, 50px);
-  text-align: center;
-  width: 100%;
-  text-decoration: underline;
-  margin: 20px 0;
-  color: whitesmoke;
-  border-radius: 50px;
-  background-color: black;
-  gap: 100px;
-  display: block;
-}
-
-#icon:hover {
-  text-decoration: underline;
-  text-decoration-color: blue;
-}
-
-#icon a {
-  text-decoration: none;
-}
-
-/* ── EMAIL ── */
-#Email {
-  
-  font-size: clamp(18px, 3.5vw, 36px);
-  line-height: 2;
-  text-align: center;
-  width: 100%;
-  font-family: 'inter',seri;
-  margin: 6px ;
-  color: whitesmoke;
-  border-top: 1px solid white;
-  border-radius: 15px;
-  background-color: black;
-  display: block;
-}
 /*════════════════════════════════════════
 ENGAGE BUTTON
 ════════════════════════════════════════ */

@@ -4,21 +4,27 @@
   <meta charset="UTF-8">
   <title>JisScroL-trends</title>
   <link rel="stylesheet" href="newpage.css">
+  <link rel="stylesheet" href="/global.css">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
   
 </head>
 <body>
-  <header id="head1"> 
-   <img id="logo"src="../pics/logo4.png">
-   <nav class="navbar">
+ <header id="header">
+  <div style=" display: flex;flex-direction:space-between;align-items: center;justify-content: space-between;">
+  <img id="logo"src="/pics/logo4.png">
+      
+  <div id="user-greeting" style="font-family:'outfit', serif;text-align:right;font-size:25px;color: white;padding:4px 0;"></div>
+  </div>
+  <nav class="navbar">
     <a  href="/index.html" class="button">Home</a>
     <a  href="/trends/" class="button active">Trends</a>
     <a  href="/sports/" class="button">Sports</a>
     <a  href="/others/" class="button">Explore</a>
    </nav>
-
-  </header>
-    
+  <div id="user-greeting" style="font-family:'outfit', serif;text-align:right;font-size:25px;color: white;padding:4px 0;"></div>
+   
+</header>
+ 
   
   
   
@@ -29,13 +35,12 @@
   
   
   
-   <footer class="about_us">
+  <footer class="about_us">
    <h2 id="Email"> ©JisScroL <br>
      Email: thejisscrol.gmail.com<br>
-     <div class="footer">
       <a id="icon" href="about.html">Terms of use</a></h2>
-   
-     <h4 id="icon" > 
+   <br>
+     <h4 id="icon">
      <a  href="https://x.com/boyslovepor" target="_blank" rel="noopener">
      <svg viewBox= "0 0 24 24" width="90" height="90" fill="white" xmlns="http://www.w3.org/2000/svg">
      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
@@ -52,13 +57,12 @@
     <svg viewBox="0 0 24 24" width="90" height="90" fill="white" xmlns="http://www.w3.org/2000/svg">
     <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.05a8.2 8.2 0 004.79 1.52V7.13a4.85 4.85 0 01-1.02-.44z"/>
     </svg>
-    </a></h4></h2>
-    <div></div><br>   
-          
+    </a></h4>
+    <div></div><br>    
  </footer>
    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
    <script src="../auth.js"></script>
- 
+ <script src="../global.js"></script>
        <script src="newpage.js"></script>
      
 

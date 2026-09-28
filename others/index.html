@@ -4,17 +4,19 @@
  <meta charset="UTF-8">
  <link rel="stylesheet" href="other.css">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
-  
+  <link rel="stylesheet" href="/global.css">
  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
   <title>The JisScroL- explore</title>
 </head>
 <body>
  
  
-  <header id="head1"> 
+  <header id="header">
+  <div style=" display: flex;flex-direction:space-between;align-items: center;justify-content: space-between;">
   <img id="logo"src="/pics/logo4.png">
-    
-  
+      
+  <div id="user-greeting" style="font-family:'outfit', serif;text-align:right;font-size:25px;color: white;padding:4px 0;"></div>
+  </div>
   <nav class="navbar">
     <a  href="/index.html" class="button">Home</a>
     <a  href="/trends/" class="button">Trends</a>
@@ -24,6 +26,7 @@
   
    
 </header>
+ 
  
  
 <!-- CHARTS SECTION -->
@@ -150,6 +153,7 @@
  
 <script src="stories.js"></script>
  
+<script src="../auth.js"></script>
  <script src="others.js"> </script>
  
   <footer class="about_us">

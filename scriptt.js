@@ -3,6 +3,7 @@
 fetch(API + '/').catch(function() {});
 setInterval(function() { fetch(API + '/').catch(function() {}); }, 5 * 60 * 1000);
 
+
 //  RENDER ENGINE
 function toggleBody(postId, encodedBody) {
     var el = document.getElementById('body-' + postId);

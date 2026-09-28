@@ -1,0 +1,125 @@
+/* ── HEADER ── */
+#header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #000; /* your dark bg */
+  box-shadow: #f9abab 5px;
+  transition: transform 0.3s ease;
+}
+
+#header.hide {
+  transform: translateY(-100%);
+}
+header {
+  position: sticky;
+  top: 0;
+  width: 101%;
+  background-color: black;
+  z-index: 100;
+  padding: 8px 0;
+}
+#logo {
+
+  border: none;
+  margin: 0;
+  width: auto;
+  height: clamp(28px, 5vw, 48px);
+}
+/* ── NAVBAR ── */
+.navbar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: clamp(8px, 2vw, 50px);
+  margin-top: 4px;
+}
+
+.navbar .button {
+  background-color: transparent;
+  text-decoration: none;
+  padding: 8px 8px;
+  font-size: clamp(20px, 4vw, 46px);
+  color: gray;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  font-weight: 300;
+  font-family: poppins serif;
+  border:none;
+  border-radius: 0;
+}
+
+.navbar a.active {
+  border-bottom: 3px solid white;
+  color:white;
+}
+
+.navbar .button:hover {
+  background: black;
+  color: gray;
+}
+/* ── ABOUT ── */
+.about_us {
+  text-decoration: none;
+  background-color: black;
+  border-radius: 28px;
+  font-size: clamp(16px, 3vw, 25px);
+  text-align: center;
+  color: rosybrown;
+  padding: 0;
+  border-radius: 50px;
+}
+.about_us a{
+    border: none;
+    text-decoration: none;
+}
+/* ── FOOTER ── */
+#fo { margin-bottom: clamp(40px, 8vw, 100px); }
+#label {
+  font-family: monospace;
+  background-color: hsla(213, 47%, 93%, 0.434);
+  font-size: clamp(18px, 4vw, 48px);
+  color: white;
+  border-radius: 4px;
+  padding: 2px 8px;
+  display: inline-block;
+}
+
+/* ── ICON ── */
+#icon {
+  border: none;
+  font-size: clamp(24px, 5vw, 50px);
+  text-align: center;
+  width: 100%;
+  text-decoration: none;
+  margin: 20px 0;
+  color: whitesmoke;
+  border-radius: 50px;
+  background-color: none;
+  gap: 100px;
+  display: block;
+}
+
+#icon:hover {
+  
+}
+
+#icon a {
+  text-decoration: none;
+}
+
+/* ── EMAIL ── */
+#Email {
+  
+  font-size: clamp(18px, 3.5vw, 36px);
+  line-height: 2;
+  text-align: center;
+  width: 100%;
+  font-family: 'inter',seri;
+  margin: 6px ;
+  color: whitesmoke;
+  border-top: 1px solid white;
+  border-radius: 15px;
+  background-color: none;
+  display: block;
+}
