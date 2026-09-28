@@ -43,7 +43,7 @@ hr { margin-top: 50px;margin-bottom: 50px; border-color: #222}
 .ticker-wrap {
   width: 99.5%;
   overflow: hidden;
-  
+  margin: 20px 0;
   padding: 6px 0;
 }
 
@@ -62,7 +62,7 @@ hr { margin-top: 50px;margin-bottom: 50px; border-color: #222}
   padding: 3px 10px;
   border-radius: 20px;
   padding:  8px;
-  font-size: clamp(14px, 3vw, 26px);
+  font-size: clamp(20px, 3vw, 30px);
   color: white;
   flex-shrink: 0;
 }
@@ -181,6 +181,7 @@ h1 {
 }
 #forup{
   font-weight:lighter ;
+  margin-top: 25px;
   margin-bottom: 12px;
   font-family: 'outfit', serif;
   font-size: clamp(18px, 4vw, 40px);
