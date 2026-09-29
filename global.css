@@ -51,6 +51,13 @@ header {
   width: auto;
   height: clamp(28px, 5vw, 48px);
 }
+.site-logo {
+  height: 50px;        /* change this one number: 20 / 24 / 28 */
+  width: auto;
+  max-height: 100%;    /* never taller than the header */
+  display: block;
+  flex-shrink: 0;
+}
 /* ── NAVBAR ── */
 .navbar {
   display: flex;
