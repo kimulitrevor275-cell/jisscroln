@@ -44,13 +44,7 @@ header {
   padding: 8px 0;
   margin-bottom: 8px;
 }
-#logo {
 
-  border: none;
-  margin: 0;
-  width: auto;
-  height: clamp(28px, 5vw, 48px);
-}
 .site-logo {
   height: 50px;        /* change this one number: 20 / 24 / 28 */
   width: auto;
@@ -89,6 +83,26 @@ header {
 .navbar .button:hover {
   background: black;
   color: gray;
+}
+#user-greeting {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 25px;
+  color: white;
+  white-space: nowrap;
+}
+
+#user-greeting img {
+  width: 50px;
+  height: auto;
+  display: block;
+}
+
+#user-greeting svg {
+  margin-left: 0;       /* gap handles spacing now */
+  vertical-align: baseline;
 }
 #label {
   font-family: monospace;

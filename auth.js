@@ -54,7 +54,7 @@ sb.auth.getSession().then(function (r) {
     sessionStorage.setItem("jis_uid", uid);
 
     if (el) {
-      el.innerHTML = `${getGreeting()}, ${name} &nbsp; <a href="#" onclick="signOut()" style="color:gray;font-size:25px;">sign out</a>`;
+      el.innerHTML = `${getGreeting()}, ${name} <a href="#" onclick="signOut()" style="color:gray;font-size:25px; margin:0">sign out</a>`;
     }
 
     fetch("https://jisscrol-opinions.onrender.com/visit", {
@@ -69,7 +69,7 @@ sb.auth.getSession().then(function (r) {
         window._cachedTier = data.tier;
         var badge = _makeBadge(data.tier, 35);
         if (el) {
-          el.innerHTML = `${getGreeting()}, ${name}${badge} &nbsp; <a href="profile.html" style="color:gray;font-size:20px;"><img src="/pics/user.png" alt="Profile" style="width:30px;height:auto;border:none;margin-left:4px;"></a>`;
+          el.innerHTML = `${getGreeting()}, ${name}${badge}  <a href="profile.html" style="color:gray;font-size:20px;"><img src="/pics/user.png" alt="Profile" style="width:50px;height:auto;border:none;"></a>`;
         }
       })
       .catch(function () {});
