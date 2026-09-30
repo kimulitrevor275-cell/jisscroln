@@ -29,7 +29,7 @@ function _makeBadge(tier, size) {
   var colors = { veteran: "#c9a96e", loyal: "#4a90d9", regular: "#87ceeb" };
   var color = colors[tier];
   if (!color) return "";
-  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" style="margin-left:4px;vertical-align:middle;">
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" style="vertical-align:middle;">
     <circle cx="12" cy="12" r="12" fill="${color}"/>
     <path d="M6.5 12.5l3.5 3.5 7-7" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>`;
@@ -54,7 +54,7 @@ sb.auth.getSession().then(function (r) {
     sessionStorage.setItem("jis_uid", uid);
 
     if (el) {
-      el.innerHTML = `${getGreeting()}, ${name} <a href="#" onclick="signOut()" style="color:gray;font-size:25px; margin:0">sign out</a>`;
+      el.innerHTML = `${getGreeting()}, ${name} <a href="#" onclick="signOut()" style="color:gray;font-size:25px; margin:0"></a>`;
     }
 
     fetch("https://jisscrol-opinions.onrender.com/visit", {
@@ -69,7 +69,9 @@ sb.auth.getSession().then(function (r) {
         window._cachedTier = data.tier;
         var badge = _makeBadge(data.tier, 35);
         if (el) {
-          el.innerHTML = `${getGreeting()}, ${name}${badge}  <a href="profile.html" style="color:gray;font-size:20px;"><img src="/pics/user.png" alt="Profile" style="width:50px;height:auto;border:none;"></a>`;
+          el.innerHTML = `${getGreeting()}, ${name}${badge}  <a href="/profile.html" style="color:gray;font-size:20px;">
+          <img src="/pics/11.svg" alt="Profile" style="width:50px;height:auto;border:none;">
+          </a>`;
         }
       })
       .catch(function () {});
@@ -80,7 +82,11 @@ sb.auth.getSession().then(function (r) {
     window._cachedTier = null;
 
     if (el) {
-      el.innerHTML = `<a href="/login/" style="color:white;font-size:30px;display:inline-block;text-decoration:none;letter-spacing:0.1em;font-weight:300;border:1px solid white;border-radius:4px;padding:3px;margin:5px;">Sign In</a>`;
+      el.innerHTML = `
+      <div style="display:"block";text-align:right;" href="/login/" >
+  
+      <a href="/login/" style="color:white;font-size:30px;text-decoration:none;">
+      <img src="/pics/11.svg" alt="Profile" style="width:50px;height:auto;border:none;">Sign In</a> </div>`;
     }
   }
 });

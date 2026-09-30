@@ -6,11 +6,8 @@
   <title>JisScroL — Sign In</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    *, *::before, *::after { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-    }
+    [hidden] { display: none !important; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background: #0a0a0a;
@@ -25,42 +22,12 @@
       line-height: 1.6;
     }
 
-    .container {
-      width: 100%;
-      max-width: 90%;
-      height: auto;
-    }
+    .container { width: 100%; max-width: 90%; height: auto; }
+    .header { text-align: center; margin-bottom: 60px; }
 
-    .header {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-
-    .logo img {
-      width: 120px;
-      height: 120px;
-      margin-bottom: 24px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .logo-text {
-      font-size: 42px;
-      font-weight: 700;
-      color: white;
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
-    }
-
-    .logo-sub {
-      font-size: 16px;
-      color: #888;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-weight: 600;
-      word-spacing: 0.3em;
-    }
+    .logo img { width: 120px; height: 120px; margin-bottom: 24px; display: block; margin-left: auto; margin-right: auto; }
+    .logo-text { font-size: 42px; font-weight: 700; color: white; letter-spacing: -0.02em; margin-bottom: 8px; }
+    .logo-sub { font-size: 16px; color: #888; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; word-spacing: 0.3em; }
 
     .form-container {
       background: rgba(12, 11, 11, 0.6);
@@ -70,23 +37,10 @@
       backdrop-filter: blur(10px);
     }
 
-    .form-group {
-      margin-bottom: 32px;
-    }
+    .form-group { margin-bottom: 32px; }
+    .form-group.hidden { display: none; }
 
-    .form-group.hidden {
-      display: none;
-    }
-
-    label {
-      display: block;
-      font-size: 30px;
-      color: #999;
-      letter-spacing: 0.06em;
-      margin-bottom: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
+    label { display: block; font-size: 30px; color: #999; letter-spacing: 0.06em; margin-bottom: 12px; font-weight: 600; text-transform: uppercase; }
 
     input {
       width: 100%;
@@ -100,255 +54,66 @@
       outline: none;
       transition: all 0.2s ease;
     }
+    input:focus { border-color: #4b82ef; background: #111; box-shadow: 0 0 0 4px rgba(201, 169, 110, 0.15); }
+    input::placeholder { color: #555; }
 
-    input:focus {
-      border-color: #4b82ef;
-      background: #111;
-      box-shadow: 0 0 0 4px rgba(201, 169, 110, 0.15);
-    }
+    .hint { font-size: 16px; color: #888; margin-top: 10px; }
 
-    input::placeholder {
-      color: #555;
-    }
+    .button-group { display: flex; flex-direction: column; gap: 14px; margin-top: 40px; margin-bottom: 32px; }
 
-    .button-group {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-top: 40px;
-      margin-bottom: 32px;
-    }
+    button { font-family: inherit; cursor: pointer; border-radius: 8px; font-size: 20px; font-weight: 600; letter-spacing: 0.04em; transition: all 0.2s ease; border: none; }
 
-    button {
-      font-family: inherit;
-      cursor: pointer;
-      border-radius: 8px;
-      font-size: 20px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      transition: all 0.2s ease;
-      border: none;
-    }
+    .btn-primary { width: 100%; background: #4f82f0; color: #0a0a0a; padding: 16px 20px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .btn-primary:hover:not(:disabled) { background: #dab882; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201, 169, 110, 0.25); }
+    .btn-primary:active:not(:disabled) { transform: translateY(0); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    .btn-primary {
-      width: 100%;
-      background: #4f82f0;
-      color: #0a0a0a;
-      padding: 16px 20px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
+    .btn-google { width: 100%; background: transparent; border: 1.5px solid #3a3a3a; color: #e8e8e8; padding: 15px 20px; display: flex; align-items: center; justify-content: center; gap: 12px; }
+    .btn-google:hover:not(:disabled) { border-color: #555; background: rgba(255, 255, 255, 0.03); }
+    .btn-google:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    .btn-primary:hover:not(:disabled) {
-      background: #dab882;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(201, 169, 110, 0.25);
-    }
+    .divider { display: flex; align-items: center; gap: 14px; margin: 24px 0; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #2a2a2a; }
+    .divider span { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
 
-    .btn-primary:active:not(:disabled) {
-      transform: translateY(0);
-    }
+    .btn-toggle { width: 100%; background: transparent; border: none; color: #e8e8e8; padding: 16px 0; font-size: 15px; text-align: center; cursor: pointer; transition: color 0.2s; font-weight: 500; }
+    .btn-toggle:hover { color: #2993b4; }
+    .btn-toggle b { color: #6e9bc9; font-weight: 700; }
 
-    .btn-primary:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+    .message { font-size: 30px; text-align: center; margin-top: 20px; min-height: 22px; letter-spacing: 0.02em; border-radius: 6px; padding: 12px; }
+    .message.error { color: #ff6b6b; background: rgba(255, 107, 107, 0.12); }
+    .message.success { color: #7ccd7c; background: rgba(124, 205, 124, 0.12); }
 
-    .btn-google {
-      width: 100%;
-      background: transparent;
-      border: 1.5px solid #3a3a3a;
-      color: #e8e8e8;
-      padding: 15px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-    }
-
-    .btn-google:hover {
-      border-color: #555;
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin: 24px 0;
-    }
-
-    .divider::before, .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: #2a2a2a;
-    }
-
-    .divider span {
-      font-size: 12px;
-      color: #666;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      font-weight: 600;
-    }
-
-    .btn-toggle {
-      width: 100%;
-      background: transparent;
-      border: none;
-      color: #e8e8e8;
-      padding: 16px 0;
-      font-size: 15px;
-      text-align: center;
-      cursor: pointer;
-      transition: color 0.2s;
-      font-weight: 500;
-    }
-
-    .btn-toggle:hover {
-      color: #2993b4;
-    }
-
-    .btn-toggle b {
-      color: #6e9bc9;
-      font-weight: 700;
-    }
-
-    .message {
-      font-size: 30px;
-      text-align: center;
-      margin-top: 20px;
-      min-height: 22px;
-      letter-spacing: 0.02em;
-      border-radius: 6px;
-      padding: 12px;
-    }
-
-    .message.error {
-      color: #ff6b6b;
-      background: rgba(255, 107, 107, 0.12);
-    }
-
-    .message.success {
-      color: #7ccd7c;
-      background: rgba(124, 205, 124, 0.12);
-    }
-
-    /* Responsive adjustments */
     @media (max-width: 480px) {
-      
-
-      .container {
-        max-width: 100%;
-      }
-
-      .header {
-        margin-bottom: 50px;
-      }
-
-      .logo img {
-        width: 100px;
-        height: 100px;
-        margin-bottom: 20px;
-      }
-
-      .logo-text {
-        font-size: 36px;
-      }
-
-      .form-container {
-        padding: 40px 24px;
-      }
-
-      .form-group {
-        margin-bottom: 28px;
-      }
-
-      input {
-        font-size: 16px;
-        padding: 14px 14px;
-      }
-
-      label {
-        font-size: 12px;
-        margin-bottom: 10px;
-      }
-
-      .button-group {
-        margin-top: 36px;
-        margin-bottom: 28px;
-        gap: 12px;
-      }
-
-      button {
-        font-size: 15px;
-      }
-
-      .btn-primary {
-        padding: 14px 18px;
-      }
-
-      .btn-google {
-        padding: 13px 18px;
-        gap: 10px;
-      }
-
-      .btn-toggle {
-        padding: 14px 0;
-        font-size: 14px;
-      }
+      .container { max-width: 100%; }
+      .header { margin-bottom: 50px; }
+      .logo img { width: 100px; height: 100px; margin-bottom: 20px; }
+      .logo-text { font-size: 36px; }
+      .form-container { padding: 40px 24px; }
+      .form-group { margin-bottom: 28px; }
+      input { font-size: 16px; padding: 14px 14px; }
+      label { font-size: 12px; margin-bottom: 10px; }
+      .hint { font-size: 14px; }
+      .button-group { margin-top: 36px; margin-bottom: 28px; gap: 12px; }
+      button { font-size: 15px; }
+      .btn-primary { padding: 14px 18px; }
+      .btn-google { padding: 13px 18px; gap: 10px; }
+      .btn-toggle { padding: 14px 0; font-size: 14px; }
     }
 
     @media (max-width: 360px) {
-      
-
-      .logo img {
-        width: 90px;
-        height: 90px;
-        margin-bottom: 18px;
-      }
-
-      .logo-text {
-        font-size: 32px;
-      }
-
-      .form-container {
-        padding: 36px 20px;
-        border-radius: 6px;
-      }
-
-      .form-group {
-        margin-bottom: 24px;
-      }
-
-      label {
-        font-size: 11px;
-        margin-bottom: 9px;
-      }
-
-      input {
-        font-size: 16px;
-        padding: 13px 12px;
-      }
-
-      .button-group {
-        margin-top: 32px;
-        gap: 10px;
-      }
-
-      .divider {
-        margin: 18px 0;
-      }
+      .logo img { width: 90px; height: 90px; margin-bottom: 18px; }
+      .logo-text { font-size: 32px; }
+      .form-container { padding: 36px 20px; border-radius: 6px; }
+      .form-group { margin-bottom: 24px; }
+      label { font-size: 11px; margin-bottom: 9px; }
+      input { font-size: 16px; padding: 13px 12px; }
+      .button-group { margin-top: 32px; gap: 10px; }
+      .divider { margin: 18px 0; }
     }
 
-    /* Reduced motion support */
     @media (prefers-reduced-motion: reduce) {
-      * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
+      * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
     }
   </style>
 </head>
@@ -356,33 +121,33 @@
 
 <div class="container">
   <div class="header">
-    <img class="logo" style="width: 120px;" id="logo" src="/pics/logo4.png" alt="JisScroL">
-    
-    <div class="logo-sub">Member Access</div>
+    <img class="logo" style="width: 120px;" id="logo" src="/pics/logog.svg" alt="JisScroL"><span>The JisScroL</span>
+    <div class="logo-sub">Member sign in</div>
   </div>
 
   <div class="form-container">
-    <form id="auth-form" onsubmit="handleAuth(event)">
+
+    <form id="auth-form" novalidate>
       <div class="form-group hidden" id="reg-name-field">
         <label for="l-name">Display name</label>
-        <input type="text" id="l-name" placeholder="How you'll appear to others">
+        <input type="text" id="l-name" maxlength="30" autocomplete="nickname" placeholder="How you'll appear to others">
       </div>
 
       <div class="form-group">
         <label for="l-email">Email address</label>
-        <input type="email" id="l-email" placeholder="you@example.com" required>
+        <input type="email" id="l-email" autocomplete="email" placeholder="you@example.com" required>
       </div>
 
       <div class="form-group">
         <label for="l-pass">Password</label>
-        <input type="password" id="l-pass" placeholder="••••••••" required>
+        <input type="password" id="l-pass" autocomplete="current-password" placeholder="••••••••" required>
       </div>
 
       <div class="button-group">
         <button type="submit" class="btn-primary" id="btn-main">Sign In</button>
         <div class="divider"><span>or</span></div>
-        <button type="button" class="btn-google" onclick="signInGoogle()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <button type="button" class="btn-google" id="btn-google">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -392,121 +157,209 @@
         </button>
       </div>
 
-      <button type="button" class="btn-toggle" onclick="switchMode()">
+      <button type="button" class="btn-toggle" id="btn-toggle">
         No account? <b>Create one</b>
       </button>
-
-      <div class="message" id="msg"></div>
     </form>
+
+    <form id="name-form" novalidate hidden>
+      <div class="form-group">
+        <label for="n-name">Choose your display name</label>
+        <input type="text" id="n-name" maxlength="30" autocomplete="nickname" placeholder="How you'll appear to others" required>
+        <p class="hint">Shown publicly with your opinions. Your email stays private.</p>
+      </div>
+      <div class="button-group">
+        <button type="submit" class="btn-primary" id="btn-name">Continue</button>
+      </div>
+    </form>
+
+    <div class="message" id="msg" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 <script>
   const SURL = 'https://jzspezkljbxocqboqgtk.supabase.co';
   const SKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6c3BlemtsamJ4b2NxYm9xZ3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMTU4MjMsImV4cCI6MjA5Mjg5MTgyM30.VXZ4ZX9_z33ZKrWUbhs2EXKruTi1kp5IpLuGLykF1y0';
-  
+
   const sb = supabase.createClient(SURL, SKEY);
+  const HOME = '/index.html';
+  const NAME_RE = /^[\p{L}\p{N} _.\-]{2,30}$/u;
+  const NAME_HELP = 'Use 2 to 30 letters, numbers, spaces, dots, dashes or underscores.';
+  const $ = (id) => document.getElementById(id);
   let mode = 'login';
 
-  // Check if already logged in
-  sb.auth.getSession().then(function(r) {
-    if (r.data.session) window.location.href = 'index.html';
-  });
-
-  function switchMode() {
-    mode = mode === 'login' ? 'register' : 'login';
-    const nameField = document.getElementById('reg-name-field');
-    const btn = document.getElementById('btn-main');
-    const switchBtn = document.querySelector('.btn-toggle');
-    
-    nameField.classList.toggle('hidden');
-    btn.textContent = mode === 'login' ? 'Sign In' : 'Create Account';
-    switchBtn.innerHTML = mode === 'login' 
-      ? 'No account? <b>Create one</b>' 
-      : 'Already have an account? <b>Sign in</b>';
-    
-    clearMessage();
-  }
-
-  function handleAuth(event) {
-    event.preventDefault();
-    
-    const email = document.getElementById('l-email').value.trim();
-    const pass = document.getElementById('l-pass').value;
-    const btn = document.getElementById('btn-main');
-
-    if (!email || !pass) {
-      showMessage('Please fill in all fields', 'error');
-      return;
-    }
-
-    btn.disabled = true;
-    const originalText = btn.textContent;
-    btn.textContent = 'Please wait…';
-
-    if (mode === 'login') {
-      sb.auth.signInWithPassword({ email, password: pass })
-        .then(function(r) {
-          if (r.error) {
-            showMessage(r.error.message, 'error');
-            btn.disabled = false;
-            btn.textContent = originalText;
-          } else {
-            showMessage('Welcome back!', 'success');
-            setTimeout(() => window.location.href = '/index.html', 600);
-          }
-        });
-    } else {
-      const name = document.getElementById('l-name').value.trim();
-      if (!name) {
-        showMessage('Enter a display name', 'error');
-        btn.disabled = false;
-        btn.textContent = originalText;
-        return;
-      }
-      if (pass.length < 6) {
-        showMessage('Password must be at least 6 characters', 'error');
-        btn.disabled = false;
-        btn.textContent = originalText;
-        return;
-      }
-
-      sb.auth.signUp({
-        email,
-        password: pass,
-        options: { data: { display_name: name } }
-      })
-        .then(function(r) {
-          if (r.error) {
-            showMessage(r.error.message, 'error');
-            btn.disabled = false;
-            btn.textContent = originalText;
-          } else {
-            showMessage('Account created!', 'success');
-            setTimeout(() => window.location.href = '/index.html', 600);
-          }
-        });
-    }
-  }
-
-  function signInGoogle() {
-    sb.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: window.location.origin + '/index.html' }
-    });
-  }
-
+  /* ── Helpers ─────────────────────────────── */
   function showMessage(text, type) {
-    const el = document.getElementById('msg');
+    const el = $('msg');
     el.textContent = text;
     el.className = 'message ' + type;
   }
 
   function clearMessage() {
-    const el = document.getElementById('msg');
+    const el = $('msg');
     el.textContent = '';
     el.className = 'message';
   }
+
+  // Turns network failures into a normal { error } result.
+  function run(task) {
+    return task().catch(() => ({ error: { message: 'No connection. Check your internet and try again.' } }));
+  }
+
+  function setBusy(btn, busy, label) {
+    btn.disabled = busy;
+    if (label) btn.textContent = label;
+  }
+
+  function cleanName(value) {
+    return value.trim().replace(/\s+/g, ' ');
+  }
+
+  function hasName(user) {
+    const n = user && user.user_metadata && user.user_metadata.display_name;
+    return typeof n === 'string' && n.trim().length >= 2;
+  }
+
+  function goHome() {
+    window.location.href = HOME;
+  }
+
+  /* ── Display name step (Google and older accounts) ── */
+  function showNameStep(user) {
+    const meta = user.user_metadata || {};
+    const suggestion = String(meta.full_name || meta.name || '')
+      .replace(/[^\p{L}\p{N} _.\-]/gu, '')
+      .trim()
+      .slice(0, 30);
+
+    $('auth-form').hidden = true;
+    $('name-form').hidden = false;
+    $('n-name').value = suggestion;
+    $('n-name').focus();
+    clearMessage();
+  }
+
+  $('name-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const name = cleanName($('n-name').value);
+    const btn = $('btn-name');
+
+    if (!NAME_RE.test(name)) { showMessage(NAME_HELP, 'error'); return; }
+
+    setBusy(btn, true, 'Saving…');
+    const res = await run(() => sb.auth.updateUser({ data: { display_name: name } }));
+
+    if (res.error) {
+      showMessage(res.error.message, 'error');
+      setBusy(btn, false, 'Continue');
+      return;
+    }
+    sessionStorage.setItem('jis_username', name);
+    goHome();
+  });
+
+  /* ── Already signed in? ──────────────────── */
+  sb.auth.getSession().then((r) => {
+    const session = r.data.session;
+    if (!session) return;
+    if (hasName(session.user)) goHome();
+    else showNameStep(session.user);
+  }).catch(() => {});
+
+  /* ── Sign in / create account ────────────── */
+  function switchMode() {
+    mode = mode === 'login' ? 'register' : 'login';
+    $('reg-name-field').classList.toggle('hidden');
+    $('btn-main').textContent = mode === 'login' ? 'Sign In' : 'Create Account';
+    $('l-pass').autocomplete = mode === 'login' ? 'current-password' : 'new-password';
+    $('btn-toggle').innerHTML = mode === 'login'
+      ? 'No account? <b>Create one</b>'
+      : 'Already have an account? <b>Sign in</b>';
+    clearMessage();
+  }
+
+  async function handleAuth(event) {
+    event.preventDefault();
+    clearMessage();
+
+    const email = $('l-email').value.trim().toLowerCase();
+    const pass = $('l-pass').value;
+    const btn = $('btn-main');
+    const label = btn.textContent;
+
+    if (!email || !pass) { showMessage('Please fill in all fields', 'error'); return; }
+    if (!/^\S+@\S+\.\S+$/.test(email)) { showMessage('Enter a valid email address', 'error'); return; }
+
+    if (mode === 'register') {
+      const name = cleanName($('l-name').value);
+      if (!NAME_RE.test(name)) { showMessage(NAME_HELP, 'error'); return; }
+      if (pass.length < 8) { showMessage('Password must be at least 8 characters', 'error'); return; }
+
+      setBusy(btn, true, 'Please wait…');
+      const res = await run(() => sb.auth.signUp({
+        email,
+        password: pass,
+        options: { data: { display_name: name } }
+      }));
+      setBusy(btn, false, label);
+
+      if (res.error) { showMessage(res.error.message, 'error'); return; }
+
+      // With email confirmation on, an existing address comes back with no identities.
+      const u = res.data && res.data.user;
+      if (u && u.identities && u.identities.length === 0) {
+        showMessage('An account with this email already exists. Try signing in.', 'error');
+        return;
+      }
+      // With email confirmation on, there is no session until the link is opened.
+      if (!res.data.session) {
+        showMessage('Account created. Check your email to confirm it, then sign in.', 'success');
+        return;
+      }
+      sessionStorage.setItem('jis_username', name);
+      showMessage('Account created!', 'success');
+      setTimeout(goHome, 600);
+      return;
+    }
+
+    setBusy(btn, true, 'Please wait…');
+    const res = await run(() => sb.auth.signInWithPassword({ email, password: pass }));
+    setBusy(btn, false, label);
+
+    if (res.error) {
+      const msg = /not confirmed/i.test(res.error.message)
+        ? 'Please confirm your email first. Check your inbox for the link.'
+        : res.error.message;
+      showMessage(msg, 'error');
+      return;
+    }
+
+    const user = res.data.user;
+    if (!hasName(user)) { showNameStep(user); return; }
+    showMessage('Welcome back!', 'success');
+    setTimeout(goHome, 600);
+  }
+
+  async function signInGoogle() {
+    clearMessage();
+    const btn = $('btn-google');
+    btn.disabled = true;
+
+    // Come back to this page so new Google users can choose a display name.
+    const res = await run(() => sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin + window.location.pathname }
+    }));
+
+    if (res.error) {
+      showMessage(res.error.message, 'error');
+      btn.disabled = false;
+    }
+  }
+
+  $('auth-form').addEventListener('submit', handleAuth);
+  $('btn-toggle').addEventListener('click', switchMode);
+  $('btn-google').addEventListener('click', signInGoogle);
 </script>
 
 </body>

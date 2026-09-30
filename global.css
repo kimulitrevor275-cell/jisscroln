@@ -38,7 +38,7 @@ body {
 header {
   position: sticky;
   top: 0;
-  width: 101%;
+  width: 100%;
   background-color: black;
   z-index: 100;
   padding: 8px 0;
@@ -57,7 +57,7 @@ header {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: clamp(8px, 2vw, 50px);
+  gap: clamp(16px, 2vw, 50px);
   margin-top: 4px;
 }
 
@@ -89,7 +89,7 @@ header {
   align-items: center;
   gap: 16px;
   font-family: 'Outfit', sans-serif;
-  font-size: 25px;
+  font-size: 29px;
   color: white;
   white-space: nowrap;
 }
@@ -334,7 +334,7 @@ p::first-letter {
   scrollbar-width: none;
   color: white;
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(14px, 3vw, 22px);
+  font-size: clamp(18px, 3vw, 22px);
 }
 .jisscrolpolls::-webkit-scrollbar { display: none; }
 
@@ -354,7 +354,7 @@ p::first-letter {
   border-radius: 20px;
   background-color: black;
   width: 90vw;
-  min-height: clamp(400px);
+  min-height: 200px;
   margin: 8px;
   display: flex;
   flex-direction: column;
@@ -362,13 +362,13 @@ p::first-letter {
   justify-content: center;
   overflow: hidden;
 }
-@media (min-width: 600px)  { #poll1, #poll2, #poll3, #poll4 { width: 70vw; } }
+@media (min-width: 600px)  { #poll1, #poll2, #poll3, #poll4 { width: 40vw; } }
 @media (min-width: 1024px) { #poll1, #poll2, #poll3, #poll4 { width: 420px; } }
 
 #poll1 img, #poll2 img, #poll3 img, #poll4 img {
   object-fit: cover;
   width: 100%;
-  height: clamp(200px, 20vw, 2100px);
+  height:220px;
   border-radius: 20px;
   border: none;
   margin: 0;
