@@ -21,6 +21,7 @@ h2{
   font-family: 'outfit', serif;
   font-size: clamp(2.5rem, 5vw, 4rem);
   letter-spacing: 0.01em;
+  font-weight: light;
 }
 @media (min-width: 1024px) {
   body {
@@ -50,7 +51,7 @@ header {
 }
 
 .site-logo {
-  height: 50px;        /* change this one number: 20 / 24 / 28 */
+  height: 60px;        /* change this one number: 20 / 24 / 28 */
   width: auto;
   max-height: 100%;    /* never taller than the header */
   display: block;
@@ -125,7 +126,7 @@ header {
 }
 #label {
   font-family: monospace;
-  background-color: #d0c7f2;
+  background-color: #c9bdf3;
   font-size: clamp(18px, 4vw, 48px);
   color: white;
   border-radius: 4px;
@@ -261,7 +262,7 @@ b { font-size: clamp(20px, 3.5vw, 26px); font-weight: 600; }
 p {
   max-width: 100%;
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(25px, 3.4vw, 40px);
+  font-size: clamp(28px, 3.4vw, 40px);
   color: white;
   line-height: 1.6;
   margin: 20px ;
@@ -317,7 +318,7 @@ p::first-letter {
   background-color: hsla(212, 63%, 43%, 0.55);
   padding: 8px 14px;
   border-radius: 20px;
-  font-size: clamp(15px, 3vw, 20px);
+  font-size: clamp(20px, 3.1vw, 29px);
   color: white;
   flex-shrink: 0;
 }
@@ -409,7 +410,7 @@ img:hover { border-color: #444; }
 }
 
 #time {
-  font-size: clamp(12px, 2.5vw, 16px);
+  font-size: clamp(19px, 2.5vw, 25px);
   color: gray;
   display: inline-block;
   padding: 4px 0;
@@ -431,27 +432,107 @@ img:hover { border-color: #444; }
   border: none;
   color: white;
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(18px, 2.2vw, 25px);
+  font-size: clamp(24px, 2.2vw, 34px);
   cursor: pointer;
   padding: 4px 6px;
   border-radius: 8px;
+}
+.btn-good, .btn-bad {
+  position: relative;
 }
 .btn-good:hover, .btn-bad:hover, .btn-engage:hover { background: #1a1a1a; }
 .btn-good.voted { color: #6ec98a; }
 .btn-bad.voted  { color: #e07070; }
 
+.btn-good.voted::before,
+.btn-bad.voted::before {
+  content: "";
+  position: absolute;
+  left: 31px;
+  top: 50%;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.2);
+  animation: vote-color-splash 650ms ease-out both;
+}
+
+.btn-good.voted::before {
+  background: radial-gradient(
+    circle,
+    rgba(38, 255, 119, 0.95) 0%,
+    rgba(38, 255, 119, 0.62) 38%,
+    rgba(38, 255, 119, 0) 74%
+  );
+}
+
+.btn-bad.voted::before {
+  background: radial-gradient(
+    circle,
+    rgba(255, 48, 72, 0.95) 0%,
+    rgba(255, 48, 72, 0.62) 38%,
+    rgba(255, 48, 72, 0) 74%
+  );
+}
+
 .btn-good img, .btn-bad img, #commentbtn {
-  width: 50px;
-  height: 44px;
+  width: 55px;
+  height: 48px;
   border: none;
   border-radius: 0;
   margin: 0;
 }
 
+.btn-good img,
+.btn-bad img {
+  position: relative;
+}
+
+.btn-good.voted img {
+  animation: like-pop 500ms ease-out;
+  transform-origin: 50% 85%;
+}
+
+.btn-bad.voted img {
+  animation: dislike-wiggle 500ms ease-in-out;
+  transform-origin: 50% 70%;
+}
+
+@keyframes like-pop {
+  0%, 100% { transform: scale(1) rotate(0); }
+  35% { transform: scale(1.3) rotate(-18deg); }
+  65% { transform: scale(0.92) rotate(6deg); }
+}
+
+@keyframes dislike-wiggle {
+  0%, 100% { transform: rotate(0); }
+  20%, 60% { transform: rotate(-14deg); }
+  40%, 80% { transform: rotate(12deg); }
+}
+
+@keyframes vote-color-splash {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+  18% { opacity: 1; transform: translate(-50%, -50%) scale(0.85); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.7); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-good.voted::before,
+  .btn-bad.voted::before {
+    display: none;
+  }
+
+  .btn-good.voted img,
+  .btn-bad.voted img {
+    animation: none;
+  }
+}
+
 .rate-bar-wrap {
   flex: 1;
   display: flex;
-  height: 6px;
+  height: 10px;
   border-radius: 4px;
   overflow: hidden;
   background: #222;
@@ -459,6 +540,12 @@ img:hover { border-color: #444; }
 }
 .rate-bar-good { background: #6ec98a; height: 100%; }
 .rate-bar-bad  { background: #e07070; height: 100%; }
+
+@media (max-width: 599px) {
+  .rate-bar-wrap {
+    height: 10px;
+  }
+}
 
 /* ── ENGAGEMENT PANEL ── */
 .engage-panel {
