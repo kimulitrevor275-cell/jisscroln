@@ -1054,7 +1054,7 @@ function renderVideoEmbed(src, type, fillFrame) {
       ? `<video class="article-image-backdrop post-video-backdrop" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1" src="${safeSrc}"></video>`
       : "";
     return `${backdrop}
-      <video class="post-video-main" autoplay muted loop playsinline preload="auto" src="${safeSrc}">Your browser does not support video playback.</video>
+      <video class="post-video-main" muted loop playsinline preload="auto" src="${safeSrc}">Your browser does not support video playback.</video>
       <div class="post-video-controls" role="group" aria-label="Video controls">
         <button class="post-video-control post-video-mute is-muted" type="button" data-video-action="mute" aria-label="Unmute video">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z"/><path class="video-mute-mark" d="m16 9 5 6m0-6-5 6"/></svg>
@@ -1187,6 +1187,48 @@ function updateArticleVideoControls(video) {
   );
 }
 
+var articleVideosMuted = true;
+var activeArticleVideo = null;
+var visibleArticleVideos = new WeakSet();
+
+function startArticleVideo(video) {
+  document.querySelectorAll(".post-video-main").forEach(function (otherVideo) {
+    if (otherVideo === video) return;
+    delete otherVideo.dataset.resumeAfterScroll;
+    if (!otherVideo.paused) otherVideo.pause();
+  });
+
+  activeArticleVideo = video;
+  video.muted = articleVideosMuted;
+  video.play().catch(function (error) {
+    if (activeArticleVideo === video) activeArticleVideo = null;
+    console.error("Article video playback could not start:", error);
+    startNextVisibleArticleVideo();
+  });
+}
+
+function startNextVisibleArticleVideo() {
+  if (activeArticleVideo && !activeArticleVideo.paused) return;
+
+  var candidate = Array.from(document.querySelectorAll(".post-video-main")).find(
+    function (video) {
+      if (
+        video.dataset.resumeAfterScroll !== "true" &&
+        video.dataset.autoPlayPending !== "true"
+      ) {
+        return false;
+      }
+      return visibleArticleVideos.has(video);
+    },
+  );
+
+  if (candidate) {
+    delete candidate.dataset.resumeAfterScroll;
+    delete candidate.dataset.autoPlayPending;
+    startArticleVideo(candidate);
+  }
+}
+
 document.addEventListener("click", function (event) {
   var button = event.target.closest("[data-video-action]");
   if (!button) return;
@@ -1197,14 +1239,16 @@ document.addEventListener("click", function (event) {
 
   if (button.dataset.videoAction === "play") {
     if (video.paused) {
-      video.play().catch(function (error) {
-        console.error("Article video playback could not start:", error);
-      });
+      startArticleVideo(video);
     } else {
       video.pause();
     }
   } else if (button.dataset.videoAction === "mute") {
-    video.muted = !video.muted;
+    articleVideosMuted = !video.muted;
+    document.querySelectorAll(".post-video-main").forEach(function (articleVideo) {
+      articleVideo.muted = articleVideosMuted;
+      updateArticleVideoControls(articleVideo);
+    });
   } else if (button.dataset.videoAction === "fullscreen") {
     var fullscreenRequest =
       document.fullscreenElement === wrapper
@@ -1234,9 +1278,27 @@ document.addEventListener("input", function (event) {
     document.addEventListener(
       eventName,
       function (event) {
-        if (event.target instanceof HTMLVideoElement && event.target.classList.contains("post-video-main")) {
-          updateArticleVideoControls(event.target);
+        var articleVideo = event.target;
+        if (
+          !(articleVideo instanceof HTMLVideoElement) ||
+          !articleVideo.classList.contains("post-video-main")
+        ) {
+          return;
         }
+
+        if (event.type === "play") {
+          var playingVideo = articleVideo;
+          document.querySelectorAll(".post-video-main").forEach(function (otherVideo) {
+            if (otherVideo === playingVideo) return;
+            delete otherVideo.dataset.resumeAfterScroll;
+            if (!otherVideo.paused) otherVideo.pause();
+          });
+          activeArticleVideo = playingVideo;
+        } else if (event.type === "pause" && activeArticleVideo === articleVideo) {
+          activeArticleVideo = null;
+          window.setTimeout(startNextVisibleArticleVideo, 0);
+        }
+        updateArticleVideoControls(articleVideo);
       },
       true,
     );
@@ -1254,6 +1316,12 @@ var articleVideoObserver = new IntersectionObserver(
       var wrapper = video.closest(".post-video");
       if (!wrapper) return;
 
+      if (entry.isIntersecting) {
+        visibleArticleVideos.add(video);
+      } else {
+        visibleArticleVideos.delete(video);
+      }
+
       var backdrop = wrapper.querySelector(".post-video-backdrop");
       if (entry.isIntersecting) {
         if (backdrop && backdrop.paused) {
@@ -1261,11 +1329,14 @@ var articleVideoObserver = new IntersectionObserver(
             console.error("Article video backdrop could not resume:", error);
           });
         }
-        if (video.dataset.resumeAfterScroll === "true") {
+        if (
+          !activeArticleVideo &&
+          (video.dataset.resumeAfterScroll === "true" ||
+            video.dataset.autoPlayPending === "true")
+        ) {
           delete video.dataset.resumeAfterScroll;
-          video.play().catch(function (error) {
-            console.error("Article video could not resume after scrolling into view:", error);
-          });
+          delete video.dataset.autoPlayPending;
+          startArticleVideo(video);
         }
         return;
       }
@@ -1292,6 +1363,8 @@ function observeArticleVideos(node) {
   videos.forEach(function (video) {
     if (observedArticleVideos.has(video)) return;
     observedArticleVideos.add(video);
+    video.muted = articleVideosMuted;
+    video.dataset.autoPlayPending = "true";
     articleVideoObserver.observe(video);
   });
 }
