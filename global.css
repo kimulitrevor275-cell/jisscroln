@@ -15,9 +15,13 @@ body {
   width: 100%;
   overflow-x: hidden;
   padding: 0 16px;
-  font-size: clamp(14px, 3vw, 22px);
+  font-size: clamp(20px, 3vw, 25px);
 }
-
+h2{
+  font-family: 'outfit', serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  letter-spacing: 0.01em;
+}
 @media (min-width: 1024px) {
   body {
     padding: 0 24px;
@@ -51,6 +55,7 @@ header {
   max-height: 100%;    /* never taller than the header */
   display: block;
   flex-shrink: 0;
+  border:none;
 }
 /* ── NAVBAR ── */
 .navbar {
@@ -70,7 +75,7 @@ header {
   cursor: pointer;
   transition: color 0.3s ease;
   font-weight: 300;
-  font-family: poppins serif;
+  font-family: "poppins" serif;
   border:none;
   border-radius: 0;
 }
@@ -94,10 +99,24 @@ header {
   white-space: nowrap;
 }
 
+.greeting-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
 #user-greeting img {
   width: 50px;
   height: auto;
   display: block;
+}
+
+#lightmode {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  cursor: pointer;
+  border: none;
 }
 
 #user-greeting svg {
@@ -224,20 +243,7 @@ h1 {
 #forup a { color: gray; }
 #nxtp-icon { width: 60px; height: 60px; border: none; }
 
-h2 {
-  text-align: left;
-  font-size: clamp(28px, 4.3vw, 35px);
-  font-family: 'Outfit', serif;
-  color: white;
-  padding: 8px 0;
-  line-height: 1.2;
-  font-weight: 400;
-  margin-bottom: 24px;
-}
-h2::first-letter {
-  font-family: 'Poppins', serif;
-  font-size: clamp(34px, 4.6vw, 42px);
-}
+
 
 h4 {
   padding: 4px 8px;
@@ -255,10 +261,10 @@ b { font-size: clamp(20px, 3.5vw, 26px); font-weight: 600; }
 p {
   max-width: 100%;
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(23px, 3.4vw, 40px);
+  font-size: clamp(25px, 3.4vw, 40px);
   color: white;
   line-height: 1.6;
-  margin: 16px 0;
+  margin: 20px ;
   font-weight: 400;
 }
 p::first-letter {
@@ -276,9 +282,8 @@ p::first-letter {
 .see-more {
   color: #6eaec9;
   cursor: pointer;
-  font-size: clamp(14px, 2vw, 17px);
+  font-size: inherit;
   display: inline-block;
-  margin-top: 4px;
   font-family: 'Outfit', sans-serif;
 }
 .see-more:hover { opacity: 0.8; }
@@ -539,3 +544,160 @@ img:hover { border-color: #444; }
   display: none;
 }
 .btn-show-more.visible { display: inline-block; }
+
+/* ── LIGHT MODE ── */
+html.light-mode body {
+  background-color: #f5f5f5;
+  color: #222;
+}
+
+html.light-mode #header,
+html.light-mode header {
+  background: #fff;
+}
+
+html.light-mode h1,
+html.light-mode h2,
+html.light-mode h4,
+html.light-mode p,
+html.light-mode #user-greeting {
+  color: #222 !important;
+}
+
+html.light-mode #user-greeting a {
+  color: #333 !important;
+}
+
+html.light-mode #user-greeting img {
+  filter: brightness(0);
+}
+
+html.light-mode #label {
+  background-color: #e6e6e6;
+  color: #333;
+}
+
+html.light-mode .navbar a.active {
+  border-bottom-color: #222;
+  color: #222;
+}
+
+html.light-mode .navbar .button:hover {
+  background: #eee;
+}
+
+html.light-mode .about_us,
+html.light-mode #poll1,
+html.light-mode #poll2,
+html.light-mode #poll3,
+html.light-mode #poll4,
+html.light-mode .post-card {
+  background-color: #fff;
+  color: #222;
+}
+
+html.light-mode #Email {
+  color: #222;
+  border-top-color: #ccc;
+}
+
+html.light-mode h4 {
+  color: #222;
+}
+
+html.light-mode #ticker span {
+  background-color: #e8f1fb;
+  color: #222;
+}
+
+html.light-mode .post-card,
+html.light-mode .opinion-card {
+  border-color: #ddd;
+}
+
+html.light-mode .btn-good,
+html.light-mode .btn-bad,
+html.light-mode .btn-engage {
+  color: #222;
+}
+
+html.light-mode .btn-good:hover,
+html.light-mode .btn-bad:hover,
+html.light-mode .btn-engage:hover {
+  background: #eee;
+}
+
+html.light-mode .rate-bar-wrap {
+  background: #ddd;
+}
+
+html.light-mode .engage-panel {
+  background: #f0f0f0;
+  border-color: #ddd;
+}
+
+html.light-mode .opinion-input {
+  background: #fff;
+  border-color: #ccc;
+  color: #222;
+}
+
+html.light-mode .opinion-text {
+  color: #333;
+}
+
+html.light-mode .opinion-time,
+html.light-mode .opinion-label,
+html.light-mode .opinions-title,
+html.light-mode .no-opinions,
+html.light-mode .char-count,
+html.light-mode #time {
+  color: #0c0c0c;
+}
+
+html.light-mode .opinion-card {
+  border-top-color: #ddd;
+}
+
+
+html.light-mode #lightmode {
+  cursor: pointer;
+}
+
+html.light-mode #jis-search-overlay {
+  background: #fff;
+  border-bottom-color: #ddd;
+}
+
+html.light-mode .skeleton {
+  background-image: linear-gradient(
+    90deg,
+    #e2e2e2 25%,
+    #f2f2f2 50%,
+    #e2e2e2 75%
+  );
+}
+
+html.light-mode .skeleton-card {
+  border-bottom-color: #ddd;
+}
+
+html.light-mode #jis-search-input {
+  background: #f5f5f5;
+  color: #222;
+}
+
+html.light-mode #jis-search-close,
+html.light-mode .jis-result-section,
+html.light-mode .jis-result-title,
+html.light-mode .jis-no-results {
+  color: #222;
+}
+
+html.light-mode .jis-result-cat {
+  color: #666;
+}
+
+html.light-mode .jis-result-img {
+  background: #eee;
+}

@@ -7,6 +7,52 @@ var sb = supabase.createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6c3BlemtsamJ4b2NxYm9xZ3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMTU4MjMsImV4cCI6MjA5Mjg5MTgyM30.VXZ4ZX9_z33ZKrWUbhs2EXKruTi1kp5IpLuGLykF1y0",
 );
 
+var LIGHT_MODE_STORAGE_KEY = "jisscrol-light-mode";
+
+function setLightMode(enabled) {
+  document.documentElement.classList.toggle("light-mode", enabled);
+  localStorage.setItem(LIGHT_MODE_STORAGE_KEY, enabled ? "true" : "false");
+}
+
+if (localStorage.getItem(LIGHT_MODE_STORAGE_KEY) === "true") {
+  document.documentElement.classList.add("light-mode");
+}
+
+function handleLightModeInput(event) {
+  var toggle = event.target.closest("#lightmode");
+  if (!toggle) return;
+
+  if (event.type === "keydown") {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+  }
+
+  var enabled = !document.documentElement.classList.contains("light-mode");
+  setLightMode(enabled);
+  toggle.setAttribute("aria-pressed", String(enabled));
+  toggle.setAttribute(
+    "aria-label",
+    enabled ? "Switch to dark mode" : "Switch to light mode",
+  );
+}
+
+var existingLightModeToggle = document.getElementById("lightmode");
+if (existingLightModeToggle) {
+  var lightModeEnabled =
+    document.documentElement.classList.contains("light-mode");
+  existingLightModeToggle.setAttribute("aria-pressed", String(lightModeEnabled));
+  existingLightModeToggle.setAttribute(
+    "aria-label",
+    lightModeEnabled ? "Switch to dark mode" : "Switch to light mode",
+  );
+}
+
+if (!window._lightModeListenersInitialized) {
+  document.addEventListener("click", handleLightModeInput);
+  document.addEventListener("keydown", handleLightModeInput);
+  window._lightModeListenersInitialized = true;
+}
+
 // ─────────────────────────────────────────
 //  AUTH HELPERS
 // ─────────────────────────────────────────
@@ -40,6 +86,13 @@ function _makeBadge(tier, size) {
 // ─────────────────────────────────────────
 var username = sessionStorage.getItem("jis_username") || "Anonymous";
 
+function lightModeToggleMarkup(greetingElement) {
+  var toggle = document.getElementById("lightmode");
+  if (toggle && !greetingElement.contains(toggle)) return "";
+
+  return `<img id="lightmode" src="/pics/lm.png" alt="Toggle light mode" role="button" tabindex="0" aria-pressed="${document.documentElement.classList.contains("light-mode")}">`;
+}
+
 sb.auth.getSession().then(function (r) {
   var el = document.getElementById("user-greeting");
 
@@ -54,7 +107,8 @@ sb.auth.getSession().then(function (r) {
     sessionStorage.setItem("jis_uid", uid);
 
     if (el) {
-      el.innerHTML = `${getGreeting()}, ${name} <a href="#" onclick="signOut()" style="color:gray;font-size:25px; margin:0"></a>`;
+      el.innerHTML = `${getGreeting()}, ${name} <a href="#" onclick="signOut()" style="color:gray;font-size:25px; margin:0"></a>
+      ${lightModeToggleMarkup(el)}`;
     }
 
     fetch("https://jisscrol-opinions.onrender.com/visit", {
@@ -69,9 +123,11 @@ sb.auth.getSession().then(function (r) {
         window._cachedTier = data.tier;
         var badge = _makeBadge(data.tier, 35);
         if (el) {
-          el.innerHTML = `${getGreeting()}, ${name}${badge}  <a href="/profile.html" style="color:gray;font-size:20px;">
+          el.innerHTML = `${getGreeting()}, <span class="greeting-name">${name}${badge}</span>  <a href="/profile.html" style="color:gray;font-size:20px;">
           <img src="/pics/11.svg" alt="Profile" style="width:50px;height:auto;border:none;">
-          </a>`;
+          </a>
+         ${lightModeToggleMarkup(el)}
+          `;
         }
       })
       .catch(function () {});
@@ -83,13 +139,17 @@ sb.auth.getSession().then(function (r) {
 
     if (el) {
       el.innerHTML = `
-      <div style="display:"block";text-align:right;" href="/login/" >
+      <div style="display:"flex"; width:"auto";text-align:right;" href="/login/" >
   
       <a href="/login/" style="color:white;font-size:30px;text-decoration:none;">
-      <img src="/pics/11.svg" alt="Profile" style="width:50px;height:auto;border:none;">Sign In</a> </div>`;
+      <img src="/pics/11.svg" alt="Profile" style="width:50px;height:auto;border:none;">Sign In</a> </div>
+      ${lightModeToggleMarkup(el)}`;
     }
   }
+
 });
+
+
 
 // ─────────────────────────────────────────
 //  API
@@ -670,7 +730,7 @@ function attachSeeMore(postId) {
 var BODY_LIMIT = 300;
 
 function toggleBody(postId, encodedBody) {
-  var el = document.getElementById("body-" + postId);
+  var el = document.getElementById("body-text-" + postId);
   var btn = document.getElementById("sm-" + postId);
   var full = decodeURIComponent(encodedBody);
 
@@ -692,11 +752,12 @@ function renderBody(post) {
     : formatBody(post.body);
 
   return `
-    <p class="article-body" id="body-${post.id}">${shown}</p>
-    ${
-      isLong
-        ? `<span class="see-more" id="sm-${post.id}" data-body="${encodeURIComponent(post.body)}">See More</span>`
-        : ""
-    }
+    <p class="article-body" id="body-${post.id}">
+      <span id="body-text-${post.id}">${shown}</span>${
+        isLong
+          ? ` <span class="see-more" id="sm-${post.id}" data-body="${encodeURIComponent(post.body)}">See More</span>`
+          : ""
+      }
+    </p>
   `;
 }

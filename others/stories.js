@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────
 
 const likedMap = {};
-const API = 'https://jisscrol-opinions.onrender.com';
+const STORIES_API = 'https://jisscrol-opinions.onrender.com';
 
 function render(DATA) {
   const feed = document.getElementById('feed');
@@ -94,7 +94,7 @@ function render(DATA) {
   // load like counts
   feed.querySelectorAll('.like-btn').forEach(function(btn) {
     var storyId = btn.dataset.id;
-    fetch(API + '/ratings/' + storyId)
+    fetch(STORIES_API + '/ratings/' + storyId)
     .then(function(r) { return r.json(); })
     .then(function(data) { btn.querySelector('.lcount').textContent = data.good || 0; })
     .catch(function() {});
@@ -108,7 +108,7 @@ function render(DATA) {
       if (likedMap[storyId]) return;
       likedMap[storyId] = true;
       btn.classList.add('liked');
-      fetch(API + '/ratings', {
+      fetch(STORIES_API + '/ratings', {
         method : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body   : JSON.stringify({ post_id: storyId, vote: 'good' })
@@ -124,7 +124,7 @@ function render(DATA) {
 //  FETCH AND RENDER
 // ─────────────────────────────────────────
 
-fetch(API + '/stories')
+fetch(STORIES_API + '/stories')
   .then(function(r) { return r.json(); })
   .then(function(data) { render(data); })
   .catch(function() { render([]); });

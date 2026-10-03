@@ -19,7 +19,10 @@
   <h1 style="margin:0;">The JisScroL</h1>
 
 </div>
-  <div id="user-greeting" style="font-family:'outfit', serif;font-size:30px;color: white;"></div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div id="user-greeting" style="font-family:'outfit', serif;font-size:30px;color: white;"></div>
+    <img id="lightmode" src="/pics/lm.png" alt="Toggle light mode" role="button" tabindex="0" aria-pressed="false">
+  </div>
   </div>
   <nav class="navbar">
     <a  href="/index.html" class="button">Home</a>
@@ -35,7 +38,7 @@
  
 <!-- CHARTS SECTION -->
 <section class="charts-section">
- <div class="section-label">JisScroL COVERS</div>
+ <div class="section-label">Covers</div>
  <div class="charts-scroll">
 
     <!-- CARD 1 -->
@@ -112,7 +115,7 @@
  
  
  
- <div class="section-label">JisScroL GLOBAL MUSIC CHARTS</div>
+ <div class="section-label"> Global music charts</div>
  <div class="musiccharts">  
     <div class="polls">
     <div>
@@ -157,6 +160,7 @@
  
 <script src="stories.js"></script>
  
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../auth.js"></script>
  <script src="others.js"> </script>
  

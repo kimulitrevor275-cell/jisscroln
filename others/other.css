@@ -45,6 +45,7 @@ header {
   max-height: 100%;    /* never taller than the header */
   display: block;
   flex-shrink: 0;
+  border: none;
 }
 /* ── NAVBAR ── */
 .navbar {
@@ -64,7 +65,7 @@ header {
   cursor: pointer;
   transition: color 0.3s ease;
   font-weight: 300;
-  font-family: poppins serif;
+  font-family: "poppins" serif;
   border:none;
   border-radius: 0;
 }
@@ -86,6 +87,14 @@ header {
   font-size: 29px;
   color: white;
   white-space: nowrap;
+}
+
+#lightmode {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  cursor: pointer;
+  border: none;
 }
 
 hr {
@@ -149,13 +158,13 @@ b {
 }
 
 .section-label {
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  font-family: 'outfit', serif;
-  font-size: clamp(18px, 3vw, 40px);
+  font-weight: 300;
+  margin-top: 25px;
+  margin-bottom: 12px;
+  font-family: 'Outfit', serif;
+  font-size: clamp(18px, 4vw, 40px);
   letter-spacing: 0.11em;
   color: white;
-  font-weight: 200;
 }
 
 .charts-scroll {
@@ -462,12 +471,13 @@ b {
 }
 
 .scard-preview {
+  --story-preview-font-size: clamp(30px, 3.5vw, 30px);
   padding: 18px 16px;
   border-bottom: 1px solid #1e1e1e;
 }
 
 .preview-snippet {
-  font-size: clamp(30px, 3.5vw, 30px);
+  font-size: var(--story-preview-font-size);
   line-height: 1.6;
   font-family: "outfit",serif;
   color: gray;
@@ -513,7 +523,7 @@ b {
   display: flex;
   align-items: center;
   gap: 3px;
-  font-size: clamp(14px, 3vw, 30px);
+  font-size: var(--story-preview-font-size);
   font-weight: 700;
   color: lightblue;
   white-space: nowrap;
@@ -616,6 +626,113 @@ b {
 .cc-drama { color: #a04ae8; }
 .cc-life  { color: #e87d4a; }
 
+html.light-mode body {
+  background-color: #f5f5f5;
+  color: #222;
+}
+
+html.light-mode #header,
+html.light-mode header {
+  background-color: #fff;
+}
+
+html.light-mode #user-greeting img {
+  filter: brightness(0);
+}
+
+html.light-mode #lightmode {
+  filter: brightness(0);
+}
+
+html.light-mode #user-greeting {
+  color: #222 !important;
+}
+
+html.light-mode #user-greeting a {
+  color: #333 !important;
+}
+
+html.light-mode h1,
+html.light-mode h2,
+html.light-mode .section-label,
+html.light-mode .section-title,
+html.light-mode .chart-name {
+  color: #222;
+}
+
+html.light-mode .chart-name {
+  background-color: #eee;
+}
+
+html.light-mode .chart-type {
+  color: #555;
+}
+
+html.light-mode .navbar a.active {
+  border-bottom-color: #222;
+  color: #222;
+}
+
+html.light-mode .navbar .button:hover {
+  background: #eee;
+}
+
+html.light-mode #poll1,
+html.light-mode #poll2,
+html.light-mode #poll3,
+html.light-mode #poll4 {
+  background-color: #fff;
+  color: #222;
+}
+
+html.light-mode #rank,
+html.light-mode #songname,
+html.light-mode .days {
+  color: #222;
+}
+
+html.light-mode #poll1 hr,
+html.light-mode #poll2 hr,
+html.light-mode #poll3 hr,
+html.light-mode #poll4 hr {
+  border-top-color: #ddd;
+}
+
+html.light-mode .scard {
+  background: #fff;
+  border-color: #ddd;
+}
+
+html.light-mode .scard-preview,
+html.light-mode .reactions {
+  border-color: #ddd;
+}
+
+html.light-mode .preview-snippet,
+html.light-mode .meta-left,
+html.light-mode .meta-author,
+html.light-mode .article-body p {
+  color: #333;
+}
+
+html.light-mode .read-more {
+  color: #17627a;
+}
+
+html.light-mode .like-btn {
+  border-color: #ccc;
+  color: #555;
+}
+
+html.light-mode #Email,
+html.light-mode #icon {
+  background-color: #f5f5f5;
+  color: #222;
+}
+
+html.light-mode #Email {
+  border-top-color: #ccc;
+}
 
 
 /* ── COMMENT ── */
