@@ -7,7 +7,7 @@ var sb = supabase.createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6c3BlemtsamJ4b2NxYm9xZ3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMTU4MjMsImV4cCI6MjA5Mjg5MTgyM30.VXZ4ZX9_z33ZKrWUbhs2EXKruTi1kp5IpLuGLykF1y0",
 );
 
-var LIGHT_MODE_STORAGE_KEY = "jisscrol-light-mode";
+var LIGHT_MODE_STORAGE_KEY = "jisscrol-theme";
 
 function setLightMode(enabled) {
   document.documentElement.classList.toggle("light-mode", enabled);

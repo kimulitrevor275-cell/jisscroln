@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="/theme.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JisScroL — Sign In</title>
@@ -83,6 +84,20 @@
     .message { font-size: 30px; text-align: center; margin-top: 20px; min-height: 22px; letter-spacing: 0.02em; border-radius: 6px; padding: 12px; }
     .message.error { color: #ff6b6b; background: rgba(255, 107, 107, 0.12); }
     .message.success { color: #7ccd7c; background: rgba(124, 205, 124, 0.12); }
+
+    html.light-mode body { background:#f5f5f5; color:#222; }
+    html.light-mode .logo-text { color:#222; }
+    html.light-mode .form-container { background:#fff; border-color:#ddd; }
+    html.light-mode label { color:#555; }
+    html.light-mode input { background:#fff; border-color:#ccc; color:#222; }
+    html.light-mode input:focus { background:#fff; }
+    html.light-mode input::placeholder { color:#888; }
+    html.light-mode .btn-google { border-color:#bbb; color:#222; }
+    html.light-mode .btn-google:hover:not(:disabled) { border-color:#888; background:#f5f5f5; }
+    html.light-mode .divider::before,
+    html.light-mode .divider::after { background:#ddd; }
+    html.light-mode .btn-toggle { color:#333; }
+    html.light-mode .btn-toggle b { color:#276b9b; }
 
     @media (max-width: 480px) {
       .container { max-width: 100%; }
