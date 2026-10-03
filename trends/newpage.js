@@ -13,7 +13,6 @@ fetch(API + "/").catch(function () {});
 
 function renderPost(post) {
   var postId = post.id;
-  var singleImg = !post.img2;
 
   return `
     <b id="label">${post.label || ""}</b>
@@ -22,8 +21,7 @@ function renderPost(post) {
         ? ` <a href="${post.link}" target="_blank" rel="noopener noreferrer">view ↗</a>`
         : ""
     }</h2>
-    ${post.img ? `<img src="${post.img}" alt="photo"${singleImg ? ' id="p1"' : ""}>` : ""}
-    ${post.img2 ? `<img src="${post.img2}" alt="photo">` : ""}
+    ${renderArticleImages(post)}
     ${renderBody(post)}
     ${renderRateboxAndEngagement(postId)}
     ${post.time ? `<br><b id="time">${post.time}</b>` : ""}

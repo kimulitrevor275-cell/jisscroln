@@ -729,6 +729,24 @@ function attachSeeMore(postId) {
 
 var BODY_LIMIT = 300;
 
+function renderArticleImages(post) {
+  if (post.img && post.img2) {
+    return `<div class="article-images">${[post.img, post.img2]
+      .map(function (src) {
+        return `
+          <div class="article-image-frame">
+            <img class="article-image-backdrop" src="${src}" alt="" aria-hidden="true">
+            <img class="article-image" src="${src}" alt="photo">
+          </div>
+        `;
+      })
+      .join("")}</div>`;
+  }
+
+  var image = post.img || post.img2;
+  return image ? `<img src="${image}" alt="photo" id="p1">` : "";
+}
+
 function toggleBody(postId, encodedBody) {
   var el = document.getElementById("body-text-" + postId);
   var btn = document.getElementById("sm-" + postId);

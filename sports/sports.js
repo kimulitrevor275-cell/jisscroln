@@ -20,7 +20,6 @@ setInterval(keepSportsApiAwake, 5 * 60 * 1000);
 
 function renderSportsPost(post) {
   var postId = post.id;
-  var singleImg = !post.img2;
 
   return `
     <b id="label">${post.label || ""}</b>
@@ -30,8 +29,7 @@ function renderSportsPost(post) {
         : ""
     }</h2>
     ${renderBody(post)}
-    ${post.img ? `<img src="${post.img}" alt="photo"${singleImg ? ' id="p1"' : ""}>` : ""}
-    ${post.img2 ? `<img src="${post.img2}" alt="photo">` : ""}
+    ${renderArticleImages(post)}
     ${renderRateboxAndEngagement(postId)}
     ${post.time ? `<br><b id="time">${post.time}</b>` : ""}
     

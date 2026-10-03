@@ -218,7 +218,7 @@ a:hover { opacity: 0.8; }
 hr {
   border: none;
   border-top: 1px solid #222;
-  margin: 50px 0;
+  margin: 30px 0;
 }
 
 /* ── HEADINGS ── */
@@ -262,7 +262,7 @@ b { font-size: clamp(20px, 3.5vw, 26px); font-weight: 600; }
 p {
   max-width: 100%;
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(28px, 3.4vw, 40px);
+  font-size: clamp(32px, 3.4vw, 40px);
   color: white;
   line-height: 1.6;
   margin: 20px ;
@@ -394,6 +394,49 @@ img {
 img:hover { border-color: #444; }
 #p1 { width: 98%; }
 
+.article-images {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(8px, 2vw, 16px);
+  width: 100%;
+  margin: 12px 0 20px;
+}
+
+.article-image-frame {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 10px;
+  background: #111;
+}
+
+.article-image-frame .article-image-backdrop {
+  position: absolute;
+  inset: -10%;
+  width: 100%;
+  height: 120%;
+  max-width: none;
+  object-fit: cover;
+  filter: blur(18px) brightness(0.75);
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+}
+
+.article-image-frame .article-image {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
 /* ── TRENDS / POST CARDS ── */
 #trends, #content {
   width: 100%;
@@ -439,6 +482,7 @@ img:hover { border-color: #444; }
 }
 .btn-good, .btn-bad {
   position: relative;
+  min-width: 100px;
 }
 .btn-good:hover, .btn-bad:hover, .btn-engage:hover { background: #1a1a1a; }
 .btn-good.voted { color: #6ec98a; }
@@ -477,7 +521,7 @@ img:hover { border-color: #444; }
 }
 
 .btn-good img, .btn-bad img, #commentbtn {
-  width: 55px;
+  width: 48px;
   height: 48px;
   border: none;
   border-radius: 0;
@@ -487,6 +531,8 @@ img:hover { border-color: #444; }
 .btn-good img,
 .btn-bad img {
   position: relative;
+  flex: 0 0 48px;
+  object-fit: contain;
 }
 
 .btn-good.voted img {

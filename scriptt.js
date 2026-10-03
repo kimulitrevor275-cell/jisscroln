@@ -47,13 +47,11 @@ function renderPolls(polls) {
 
 function renderPost(post) {
   var postId = post.id;
-  var singleImg = !post.img2;
 
   return `
     <b id="label">${post.label || ""}</b>
     <h2>${post.headline}${post.link ? ` <a href="${post.link}" target="_blank" rel="noopener">view↗</a>` : ""}</h2>
-    ${post.img ? `<img src="${post.img}" alt="photo"${singleImg ? ' id="p1"' : ""}>` : ""}
-    ${post.img2 ? `<img src="${post.img2}" alt="photo">` : ""}
+    ${renderArticleImages(post)}
     ${renderBody(post)}
     ${renderRateboxAndEngagement(postId)}
     <br><b id="time">${post.time}</b>
