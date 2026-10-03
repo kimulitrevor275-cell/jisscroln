@@ -1054,7 +1054,7 @@ function renderVideoEmbed(src, type, fillFrame) {
       ? `<video class="article-image-backdrop post-video-backdrop" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1" src="${safeSrc}"></video>`
       : "";
     return `${backdrop}
-      <video class="post-video-main" muted loop playsinline preload="auto" src="${safeSrc}">Your browser does not support video playback.</video>
+      <video class="post-video-main" autoplay muted loop playsinline preload="auto" src="${safeSrc}">Your browser does not support video playback.</video>
       <div class="post-video-controls" role="group" aria-label="Video controls">
         <button class="post-video-control post-video-mute is-muted" type="button" data-video-action="mute" aria-label="Unmute video">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z"/><path class="video-mute-mark" d="m16 9 5 6m0-6-5 6"/></svg>
