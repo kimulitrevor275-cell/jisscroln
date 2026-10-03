@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JisScroL Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a96e;
+    --gold-dim: #a07840;
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #181818;
+    --border: #222222;
+    --text: #e8e8e8;
+    --muted: #666;
+    --success: #4caf82;
+    --error: #e07070;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+  }
+
+  /* ── AUTH GATE ── */
+  #auth-gate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 24px;
+  }
+
+  
+  .auth-box {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 40px 32px;
+    text-align: center;
+  }
+
+  .auth-box h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .auth-box p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 28px;
+  }
+
+  .auth-box input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    margin-bottom: 14px;
+    outline: none;
+    letter-spacing: 0.1em;
+  }
+
+  .auth-box input:focus { border-color: var(--gold); }
+
+  /* ── MAIN LAYOUT ── */
+  #admin-panel { display: none; }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }.article-body {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  line-height: 1.6;
+}
+
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+
+  header span {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .logout-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .logout-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    padding: 0 24px;
+    overflow-x: auto;
+    gap: 0;
+  }
+
+  .tab {
+    padding: 14px 20px;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .tab:hover { color: var(--text); }
+
+  /* ── CONTENT ── */
+  .panel-content { padding: 24px; max-width: 680px; margin: 0 auto; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── FORM ── */
+  .form-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .form-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  .field {
+    margin-bottom: 18px;
+  }
+
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 7px;
+  }
+
+  label span {
+    color: var(--gold);
+    font-size: 10px;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-left: 6px;
+  }
+
+  input[type="text"],
+  input[type="url"],
+  select,
+  textarea {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--gold);
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%23666' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    cursor: pointer;
+  }
+
+  select option { background: var(--surface2); }
+
+  textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  /* ── IMAGE PREVIEW ── */
+  .img-preview {
+    margin-top: 8px;
+    width: 100%;
+    height: 140px;
+    border-radius: 6px;
+    object-fit: cover;
+    display: none;
+    border: 1px solid var(--border);
+  }
+
+  .img-preview.show { display: block; }
+
+  /* ── CHAR COUNT ── */
+  .char-wrap {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+  }
+
+  .char-count { font-size: 11px; color: var(--muted); }
+
+  /* ── SUBMIT ── */
+  .btn-publish {
+    width: 100%;
+    background: var(--gold);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    padding: 15px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+
+  .btn-publish:hover { background: #ddb87c; }
+  .btn-publish:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 13px;
+    opacity: 0;
+    transition: all 0.3s;
+    pointer-events: none;
+    z-index: 999;
+    white-space: nowrap;
+  }
+
+  #toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  #toast.success { border-color: var(--success); color: var(--success); }
+  #toast.error   { border-color: var(--error);   color: var(--error);   }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 28px 0;
+  }
+
+  /* ── RECENT LIST ── */
+  .section-title {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .recent-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .recent-item-info { flex: 1; min-width: 0; }
+
+  .recent-item-cat {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .recent-item-title {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text);
+  }
+
+  .recent-item-time {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  .btn-delete {
+    background: none;
+    border: 1px solid #333;
+    color: var(--muted);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 11px;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-delete:hover { border-color: var(--error); color: var(--error); }
+
+  .empty-state {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    padding: 32px 0;
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 500px) {
+    .row { grid-template-columns: 1fr; }
+    .panel-content { padding: 16px; }
+    header { padding: 12px 16px; }
+    .tabs { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- AUTH GATE -->
+<div id="auth-gate">
+  <div class="auth-box">
+    <h1><img src="pics/logo4.png" style="width:100px"></h1>
+    <p>Admin access only</p>
+    <input type="password" id="pw-input" placeholder="Enter admin password" autocomplete="current-password">
+    <button class="btn-publish" onclick="checkAuth()">Enter</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-panel">
+
+  <header>
+    <h1><img src="pics/logo4.png" style="width:100px"> Admin</h1>
+    <button class="logout-btn" onclick="logout()">Sign out</button>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('articles')">Articles</button>
+    <button class="tab" onclick="switchTab('stories')">Stories</button>
+    <button class="tab" onclick="switchTab('tickers')">Tickers</button>
+    <button class="tab" onclick="switchTab('charts')">Charts</button>
+    <button class="tab" onclick="switchTab('songs')">Songs</button>
+    <button class="tab" onclick="switchTab('polls')">Polls</button>
+    <button class="tab" onclick="switchTab('recent')">Recent</button>
+  </div>
+
+  <div class="panel-content">
+
+    <!-- ── ARTICLES TAB ── -->
+    <div class="tab-panel active" id="tab-articles">
+      <h2 class="form-title">Publish Article</h2>
+      <p class="form-sub">Fills instantly on the site after publishing.</p>
+
+      <div class="field">
+        <label>Category <span>required</span></label>
+        <select id="a-category">
+          <option value="">Select category</option>
+          <option value="trends">Trends (Home)</option>
+          <option value="newpage">Newpage (Trends page)</option>
+          <option value="sports">Sports</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Label <span>optional — e.g. JUST-IN, TECHNOLOGY</span></label>
+        <input type="text" id="a-label" placeholder="JUST-IN">
+      </div>
+
+      <div class="field">
+        <label>Headline <span>required</span></label>
+        <input type="text" id="a-headline" placeholder="Write the headline...">
+      </div>
+
+      <div class="field">
+        <label>Image URL <span>optional</span></label>
+        <input type="url" id="a-img" placeholder="https://res.cloudinary.com/..." oninput="previewImg('a-img','prev-img1')">
+        <img id="prev-img1" class="img-preview" src="" alt="preview">
+      </div>
+
+      <div class="field">
+        <label>Image 2 URL <span>optional</span></label>
+        <input type="url" id="a-img2" placeholder="https://..." oninput="previewImg('a-img2','prev-img2')">
+        <img id="prev-img2" class="img-preview" src="" alt="preview">
+      </div>
+
+      <div class="field">
+        <label>Body <span>optional</span></label>
+        <textarea id="a-body" placeholder="Article body..." oninput="countChars(this,'a-chars')"></textarea>
+        <div class="char-wrap"><span class="char-count" id="a-chars">0</span></div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Time</label>
+          <input type="text" id="a-time" placeholder="21.5.26 | 9:00 AM">
+        </div>
+        <div class="field">
+          <label>Link <span>optional</span></label>
+          <input type="url" id="a-link" placeholder="https://...">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Read Link <span>optional</span></label>
+          <input type="url" id="a-readlink" placeholder="https://...">
+        </div>
+        <div class="field">
+          <label>Read Text <span>optional</span></label>
+          <input type="text" id="a-readtext" placeholder="Read more">
+        </div>
+      </div>
+
+      <button class="btn-publish" onclick="publishArticle()">Publish Article</button>
+    </div>
+
+    <!-- ── STORIES TAB ── -->
+    <div class="tab-panel" id="tab-stories">
+      <h2 class="form-title">Publish Story</h2>
+      <p class="form-sub">Personal stories for the Explore page.</p>
+
+      <div class="field">
+        <label>Story ID <span>required — unique e.g. st6</span></label>
+        <input type="text" id="s-id" placeholder="st6">
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Category</label>
+          <input type="text" id="s-cat" placeholder="Love & Betrayal">
+        </div>
+        <div class="field">
+          <label>Badge</label>
+          <input type="text" id="s-badge" placeholder="Trending">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>CSS Class <span>cc-love / cc-money / cc-drama / cc-life</span></label>
+        <select id="s-cc">
+          <option value="cc-love">cc-love</option>
+          <option value="cc-money">cc-money</option>
+          <option value="cc-drama">cc-drama</option>
+          <option value="cc-life">cc-life</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Title <span>required</span></label>
+        <input type="text" id="s-title" placeholder="He Said He Loved Me...">
+      </div>
+
+      <div class="field">
+        <label>Snippet <span>short preview text</span></label>
+        <input type="text" id="s-snippet" placeholder="Short preview shown on card...">
+      </div>
+
+      <div class="field">
+        <label>Full Body</label>
+        <textarea id="s-body" placeholder="Full story..." style="min-height:160px;" oninput="countChars(this,'s-chars')"></textarea>
+        <div class="char-wrap"><span class="char-count" id="s-chars">0</span></div>
+      </div>
+
+      <div class="field">
+        <label>Image URL</label>
+        <input type="url" id="s-img" placeholder="https://..." oninput="previewImg('s-img','prev-simg')">
+        <img id="prev-simg" class="img-preview" src="" alt="preview">
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Author</label>
+          <input type="text" id="s-author" placeholder="Anonymous">
+        </div>
+        <div class="field">
+          <label>Initials</label>
+          <input type="text" id="s-initials" placeholder="AN" maxlength="2">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Time</label>
+          <input type="text" id="s-time" placeholder="2h ago">
+        </div>
+        <div class="field">
+          <label>Read Time</label>
+          <input type="text" id="s-readtime" placeholder="3 min">
+        </div>
+      </div>
+
+      <button class="btn-publish" onclick="publishStory()">Publish Story</button>
+    </div>
+
+    <!-- ── TICKERS TAB ── -->
+    <div class="tab-panel" id="tab-tickers">
+      <h2 class="form-title">Add Ticker</h2>
+      <p class="form-sub">Breaking news that scrolls across the top.</p>
+
+      <div class="field">
+        <label>Ticker Text <span>required</span></label>
+        <input type="text" id="t-text" placeholder="Breaking: ...">
+      </div>
+
+      <button class="btn-publish" onclick="publishTicker()">Add Ticker</button>
+
+      <hr class="divider">
+      <p class="section-title">Active Tickers</p>
+      <div id="ticker-list"><p class="empty-state">Loading...</p></div>
+    </div>
+
+    <!-- ── CHARTS TAB ── -->
+    <div class="tab-panel" id="tab-charts">
+      <h2 class="form-title">Update Chart Cover</h2>
+      <p class="form-sub">5 chart cover slots: chart-cover1 to chart-cover5.</p>
+      <div class="field"><label>Chart ID <span>chart-cover1 to chart-cover5</span></label><select id="c-id"><option value="chart-cover1">chart-cover1 — Global</option><option value="chart-cover2">chart-cover2 — Regional</option><option value="chart-cover3">chart-cover3 — Uganda</option><option value="chart-cover4">chart-cover4 — Africa</option><option value="chart-cover5">chart-cover5 — Regional 2</option></select></div>
+      <div class="field"><label>Image URL</label><input type="url" id="c-img" placeholder="https://..." oninput="previewImg('c-img','prev-cimg')"><img id="prev-cimg" class="img-preview" src="" alt="preview"></div>
+      <div class="field"><label>Link URL <span>optional</span></label><input type="url" id="c-link" placeholder="https://..."></div>
+      <button class="btn-publish" onclick="updateChart()">Update Chart</button>
+    </div>
+
+    <!-- ── SONGS TAB ── -->
+    <div class="tab-panel" id="tab-songs">
+      <h2 class="form-title">Add Song</h2>
+      <p class="form-sub">Adds to the music charts rankings.</p>
+      <div class="row"><div class="field"><label>Rank</label><input type="text" id="so-rank" placeholder="1"></div><div class="field"><label>Trend</label><select id="so-trend"><option value="up">Up ⌃</option><option value="neutral">Neutral ●</option><option value="down">Down ⌄</option></select></div></div>
+      <div class="field"><label>Song Name <span>required</span></label><input type="text" id="so-name" placeholder="Song title"></div>
+      <div class="row"><div class="field"><label>Artist</label><input type="text" id="so-artist" placeholder="Artist name"></div><div class="field"><label>Days on chart</label><input type="text" id="so-days" placeholder="4d"></div></div>
+      <div class="field"><label>Image URL</label><input type="url" id="so-img" placeholder="https://..." oninput="previewImg('so-img','prev-soimg')"><img id="prev-soimg" class="img-preview" src="" alt="preview"></div>
+      <button class="btn-publish" onclick="publishSong()">Add Song</button>
+      <hr class="divider"><p class="section-title">Current Songs</p>
+      <div id="songs-list"><p class="empty-state">Loading...</p></div>
+    </div>
+
+    <!-- ── POLLS TAB ── -->
+    <div class="tab-panel" id="tab-polls">
+      <h2 class="form-title">Quick Feeds</h2>
+      <p class="form-sub">Update Song of the day, Trend of The day, Did you know?, Guess what?</p>
+      <div id="polls-list"><p class="empty-state">Loading...</p></div>
+    </div>
+
+    <!-- ── RECENT TAB ── -->
+    <div class="tab-panel" id="tab-recent">
+      <h2 class="form-title">Recent Articles</h2>
+      <p class="form-sub">Last 20 published. Tap delete to remove.</p>
+      <div id="recent-list"><p class="empty-state">Loading...</p></div>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+var API      = 'https://jisscrol-opinions.onrender.com';
+var ADMIN_PW = '';
+
+function checkAuth() {
+  var pw = document.getElementById('pw-input').value.trim();
+  if (!pw) return;
+  fetch(API + '/admin/articles', {
+    headers: { 'x-admin-password': pw }
+  })
+  .then(function(r) {
+    if (r.ok) {
+      ADMIN_PW = pw;
+      document.getElementById('auth-gate').style.display  = 'none';
+      document.getElementById('admin-panel').style.display = 'block';
+      loadRecent();
+      loadTickers();
+      setDefaultTime();
+    } else {
+      toast('Wrong password', 'error');
+    }
+  })
+  .catch(function() { toast('Cannot reach server', 'error'); });
+}
+
+function logout() {
+  ADMIN_PW = '';
+  document.getElementById('auth-gate').style.display  = 'flex';
+  document.getElementById('admin-panel').style.display = 'none';
+  document.getElementById('pw-input').value = '';
+}
+
+// ── TABS ──
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+  if (name === 'recent')  loadRecent();
+  if (name === 'tickers') loadTickers();
+}
+
+// ── HELPERS ──
+function setDefaultTime() {
+  var now = new Date();
+  var d   = now.getDate() + '.' + (now.getMonth()+1) + '.' + String(now.getFullYear()).slice(2);
+  var h   = now.getHours();
+  var m   = String(now.getMinutes()).padStart(2,'0');
+  var ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  document.getElementById('a-time').value = d + ' | ' + h + ':' + m + ' ' + ampm;
+}
+
+function previewImg(inputId, previewId) {
+  var val  = document.getElementById(inputId).value.trim();
+  var prev = document.getElementById(previewId);
+  if (val) {
+    prev.src = val;
+    prev.classList.add('show');
+    prev.onerror = function() { prev.classList.remove('show'); };
+  } else {
+    prev.classList.remove('show');
+  }
+}
+
+function countChars(el, countId) {
+  document.getElementById(countId).textContent = el.value.length;
+}
+
+function clearForm(fields) {
+  fields.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.value = '';
+    if (el.tagName === 'SELECT') el.selectedIndex = 0;
+  });
+  document.querySelectorAll('.img-preview').forEach(function(p) { p.classList.remove('show'); });
+  document.querySelectorAll('.char-count').forEach(function(c) { c.textContent = '0'; });
+  setDefaultTime();
+}
+
+function toast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + (type || '');
+  setTimeout(function() { t.className = ''; }, 3000);
+}
+
+function genId() {
+  return Date.now().toString(36);
+}
+
+// ── PUBLISH ARTICLE ──
+function publishArticle() {
+  var cat      = document.getElementById('a-category').value.trim();
+  var headline = document.getElementById('a-headline').value.trim();
+  var img      = document.getElementById('a-img').value.trim();
+
+  if (!cat || !headline) {
+    toast('Category and headline are required', 'error');
+    return;
+  }
+
+  var btn = document.querySelector('#tab-articles .btn-publish');
+  btn.disabled    = true;
+  btn.textContent = 'Publishing...';
+
+  var payload = {
+    id        : genId(),
+    category  : cat,
+    label     : document.getElementById('a-label').value.trim(),
+    headline  : headline,
+    img       : img,
+    img2      : document.getElementById('a-img2').value.trim(),
+    body      : document.getElementById('a-body').value.trim(),
+    time      : document.getElementById('a-time').value.trim(),
+    link      : document.getElementById('a-link').value.trim(),
+    read_link : document.getElementById('a-readlink').value.trim(),
+    read_text : document.getElementById('a-readtext').value.trim(),
+  };
+alert('pw: ' + ADMIN_PW);
+  fetch(API + '/admin/articles', {
+    method : 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-admin-password': ADMIN_PW },
+    body   : JSON.stringify(payload)
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    btn.disabled    = false;
+    btn.textContent = 'Publish Article';
+    if (data.success) {
+      toast('Article published!', 'success');
+      clearForm(['a-category','a-label','a-headline','a-img','a-img2','a-body','a-time','a-link','a-readlink','a-readtext']);
+    } else {
+      toast(data.error || 'Failed', 'error');
+    }
+  })
+  .catch(function() {
+    btn.disabled    = false;
+    btn.textContent = 'Publish Article';
+    toast('No connection', 'error');
+  });
+}
+
+// ── PUBLISH STORY ──
+function publishStory() {
+  var id    = document.getElementById('s-id').value.trim();
+  var title = document.getElementById('s-title').value.trim();
+
+  if (!id || !title) {
+    toast('ID and title are required', 'error');
+    return;
+  }
+
+  var btn = document.querySelector('#tab-stories .btn-publish');
+  btn.disabled    = true;
+  btn.textContent = 'Publishing...';
+
+  var payload = {
+    id        : id,
+    cat       : document.getElementById('s-cat').value.trim(),
+    badge     : document.getElementById('s-badge').value.trim(),
+    cc        : document.getElementById('s-cc').value,
+    title     : title,
+    snippet   : document.getElementById('s-snippet').value.trim(),
+    body      : document.getElementById('s-body').value.trim(),
+    img       : document.getElementById('s-img').value.trim(),
+    author    : document.getElementById('s-author').value.trim() || 'Anonymous',
+    initials  : document.getElementById('s-initials').value.trim() || 'AN',
+    time      : document.getElementById('s-time').value.trim(),
+    read_time : document.getElementById('s-readtime').value.trim(),
+  };
+
+  fetch(API + '/admin/stories', {
+    method : 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-admin-password': ADMIN_PW },
+    body   : JSON.stringify(payload)
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    btn.disabled    = false;
+    btn.textContent = 'Publish Story';
+    if (data.success) {
+      toast('Story published!', 'success');
+      clearForm(['s-id','s-cat','s-badge','s-cc','s-title','s-snippet','s-body','s-img','s-author','s-initials','s-time','s-readtime']);
+    } else {
+      toast(data.error || 'Failed', 'error');
+    }
+  })
+  .catch(function() {
+    btn.disabled    = false;
+    btn.textContent = 'Publish Story';
+    toast('No connection', 'error');
+  });
+}
+
+// ── PUBLISH TICKER ──
+function publishTicker() {
+  var text = document.getElementById('t-text').value.trim();
+  if (!text) { toast('Ticker text is required', 'error'); return; }
+
+  var btn = document.querySelector('#tab-tickers .btn-publish');
+  btn.disabled    = true;
+  btn.textContent = 'Adding...';
+
+  fetch(API + '/admin/tickers', {
+    method : 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-admin-password': ADMIN_PW },
+    body   : JSON.stringify({ text: text })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    btn.disabled    = false;
+    btn.textContent = 'Add Ticker';
+    if (data.success) {
+      toast('Ticker added!', 'success');
+      document.getElementById('t-text').value = '';
+      loadTickers();
+    } else {
+      toast(data.error || 'Failed', 'error');
+    }
+  })
+  .catch(function() {
+    btn.disabled    = false;
+    btn.textContent = 'Add Ticker';
+    toast('No connection', 'error');
+  });
+}
+// ── DELETE ──
+function deleteArticle(id) {
+  if (!confirm('Delete this article?')) return;
+  fetch(API + '/admin/articles/' + id, {
+    method : 'DELETE',
+    headers: { 'x-admin-password': ADMIN_PW }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.success) { toast('Deleted', 'success'); loadRecent(); }
+    else toast('Failed', 'error');
+  })
+  .catch(function() { toast('No connection', 'error'); });
+}
+
+function deleteTicker(id) {
+  fetch(API + '/admin/tickers/' + id, {
+    method : 'DELETE',
+    headers: { 'x-admin-password': ADMIN_PW }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.success) { toast('Removed', 'success'); loadTickers(); }
+    else toast('Failed', 'error');
+  })
+  .catch(function() { toast('No connection', 'error'); });
+}
+
+// ── LOAD RECENT ──
+function loadRecent() {
+  var list = document.getElementById('recent-list');
+  list.innerHTML = '<p class="empty-state">Loading...</p>';
+
+  fetch(API + '/admin/articles', {
+    headers: { 'x-admin-password': ADMIN_PW }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (!data.length) {
+      list.innerHTML = '<p class="empty-state">No articles yet.</p>';
+      return;
+    }
+    list.innerHTML = '';
+    data.slice(0,20).forEach(function(a) {
+      var item = document.createElement('div');
+      item.className = 'recent-item';
+      item.innerHTML =
+        '<div class="recent-item-info">' +
+          '<div class="recent-item-cat">' + a.category + (a.label ? ' · ' + a.label : '') + '</div>' +
+          '<div class="recent-item-title">' + a.headline + '</div>' +
+          '<div class="recent-item-time">' + (a.time || '') + '</div>' +
+        '</div>' +
+        '<button class="btn-delete" onclick="deleteArticle(\'' + a.id + '\')">Delete</button>';
+      list.appendChild(item);
+    });
+  })
+  .catch(function() { list.innerHTML = '<p class="empty-state">Could not load.</p>'; });
+}
+
+// ── LOAD TICKERS ──
+function loadTickers() {
+  var list = document.getElementById('ticker-list');
+  if (!list) return;
+  list.innerHTML = '<p class="empty-state">Loading...</p>';
+
+  fetch(API + '/tickers')
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (!data.length) {
+      list.innerHTML = '<p class="empty-state">No tickers.</p>';
+      return;
+    }
+    list.innerHTML = '';
+    data.forEach(function(t) {
+      var item = document.createElement('div');
+      item.className = 'recent-item';
+      item.innerHTML =
+        '<div class="recent-item-info">' +
+          '<div class="recent-item-title">' + t.text + '</div>' +
+        '</div>' +
+        '<button class="btn-delete" onclick="deleteTicker(' + t.id + ')">Remove</button>';
+      list.appendChild(item);
+    });
+  })
+  .catch(function() { list.innerHTML = '<p class="empty-state">Could not load.</p>'; });
+}
+</script>
+</body>
+</html>
+<script>
+// ── UPDATE CHART ──
+function updateChart() {
+  var id   = document.getElementById('c-id').value;
+  var img  = document.getElementById('c-img').value.trim();
+  var link = document.getElementById('c-link').value.trim();
+  if (!img) { toast('Image URL required', 'error'); return; }
+
+  var btn = document.querySelector('#tab-charts .btn-publish');
+  btn.disabled = true; btn.textContent = 'Updating...';
+
+  fetch(API + '/admin/charts/' + id, {
+    method : 'PUT',
+    headers: { 'Content-Type': 'application/json', 'x-admin-password': ADMIN_PW },
+    body   : JSON.stringify({ img: img, link: link })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    btn.disabled = false; btn.textContent = 'Update Chart';
+    if (data.success) { toast('Chart updated!', 'success'); document.getElementById('c-img').value = ''; document.getElementById('c-link').value = ''; document.getElementById('prev-cimg').classList.remove('show'); }
+    else toast(data.error || 'Failed', 'error');
+  })
+  .catch(function() { btn.disabled = false; btn.textContent = 'Update Chart'; toast('No connection', 'error'); });
+}
+
+// ── PUBLISH SONG ──
+function publishSong() {
+  var name = document.getElementById('so-name').value.trim();
+  if (!name) { toast('Song name required', 'error'); return; }
+
+  var btn = document.querySelector('#tab-songs .btn-publish');
+  btn.disabled = true; btn.textContent = 'Adding...';
+
+  fetch(API + '/admin/songs', {
+    method : 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-admin-password': ADMIN_PW },
+    body   : JSON.stringify({
+      rank  : document.getElementById('so-rank').value.trim(),
+      trend : document.getElementById('so-trend').value,
+      name  : name,
+      artist: document.getElementById('so-artist').value.trim(),
+      days  : document.getElementById('so-days').value.trim(),
+      img   : document.getElementById('so-img').value.trim(),
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    btn.disabled = false; btn.textContent = 'Add Song';
+    if (data.success) {
+      toast('Song added!', 'success');
+      ['so-rank','so-name','so-artist','so-days','so-img'].forEach(function(id) { document.getElementById(id).value = ''; });
+      document.getElementById('prev-soimg').classList.remove('show');
+      loadSongs();
+    } else toast(data.error || 'Failed', 'error');
+  })
+  .catch(function() { btn.disabled = false; btn.textContent = 'Add Song'; toast('No connection', 'error'); });
+}
+
+// ── DELETE SONG ──
+function deleteSong(id) {
+  fetch(API + '/admin/songs/' + id, {
+    method : 'DELETE',
+    headers: { 'x-admin-password': ADMIN_PW }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.success) { toast('Removed', 'success'); loadSongs(); }
+    else toast('Failed', 'error');
+  })
+  .catch(function() { toast('No connection', 'error'); });
+}
+
+// ── LOAD SONGS ──
+function loadSongs() {
+  var list = document.getElementById('songs-list');
+  if (!list) return;
+  list.innerHTML = '<p class="empty-state">Loading...</p>';
+  fetch(API + '/songs')
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (!data.length) { list.innerHTML = '<p class="empty-state">No songs.</p>'; return; }
+    list.innerHTML = '';
+    data.forEach(function(s) {
+      var item = document.createElement('div');
+      item.className = 'recent-item';
+      item.innerHTML =
+        '<div class="recent-item-info">' +
+          '<div class="recent-item-cat">#' + s.rank + ' · ' + s.trend + '</div>' +
+          '<div class="recent-item-title">' + s.name + ' — ' + s.artist + '</div>' +
+          '<div class="recent-item-time">' + s.days + '</div>' +
+        '</div>' +
+        '<button class="btn-delete" onclick="deleteSong(' + s.id + ')">Remove</button>';
+      list.appendChild(item);
+    });
+  })
+  .catch(function() { list.innerHTML = '<p class="empty-state">Could not load.</p>'; });
+}
+
+// ── LOAD POLLS ──
+function loadPolls() {
+  var list = document.getElementById('polls-list');
+  list.innerHTML = '<p class="empty-state">Loading...</p>';
+
+  fetch(API + '/polls')
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (!data.length) {
+      list.innerHTML = '<p class="empty-state">No polls found.</p>';
+      return;
+    }
+    list.innerHTML = '';
+    data.forEach(function(poll) {
+      var pollDiv = document.createElement('div');
+      pollDiv.className = 'poll-card';
+      pollDiv.style.cssText = 'margin-bottom: 20px; padding: 16px; background: var(--surface2); border-radius: 8px; border: 1px solid var(--border);';
+      pollDiv.innerHTML = 
+        '<div style="margin-bottom: 14px;">' +
+          '<h4 style="color: var(--gold); font-size: 14px; margin-bottom: 8px; text-transform: capitalize;">' + poll.id + '</h4>' +
+          '<label style="display: block; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 5px;">Text</label>' +
+          '<textarea id="poll-text-' + poll.id + '" style="width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 10px; color: var(--text); font-family: Outfit, sans-serif; font-size: 13px; outline: none; resize: vertical; min-height: 80px; transition: border-color 0.2s;" placeholder="Poll text">' + (poll.text || '') + '</textarea>' +
+        '</div>' +
+        '<div style="margin-bottom: 14px;">' +
+          '<label style="display: block; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 5px;">Image URL</label>' +
+          '<input type="text" id="poll-img-' + poll.id + '" value="' + (poll.img || '') + '" style="width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 10px; color: var(--text); font-family: Outfit, sans-serif; font-size: 13px; outline: none; transition: border-color 0.2s;" placeholder="Image URL">' +
+          '<img id="poll-preview-' + poll.id + '" src="' + (poll.img || '') + '" style="margin-top: 8px; width: 100%; height: 120px; border-radius: 6px; object-fit: cover; display: ' + (poll.img ? 'block' : 'none') + '; border: 1px solid var(--border);">' +
+        '</div>' +
+        '<button onclick="updatePoll(\'' + poll.id + '\')" style="width: 100%; background: var(--gold); color: #000; border: none; border-radius: 6px; padding: 12px; font-family: Outfit, sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s;">Update</button>';
+      list.appendChild(pollDiv);
+
+      // Show preview on image input change
+      var imgInput = document.getElementById('poll-img-' + poll.id);
+      imgInput.addEventListener('input', function() {
+        var preview = document.getElementById('poll-preview-' + poll.id);
+        if (this.value.trim()) {
+          preview.src = this.value.trim();
+          preview.style.display = 'block';
+        } else {
+          preview.style.display = 'none';
+        }
+      });
+    });
+  })
+  .catch(function() { 
+    list.innerHTML = '<p class="empty-state">Could not load polls.</p>'; 
+  });
+}
+
+// ── UPDATE POLL ──
+function updatePoll(id) {
+  var text = document.getElementById('poll-text-' + id).value.trim();
+  var img = document.getElementById('poll-img-' + id).value.trim();
+
+  if (!text) {
+    toast('Text is required', 'error');
+    return;
+  }
+
+  var btn = event.target;
+  btn.disabled = true;
+  btn.textContent = 'Updating...';
+
+  fetch(API + '/admin/polls/' + id, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'x-admin-password': ADMIN_PW },
+    body: JSON.stringify({ text: text, img: img })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    btn.disabled = false;
+    btn.textContent = 'Update';
+    if (data.success) {
+      toast('Poll updated!', 'success');
+      loadPolls();
+    } else {
+      toast(data.error || 'Failed', 'error');
+    }
+  })
+  .catch(function() {
+    btn.disabled = false;
+    btn.textContent = 'Update';
+    toast('No connection', 'error');
+  });
+}
+
+// patch switchTab to load songs and polls
+var _origSwitchTab = switchTab;
+switchTab = function(name) {
+  _origSwitchTab(name);
+  if (name === 'songs') loadSongs();
+  if (name === 'polls') loadPolls();
+};
+</script>

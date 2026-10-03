@@ -730,22 +730,522 @@ function attachSeeMore(postId) {
 var BODY_LIMIT = 300;
 
 function renderArticleImages(post) {
-  if (post.img && post.img2) {
-    return `<div class="article-images">${[post.img, post.img2]
-      .map(function (src) {
-        return `
-          <div class="article-image-frame">
-            <img class="article-image-backdrop" src="${src}" alt="" aria-hidden="true">
-            <img class="article-image" src="${src}" alt="photo">
-          </div>
-        `;
-      })
+  var items = [];
+  if (post.img)  items.push({ src: post.img,  type: post.img_type  || "img" });
+  if (post.img2) items.push({ src: post.img2, type: post.img2_type || "img" });
+
+  if (items.length === 2) {
+    return `<div class="article-images">${items
+      .map(function (item) { return renderArticleMediaItem(item, true); })
       .join("")}</div>`;
   }
 
-  var image = post.img || post.img2;
-  return image ? `<img src="${image}" alt="photo" id="p1">` : "";
+  if (items.length === 1) {
+    return renderArticleMediaItem(items[0], false, "p1");
+  }
+
+  return "";
 }
+
+function renderArticleMediaItem(item, framed, id) {
+  var idAttr = id ? ` id="${id}"` : "";
+  var videoType = getArticleVideoType(item.src, item.type);
+
+  if (videoType) {
+    var frameClass = framed ? " article-image-frame" : "";
+    return `<div class="post-video${frameClass}"${idAttr}>${renderVideoEmbed(item.src, videoType, framed)}</div>`;
+  }
+
+  if (framed) {
+    return `
+      <div class="article-image-frame">
+        <img class="article-image-backdrop" src="${item.src}" alt="" aria-hidden="true">
+        <img class="article-image" src="${item.src}" alt="photo">
+      </div>
+    `;
+  }
+
+  return `<img src="${item.src}" alt="photo"${idAttr}>`;
+}
+
+function getArticleVideoType(src, declaredType) {
+  var mediaType = (declaredType || "").toLowerCase();
+  if (
+    mediaType === "embed" ||
+    mediaType === "iframe" ||
+    /^(youtube|vimeo|dailymotion|tiktok|instagram|facebook|twitch|streamable)$/i.test(
+      mediaType,
+    )
+  ) {
+    return "embed";
+  }
+  if (mediaType === "video" || mediaType.startsWith("video/")) return "video";
+  if (typeof src !== "string" || !src.trim()) return null;
+
+  var url;
+  try {
+    url = new URL(src, document.baseURI);
+  } catch (error) {
+    return declaredType === "video" ? "video" : null;
+  }
+
+  var host = url.hostname.toLowerCase();
+  var isVideoPlatform =
+    host === "youtube.com" ||
+    host === "www.youtube.com" ||
+    host === "m.youtube.com" ||
+    host === "youtu.be" ||
+    host === "youtube-nocookie.com" ||
+    host === "www.youtube-nocookie.com" ||
+    host === "vimeo.com" ||
+    host === "www.vimeo.com" ||
+    host === "player.vimeo.com" ||
+    host === "dailymotion.com" ||
+    host === "www.dailymotion.com" ||
+    host === "dai.ly" ||
+    host === "tiktok.com" ||
+    host === "www.tiktok.com" ||
+    host === "vm.tiktok.com" ||
+    host === "vt.tiktok.com" ||
+    host === "instagram.com" ||
+    host === "www.instagram.com" ||
+    host === "facebook.com" ||
+    host === "www.facebook.com" ||
+    host === "m.facebook.com" ||
+    host === "fb.watch" ||
+    host === "twitch.tv" ||
+    host === "www.twitch.tv" ||
+    host === "clips.twitch.tv" ||
+    host === "streamable.com" ||
+    host === "www.streamable.com";
+
+  if (declaredType === "video" || isVideoPlatform) {
+    return isVideoPlatform ? "embed" : "video";
+  }
+
+  return /\.(mp4|m4v|webm|ogv|ogg|mov|3gp|m3u8|mpd|ts)$/i.test(url.pathname)
+    ? "video"
+    : null;
+}
+
+function renderVideoEmbed(src, type, fillFrame) {
+  if (typeof src !== "string" || !src.trim()) {
+    console.error("Cannot render article media: video source is missing.");
+    return "";
+  }
+
+  var url;
+  try {
+    url = new URL(src, document.baseURI);
+  } catch (error) {
+    console.error("Cannot render article media: invalid video URL.", error);
+    return "";
+  }
+
+  if (url.protocol !== "https:" && url.protocol !== "http:") {
+    console.error("Cannot render article media: unsupported video URL protocol.");
+    return "";
+  }
+
+  var host = url.hostname.toLowerCase();
+  var segments = url.pathname.split("/").filter(Boolean);
+  var id;
+
+  var alreadyEmbedded =
+    ((host === "www.youtube.com" ||
+      host === "www.youtube-nocookie.com") &&
+      url.pathname.startsWith("/embed/")) ||
+    (host === "player.vimeo.com" &&
+      url.pathname.startsWith("/video/")) ||
+    (host === "www.dailymotion.com" &&
+      url.pathname.startsWith("/embed/video/")) ||
+    (host === "www.tiktok.com" &&
+      url.pathname.startsWith("/embed/v2/")) ||
+    (host === "www.instagram.com" &&
+      /\/embed\/$/.test(url.pathname)) ||
+    (host === "www.facebook.com" &&
+      url.pathname === "/plugins/video.php") ||
+    (host === "player.twitch.tv" &&
+      url.searchParams.get("parent") === window.location.hostname) ||
+    (host === "streamable.com" &&
+      url.pathname.startsWith("/e/"));
+
+  if (alreadyEmbedded) {
+    type = "embed";
+  } else if (
+    host === "youtu.be" ||
+    host === "www.youtu.be" ||
+    host === "youtube.com" ||
+    host === "www.youtube.com" ||
+    host === "m.youtube.com" ||
+    host === "youtube-nocookie.com" ||
+    host === "www.youtube-nocookie.com"
+  ) {
+    id = host.endsWith("youtu.be")
+      ? segments[0]
+      : url.pathname === "/watch"
+        ? url.searchParams.get("v")
+        : url.pathname.match(/^\/(?:embed|shorts|live)\/([^/]+)/)?.[1];
+
+    if (!id || !/^[\w-]+$/.test(id)) {
+      console.error("Cannot render article media: invalid YouTube video URL.");
+      return "";
+    }
+
+    var youtubeEmbedUrl = new URL(
+      "https://www.youtube-nocookie.com/embed/" + id,
+    );
+    var startTime = url.searchParams.get("start") || url.searchParams.get("t");
+    if (startTime && /^\d+$/.test(startTime)) {
+      youtubeEmbedUrl.searchParams.set("start", startTime);
+    }
+    url = youtubeEmbedUrl;
+    type = "embed";
+  } else if (
+    host === "vimeo.com" ||
+    host === "www.vimeo.com" ||
+    host === "player.vimeo.com"
+  ) {
+    id =
+      url.pathname.match(/^\/(?:video\/)?(\d+)/)?.[1] ||
+      url.pathname.match(/^\/(?:channels\/[^/]+|groups\/[^/]+\/videos)\/(\d+)/)?.[1];
+
+    if (!id) {
+      console.error("Cannot render article media: invalid Vimeo video URL.");
+      return "";
+    }
+
+    url = new URL("https://player.vimeo.com/video/" + id);
+    type = "embed";
+  } else if (
+    host === "dailymotion.com" ||
+    host === "www.dailymotion.com" ||
+    host === "dai.ly"
+  ) {
+    id =
+      host === "dai.ly"
+        ? segments[0]
+        : url.pathname.match(/^\/(?:video|embed\/video)\/([^_/?]+)/)?.[1];
+
+    if (!id) {
+      console.error("Cannot render article media: invalid Dailymotion video URL.");
+      return "";
+    }
+
+    url = new URL("https://www.dailymotion.com/embed/video/" + id);
+    type = "embed";
+  } else if (host === "tiktok.com" || host === "www.tiktok.com") {
+    id =
+      url.pathname.match(/^\/@[^/]+\/video\/(\d+)/)?.[1] ||
+      url.pathname.match(/^\/embed\/v2\/(\d+)/)?.[1];
+    if (!id) {
+      console.error("Cannot render article media: invalid TikTok video URL.");
+      return "";
+    }
+
+    url = new URL("https://www.tiktok.com/embed/v2/" + id);
+    type = "embed";
+  } else if (
+    host === "instagram.com" ||
+    host === "www.instagram.com"
+  ) {
+    var instagramPath = url.pathname.match(
+      /^\/(reel|p|tv)\/([\w-]+)(?:\/embed\/?)?\/?$/,
+    );
+    if (!instagramPath) {
+      console.error("Cannot render article media: invalid Instagram video URL.");
+      return "";
+    }
+
+    url = new URL(
+      "https://www.instagram.com/" +
+        instagramPath[1] +
+        "/" +
+        instagramPath[2] +
+        "/embed/",
+    );
+    type = "embed";
+  } else if (
+    host === "facebook.com" ||
+    host === "www.facebook.com" ||
+    host === "m.facebook.com" ||
+    host === "fb.watch"
+  ) {
+    if (
+      host === "facebook.com" ||
+      host === "www.facebook.com" ||
+      host === "m.facebook.com"
+    ) {
+      var isFacebookVideo =
+        url.pathname === "/plugins/video.php" ||
+        url.pathname.replace(/\/+$/, "") === "/watch" ||
+        /^\/(?:reel|videos)\/[\w.-]+/.test(url.pathname) ||
+        /^\/[\w.-]+\/videos\/[\w.-]+/.test(url.pathname);
+      if (!isFacebookVideo) {
+        console.error("Cannot render article media: invalid Facebook video URL.");
+        return "";
+      }
+    }
+
+    var facebookEmbedUrl = new URL(
+      "https://www.facebook.com/plugins/video.php",
+    );
+    facebookEmbedUrl.searchParams.set("href", url.href);
+    facebookEmbedUrl.searchParams.set("show_text", "0");
+    url = facebookEmbedUrl;
+    type = "embed";
+  } else if (
+    host === "player.twitch.tv" ||
+    host === "twitch.tv" ||
+    host === "www.twitch.tv" ||
+    host === "clips.twitch.tv"
+  ) {
+    var twitchPlayerUrl = new URL("https://player.twitch.tv/");
+    var clipId =
+      host === "clips.twitch.tv"
+        ? segments[0]
+        : host === "player.twitch.tv"
+          ? url.searchParams.get("video") || url.searchParams.get("clip")
+          : url.pathname.match(/^\/(?:(?:[^/]+)\/clip\/|videos\/)([^/]+)/)?.[1];
+    var channel =
+      host === "player.twitch.tv"
+        ? url.searchParams.get("channel")
+        : segments[0];
+
+    if (clipId) {
+      twitchPlayerUrl.searchParams.set(
+        host === "clips.twitch.tv" ? "clip" : "video",
+        clipId,
+      );
+    } else if (channel && (host === "player.twitch.tv" || segments.length === 1)) {
+      twitchPlayerUrl.searchParams.set("channel", channel);
+    } else {
+      console.error("Cannot render article media: invalid Twitch video URL.");
+      return "";
+    }
+
+    twitchPlayerUrl.searchParams.set("parent", window.location.hostname);
+    url = twitchPlayerUrl;
+    type = "embed";
+  } else if (
+    host === "streamable.com" ||
+    host === "www.streamable.com"
+  ) {
+    id =
+      url.pathname.match(/^\/e\/([\w-]+)/)?.[1] ||
+      url.pathname.match(/^\/([\w-]+)/)?.[1];
+    if (!id) {
+      console.error("Cannot render article media: invalid Streamable video URL.");
+      return "";
+    }
+
+    url = new URL("https://streamable.com/e/" + id);
+    type = "embed";
+  }
+
+  var safeSrc = url.href
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+
+  if (type === "video") {
+    var backdrop = fillFrame
+      ? `<video class="article-image-backdrop post-video-backdrop" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1" src="${safeSrc}"></video>`
+      : "";
+    return `${backdrop}
+      <video class="post-video-main" autoplay muted loop playsinline preload="auto" src="${safeSrc}">Your browser does not support video playback.</video>
+      <div class="post-video-controls" role="group" aria-label="Video controls">
+        <button class="post-video-control post-video-mute is-muted" type="button" data-video-action="mute" aria-label="Unmute video">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z"/><path class="video-mute-mark" d="m16 9 5 6m0-6-5 6"/></svg>
+        </button>
+        <button class="post-video-control post-video-play" type="button" data-video-action="play" aria-label="Pause video">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <input class="post-video-seek" type="range" min="0" max="1000" value="0" aria-label="Seek video">
+        <span class="post-video-time" aria-live="off">0:00 / 0:00</span>
+        <button class="post-video-control post-video-fullscreen" type="button" data-video-action="fullscreen" aria-label="Enter fullscreen">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v2H6v4H4V4zm10 0h6v6h-2V6h-4V4zM4 14h2v4h4v2H4v-6zm14 4v-4h2v6h-6v-2h4z"/></svg>
+        </button>
+      </div>`;
+  }
+
+  var isSupportedEmbed =
+    ((url.hostname === "www.youtube.com" ||
+      url.hostname === "www.youtube-nocookie.com") &&
+      url.pathname.startsWith("/embed/")) ||
+    (url.hostname === "player.vimeo.com" &&
+      url.pathname.startsWith("/video/")) ||
+    (url.hostname === "www.dailymotion.com" &&
+      url.pathname.startsWith("/embed/video/")) ||
+    (url.hostname === "www.tiktok.com" &&
+      url.pathname.startsWith("/embed/v2/")) ||
+    (url.hostname === "www.instagram.com" &&
+      /\/embed\/$/.test(url.pathname)) ||
+    (url.hostname === "www.facebook.com" &&
+      url.pathname === "/plugins/video.php") ||
+    (url.hostname === "player.twitch.tv" &&
+      url.searchParams.get("parent") === window.location.hostname) ||
+    (url.hostname === "streamable.com" &&
+      url.pathname.startsWith("/e/"));
+
+  if (!isSupportedEmbed) {
+    console.error("Cannot render article media: unsupported video embed URL.");
+    return "";
+  }
+
+  url.searchParams.set(
+    "autoplay",
+    url.hostname === "player.twitch.tv" ? "true" : "1",
+  );
+  if (url.hostname === "player.vimeo.com") {
+    url.searchParams.set("muted", "1");
+  } else if (url.hostname === "player.twitch.tv") {
+    url.searchParams.set("muted", "true");
+  } else {
+    url.searchParams.set("mute", "1");
+  }
+
+  safeSrc = url.href
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+
+  return `<iframe src="${safeSrc}" title="Article video" loading="lazy" allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+}
+
+document.addEventListener(
+  "error",
+  function (event) {
+    var video = event.target;
+    if (!(video instanceof HTMLVideoElement)) return;
+
+    var wrapper = video.closest(".post-video");
+    if (!wrapper) return;
+
+    if (video.classList.contains("post-video-backdrop")) {
+      video.remove();
+      return;
+    }
+
+    console.error(
+      "Article video could not be loaded:",
+      video.currentSrc || video.src,
+      video.error,
+    );
+
+    var message = document.createElement("p");
+    message.className = "post-video-error";
+    message.textContent =
+      "This video is unavailable. Its source may be offline or may not allow playback here.";
+    wrapper.replaceChildren(message);
+    wrapper.classList.add("media-error");
+  },
+  true,
+);
+
+function formatVideoClock(seconds) {
+  if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
+  var totalSeconds = Math.floor(seconds);
+  var minutes = Math.floor(totalSeconds / 60);
+  var remainder = String(totalSeconds % 60).padStart(2, "0");
+  if (minutes >= 60) {
+    return Math.floor(minutes / 60) + ":" + String(minutes % 60).padStart(2, "0") + ":" + remainder;
+  }
+  return minutes + ":" + remainder;
+}
+
+function updateArticleVideoControls(video) {
+  var wrapper = video.closest(".post-video");
+  if (!wrapper) return;
+
+  var seek = wrapper.querySelector(".post-video-seek");
+  var time = wrapper.querySelector(".post-video-time");
+  var playButton = wrapper.querySelector(".post-video-play");
+  var muteButton = wrapper.querySelector(".post-video-mute");
+  var fullscreenButton = wrapper.querySelector(".post-video-fullscreen");
+  if (!seek || !time || !playButton || !muteButton || !fullscreenButton) return;
+
+  var duration = Number.isFinite(video.duration) ? video.duration : 0;
+  var currentTime = Number.isFinite(video.currentTime) ? video.currentTime : 0;
+  seek.value = duration ? String(Math.round((currentTime / duration) * 1000)) : "0";
+  seek.style.setProperty("--video-progress", Number(seek.value) / 10 + "%");
+  time.textContent = formatVideoClock(currentTime) + " / " + formatVideoClock(duration);
+  playButton.setAttribute("aria-label", video.paused ? "Play video" : "Pause video");
+  playButton.innerHTML = video.paused
+    ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>'
+    : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>';
+  muteButton.setAttribute("aria-label", video.muted ? "Unmute video" : "Mute video");
+  muteButton.classList.toggle("is-muted", video.muted);
+  muteButton.innerHTML = video.muted
+    ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z"/><path class="video-mute-mark" d="m16 9 5 6m0-6-5 6"/></svg>'
+    : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z"/><path class="video-volume-mark" d="M16 9a5 5 0 0 1 0 6m2-9a8 8 0 0 1 0 12"/></svg>';
+  fullscreenButton.setAttribute(
+    "aria-label",
+    document.fullscreenElement === wrapper ? "Exit fullscreen" : "Enter fullscreen",
+  );
+}
+
+document.addEventListener("click", function (event) {
+  var button = event.target.closest("[data-video-action]");
+  if (!button) return;
+
+  var wrapper = button.closest(".post-video");
+  var video = wrapper && wrapper.querySelector(".post-video-main");
+  if (!video) return;
+
+  if (button.dataset.videoAction === "play") {
+    if (video.paused) {
+      video.play().catch(function (error) {
+        console.error("Article video playback could not start:", error);
+      });
+    } else {
+      video.pause();
+    }
+  } else if (button.dataset.videoAction === "mute") {
+    video.muted = !video.muted;
+  } else if (button.dataset.videoAction === "fullscreen") {
+    var fullscreenRequest =
+      document.fullscreenElement === wrapper
+        ? document.exitFullscreen()
+        : wrapper.requestFullscreen();
+    fullscreenRequest.catch(function (error) {
+      console.error("Article video fullscreen could not be changed:", error);
+    });
+  }
+  updateArticleVideoControls(video);
+});
+
+document.addEventListener("input", function (event) {
+  var seek = event.target.closest(".post-video-seek");
+  if (!seek) return;
+
+  var wrapper = seek.closest(".post-video");
+  var video = wrapper && wrapper.querySelector(".post-video-main");
+  if (!video || !Number.isFinite(video.duration)) return;
+
+  video.currentTime = (Number(seek.value) / 1000) * video.duration;
+  updateArticleVideoControls(video);
+});
+
+["durationchange", "loadedmetadata", "timeupdate", "play", "pause", "volumechange", "ended"].forEach(
+  function (eventName) {
+    document.addEventListener(
+      eventName,
+      function (event) {
+        if (event.target instanceof HTMLVideoElement && event.target.classList.contains("post-video-main")) {
+          updateArticleVideoControls(event.target);
+        }
+      },
+      true,
+    );
+  },
+);
+
+document.addEventListener("fullscreenchange", function () {
+  document.querySelectorAll(".post-video-main").forEach(updateArticleVideoControls);
+});
 
 function toggleBody(postId, encodedBody) {
   var el = document.getElementById("body-text-" + postId);
