@@ -1247,6 +1247,63 @@ document.addEventListener("fullscreenchange", function () {
   document.querySelectorAll(".post-video-main").forEach(updateArticleVideoControls);
 });
 
+var articleVideoObserver = new IntersectionObserver(
+  function (entries) {
+    entries.forEach(function (entry) {
+      var video = entry.target;
+      var wrapper = video.closest(".post-video");
+      if (!wrapper) return;
+
+      var backdrop = wrapper.querySelector(".post-video-backdrop");
+      if (entry.isIntersecting) {
+        if (backdrop && backdrop.paused) {
+          backdrop.play().catch(function (error) {
+            console.error("Article video backdrop could not resume:", error);
+          });
+        }
+        if (video.dataset.resumeAfterScroll === "true") {
+          delete video.dataset.resumeAfterScroll;
+          video.play().catch(function (error) {
+            console.error("Article video could not resume after scrolling into view:", error);
+          });
+        }
+        return;
+      }
+
+      if (!video.paused) {
+        video.dataset.resumeAfterScroll = "true";
+        video.pause();
+      }
+      if (backdrop && !backdrop.paused) backdrop.pause();
+    });
+  },
+  { threshold: 0.15 },
+);
+
+var observedArticleVideos = new WeakSet();
+
+function observeArticleVideos(node) {
+  if (!(node instanceof Element)) return;
+
+  var videos = [];
+  if (node.matches(".post-video-main")) videos.push(node);
+  videos.push.apply(videos, node.querySelectorAll(".post-video-main"));
+
+  videos.forEach(function (video) {
+    if (observedArticleVideos.has(video)) return;
+    observedArticleVideos.add(video);
+    articleVideoObserver.observe(video);
+  });
+}
+
+document.querySelectorAll(".post-video-main").forEach(observeArticleVideos);
+
+new MutationObserver(function (mutations) {
+  mutations.forEach(function (mutation) {
+    mutation.addedNodes.forEach(observeArticleVideos);
+  });
+}).observe(document.documentElement, { childList: true, subtree: true });
+
 function toggleBody(postId, encodedBody) {
   var el = document.getElementById("body-text-" + postId);
   var btn = document.getElementById("sm-" + postId);
