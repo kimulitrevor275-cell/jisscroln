@@ -274,6 +274,69 @@
       overflow-wrap: anywhere;
     }
 
+    .article-ratings {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+      width: 100%;
+    }
+
+    .article-vote {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-width: 58px;
+      min-height: 48px;
+      padding: 4px 8px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text);
+      font-size: 25px;
+      cursor: pointer;
+    }
+
+    .article-vote:hover,
+    .article-vote:focus-visible {
+      background: var(--panel-2);
+    }
+
+    .article-vote:focus-visible {
+      outline: 2px solid var(--accent-2);
+      outline-offset: 2px;
+    }
+
+    .article-vote:disabled {
+      cursor: default;
+    }
+
+    .article-vote.voted-good { color: #6ec98a; }
+    .article-vote.voted-bad { color: #e07070; }
+
+    .article-vote img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+      margin: 0;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .article-rate-bar {
+      display: flex;
+      flex: 1;
+      min-width: 60px;
+      height: 10px;
+      overflow: hidden;
+      border-radius: 5px;
+      background: #333;
+    }
+
+    .article-rate-good { height: 100%; background: #6ec98a; }
+    .article-rate-bad { height: 100%; background: #e07070; }
+
     .media-stage.has-media .heading-actions {
       position: absolute;
       z-index: 3;
@@ -522,6 +585,21 @@
         </div>
       </div>
       <div class="article-copy" id="articleBody"></div>
+      <div class="article-ratings" id="articleRatings" aria-label="Rate this article">
+        <button class="article-vote" id="articleLike" type="button" aria-label="Like article">
+          <img src="/pics/iconsthumbsup.png" alt="">
+          <span id="articleLikeCount">0</span>
+        </button>
+        <div class="article-rate-bar" aria-hidden="true">
+          <div class="article-rate-good" id="articleGoodBar" style="width:50%"></div>
+          <div class="article-rate-bad" id="articleBadBar" style="width:50%"></div>
+        </div>
+        <button class="article-vote" id="articleDislike" type="button" aria-label="Dislike article">
+          <img src="/pics/iconsthumbsdown.png" alt="">
+          <span id="articleDislikeCount">0</span>
+        </button>
+      </div>
+      <div class="status" id="ratingStatus" aria-live="polite"></div>
       <p class="article-time" id="articleTime" aria-busy="true">
         <span class="skeleton skeleton-time"></span>
       </p>
@@ -574,7 +652,74 @@
     const charCount = document.getElementById('charCount');
     const postBtn = document.getElementById('postBtn');
     const commentForm = document.getElementById('commentForm');
+    const likeBtn = document.getElementById('articleLike');
+    const dislikeBtn = document.getElementById('articleDislike');
+    const likeCount = document.getElementById('articleLikeCount');
+    const dislikeCount = document.getElementById('articleDislikeCount');
+    const goodBar = document.getElementById('articleGoodBar');
+    const badBar = document.getElementById('articleBadBar');
+    const ratingStatus = document.getElementById('ratingStatus');
     let currentArticle = null;
+    let currentVote = null;
+
+    function renderRatingCounts(good, bad) {
+      const goodCount = Number(good) || 0;
+      const badCount = Number(bad) || 0;
+      const total = goodCount + badCount;
+      const goodPercent = total ? Math.round((goodCount / total) * 100) : 50;
+      likeCount.textContent = String(goodCount);
+      dislikeCount.textContent = String(badCount);
+      goodBar.style.width = goodPercent + '%';
+      badBar.style.width = (100 - goodPercent) + '%';
+    }
+
+    async function loadArticleRatings(postId) {
+      try {
+        const response = await fetch(API_BASE + '/ratings/' + encodeURIComponent(postId));
+        if (!response.ok) throw new Error('Unable to load article ratings.');
+        const data = await response.json();
+        renderRatingCounts(data.good, data.bad);
+        ratingStatus.textContent = '';
+      } catch (error) {
+        ratingStatus.textContent = 'Unable to load ratings right now.';
+        ratingStatus.className = 'status error';
+        console.error('Failed to load article ratings:', error);
+      }
+    }
+
+    async function submitArticleRating(vote) {
+      if (!currentArticle || !currentArticle.id || currentVote) return;
+      likeBtn.disabled = true;
+      dislikeBtn.disabled = true;
+      ratingStatus.textContent = '';
+
+      try {
+        const response = await fetch(API_BASE + '/ratings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ post_id: currentArticle.id, vote: vote })
+        });
+        const data = await response.json();
+        if (!response.ok || !data || data.good === undefined || data.bad === undefined) {
+          throw new Error(data && data.error ? data.error : 'Unable to submit rating.');
+        }
+
+        currentVote = vote;
+        likeBtn.classList.toggle('voted-good', vote === 'good');
+        dislikeBtn.classList.toggle('voted-bad', vote === 'bad');
+        renderRatingCounts(data.good, data.bad);
+        ratingStatus.className = 'status';
+      } catch (error) {
+        ratingStatus.textContent = error.message || 'Unable to submit rating.';
+        ratingStatus.className = 'status error';
+      } finally {
+        likeBtn.disabled = Boolean(currentVote);
+        dislikeBtn.disabled = Boolean(currentVote);
+      }
+    }
+
+    likeBtn.addEventListener('click', function () { submitArticleRating('good'); });
+    dislikeBtn.addEventListener('click', function () { submitArticleRating('bad'); });
 
     function adjustComposerForKeyboard() {
       const viewport = window.visualViewport;
@@ -776,6 +921,14 @@
       }
       articleBody.innerHTML = article.body ? formatBody(article.body) : '';
       syncCounter();
+      currentVote = null;
+      likeBtn.disabled = false;
+      dislikeBtn.disabled = false;
+      likeBtn.classList.remove('voted-good');
+      dislikeBtn.classList.remove('voted-bad');
+      ratingStatus.textContent = '';
+      ratingStatus.className = 'status';
+      loadArticleRatings(article.id);
     }
 
     async function fetchArticles() {
