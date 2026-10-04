@@ -560,16 +560,32 @@
       .headline { font-size: max(25px, 1.4rem); }
       .composer { left: 10px; right: 10px; gap: 8px; }
       .post-btn { min-width: 62px; padding: 10px 12px; }
-      .feed-media > img { max-height: 60vh; }
+      .feed-media > img { max-height: 44vh; max-height: 44svh; }
       .media-stage { margin-left: -10px; margin-right: -10px; }
       .feed-media.media-fill,
-      .media-stage.has-media::after { height: 60vh; }
+      .media-stage.has-media::after {
+        height: clamp(150px, 44vh, 360px);
+        height: clamp(150px, 44svh, 360px);
+      }
+      .feed-media .article-image-frame,
+      .feed-media .post-video,
+      .comments-feed-video,
+      .comments-feed-embed {
+        max-height: 44vh;
+        max-height: 44svh;
+      }
       .media-stage.has-media .article-overlay { left: 10px; right: 10px; bottom: 24px; }
       .opinions-list { padding: 0 4px 12px; }
       .opinion-card { padding: 12px; }
       .opinion-head { align-items: flex-start; flex-direction: column; gap: 4px; }
       .opinion-user { max-width: 100%; overflow-wrap: anywhere; }
       .opinion-time { white-space: normal; overflow-wrap: anywhere; }
+      .article-copy,
+      .opinion-text,
+      .composer textarea {
+        font-size: clamp(16px, 4vw, 18px);
+      }
+      .headline { font-size: clamp(20px, 5vw, 26px); }
       .article-ratings { gap: 4px; }
       .article-vote { min-width: 54px; gap: 2px; padding: 4px; }
       .article-vote img { width: 32px; height: 32px; }
