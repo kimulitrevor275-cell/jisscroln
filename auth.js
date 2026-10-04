@@ -1,7 +1,6 @@
 // ─────────────────────────────────────────
 //  SUPABASE
 // ─────────────────────────────────────────
-
 var sb = supabase.createClient(
   "https://jzspezkljbxocqboqgtk.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6c3BlemtsamJ4b2NxYm9xZ3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMTU4MjMsImV4cCI6MjA5Mjg5MTgyM30.VXZ4ZX9_z33ZKrWUbhs2EXKruTi1kp5IpLuGLykF1y0",
@@ -168,21 +167,134 @@ function escapeHtml(str) {
   return String(str)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
-// Escapes first (safe), then turns URLs into gold clickable links
-function linkifyText(text) {
-  return escapeHtml(text).replace(
-    /(https?:\/\/[^\s<]+)/g,
-    '<a href="$1" target="_blank" rel="noopener noreferrer" class="body-link">$1</a>',
+// ── Link / hashtag detection ──
+// Finds, in RAW text: https://… links, www.… links, bare domains
+// (jisscrol.com, site.co.ug/page) and #hashtags. Trailing punctuation
+// ("see jisscrol.com, then…", "(https://x.com)") is kept OUT of the link.
+var BARE_TLDS =
+  "com|org|net|ug|co\\.ug|or\\.ug|ac\\.ug|go\\.ug|ke|tz|rw|ng|gh|za|uk|us|ca|de|fr|in|io|me|tv|fm|to|cc|co|ly|gl|be|tk|" +
+  "info|biz|app|dev|news|edu|gov|xyz|online|site|store|link|live|club|shop|tech|page|blog|wiki|media|world|today|top";
+
+function findTextTokens(text) {
+  var re = new RegExp(
+    "(https?:\\/\\/[^\\s<>\"']+" +
+      "|www\\.[^\\s<>\"']+" +
+      "|[a-z0-9][a-z0-9-]*(?:\\.[a-z0-9-]+)*\\.(?:" + BARE_TLDS + ")(?![a-z0-9-])(?:\\/[^\\s<>\"']*)?" +
+      // any other ending is still a link when a path follows: example.xyz123/page
+      "|[a-z0-9][a-z0-9-]*(?:\\.[a-z0-9-]+)*\\.[a-z]{2,}\\/[^\\s<>\"']*" +
+      "|#[\\p{L}\\p{N}_]+)",
+    "giu",
   );
+  var tokens = [];
+  var m;
+
+  while ((m = re.exec(text)) !== null) {
+    var raw = m[0];
+    var start = m.index;
+    var prev = start > 0 ? text.charAt(start - 1) : "";
+
+    if (raw.charAt(0) === "#") {
+      // hashtag: must contain a letter (so "#1" isn't one) and not be glued to a word
+      if (/[\p{L}\p{N}_]/u.test(prev) || !/\p{L}/u.test(raw)) continue;
+      tokens.push({ start: start, end: start + raw.length, text: raw, kind: "tag" });
+      continue;
+    }
+
+    // skip emails (name@site.com) and domains glued to a preceding word/path
+    if (prev === "@" || /[\w\/.-]/.test(prev)) {
+      if (!/^https?:/i.test(raw)) continue;
+    }
+
+    // trim trailing punctuation off the link
+    var trimmed = raw;
+    while (trimmed.length) {
+      var last = trimmed.charAt(trimmed.length - 1);
+      if (/[.,!?;:'"\]}>]/.test(last)) {
+        trimmed = trimmed.slice(0, -1);
+      } else if (last === ")") {
+        var opens = (trimmed.match(/\(/g) || []).length;
+        var closes = (trimmed.match(/\)/g) || []).length;
+        if (closes > opens) trimmed = trimmed.slice(0, -1);
+        else break;
+      } else {
+        break;
+      }
+    }
+    if (!trimmed) continue;
+
+    re.lastIndex = start + trimmed.length; // resume right after the link
+    tokens.push({ start: start, end: start + trimmed.length, text: trimmed, kind: "link" });
+  }
+  return tokens;
+}
+
+// Escapes everything, then wraps links and hashtags
+function linkifyText(text) {
+  if (!text) return "";
+  text = String(text);
+
+  var tokens = findTextTokens(text);
+  var out = "";
+  var pos = 0;
+
+  tokens.forEach(function (t) {
+    out += escapeHtml(text.slice(pos, t.start));
+
+    if (t.kind === "tag") {
+      out +=
+        '<span class="body-hashtag" data-tag="' + escapeHtml(t.text) + '">' +
+        escapeHtml(t.text) + "</span>";
+    } else {
+      var href = /^https?:\/\//i.test(t.text) ? t.text : "https://" + t.text;
+      out +=
+        '<a href="' + escapeHtml(href) + '" target="_blank" rel="noopener noreferrer" class="body-link">' +
+        escapeHtml(t.text) + "</a>";
+    }
+    pos = t.end;
+  });
+
+  return out + escapeHtml(text.slice(pos));
 }
 
 // Post/comment text: safe + links + line breaks
 function formatBody(text) {
   return linkifyText(text).split("\n").join("<br>");
 }
+
+// Cut text at `limit` WITHOUT slicing through a link or hashtag
+function truncateBody(text, limit) {
+  if (text.length <= limit) return text;
+  var cut = limit;
+  findTextTokens(text).forEach(function (t) {
+    if (t.start < limit && t.end > limit) cut = t.end;
+  });
+  return text.substring(0, cut);
+}
+
+// Make every body link reliably clickable, even when the post card
+// sits inside another link or has its own click handler (capture phase runs first).
+document.addEventListener(
+  "click",
+  function (event) {
+    var a = event.target.closest && event.target.closest("a.body-link");
+    if (!a) return;
+    event.preventDefault();
+    event.stopPropagation();
+    window.open(a.href, "_blank", "noopener,noreferrer");
+  },
+  true,
+);
+
+// Tapping a #hashtag opens search with that tag
+document.addEventListener("click", function (event) {
+  var tag = event.target.closest && event.target.closest(".body-hashtag");
+  if (!tag || typeof window.openJisSearch !== "function") return;
+  window.openJisSearch(tag.getAttribute("data-tag"));
+});
 
 function formatTime(iso) {
   var d = new Date(iso);
@@ -546,8 +658,11 @@ function showTickerSkeleton() {
     .skeleton-poll-text { width:80%; height:13px; margin:0 auto; }
     .skeleton-ticker { width:60%; height:14px; margin:8px auto; }
 
-    .body-link { color:#c9a96e; text-decoration:underline; word-break:break-all; cursor:pointer; }
+    .body-link { color:#3b9cff; text-decoration:underline; word-break:break-all; cursor:pointer; }
     .body-link:hover { opacity:0.8; }
+    .article-body a { pointer-events:auto; position:relative; z-index:5; }
+    .body-hashtag { color:#3b9cff; cursor:pointer; }
+    .body-hashtag:hover { text-decoration:underline; }
   `;
   document.head.appendChild(style);
 })();
@@ -708,6 +823,16 @@ function showTickerSkeleton() {
       });
   }
 
+  // lets #hashtags in post text open search
+  window.openJisSearch = function (q) {
+    q = String(q || "").replace(/^#/, "");
+    openSearch();
+    if (q) {
+      document.getElementById("jis-search-input").value = q;
+      doSearch(q);
+    }
+  };
+
   var icon = document.createElement("span");
   icon.id = "jis-search-icon";
   icon.innerHTML =
@@ -729,10 +854,32 @@ function attachSeeMore(postId) {
 
 var BODY_LIMIT = 300;
 
-function renderArticleImages(post) {
+// ─────────────────────────────────────────
+//  ARTICLE MEDIA
+// ─────────────────────────────────────────
+// The backend classifies media. Each article carries:
+//   post.media = [{ type: "image" | "video" | "embed", url, provider, embedUrl }]
+// so nothing here sniffs URLs or file extensions.
+
+// Fallback for old API responses that only have img/img2/img_type/img2_type.
+// (Embeds can't be rebuilt here without embedUrl, so they degrade to images.)
+function legacyMediaFromPost(post) {
   var items = [];
-  if (post.img)  items.push({ src: post.img,  type: post.img_type  || "img" });
-  if (post.img2) items.push({ src: post.img2, type: post.img2_type || "img" });
+  [["img", "img_type"], ["img2", "img2_type"]].forEach(function (pair) {
+    var src = post[pair[0]];
+    if (!src) return;
+    items.push({
+      type: post[pair[1]] === "video" ? "video" : "image",
+      url: src,
+      provider: null,
+      embedUrl: null,
+    });
+  });
+  return items;
+}
+
+function renderArticleImages(post) {
+  var items = post.media && post.media.length ? post.media : legacyMediaFromPost(post);
 
   if (items.length === 2) {
     return `<div class="article-images">${items
@@ -749,307 +896,31 @@ function renderArticleImages(post) {
 
 function renderArticleMediaItem(item, framed, id) {
   var idAttr = id ? ` id="${id}"` : "";
-  var videoType = getArticleVideoType(item.src, item.type);
 
-  if (videoType) {
+  if (item.type === "video" || item.type === "embed") {
+    var mediaHtml = renderVideoEmbed(item, framed);
+    if (!mediaHtml) return "";
     var frameClass = framed ? " article-image-frame" : "";
-    return `<div class="post-video${frameClass}"${idAttr}>${renderVideoEmbed(item.src, videoType, framed)}</div>`;
+    return `<div class="post-video${frameClass}"${idAttr}>${mediaHtml}</div>`;
   }
+
+  var src = escapeHtml(item.url);
 
   if (framed) {
     return `
       <div class="article-image-frame">
-        <img class="article-image-backdrop" src="${item.src}" alt="" aria-hidden="true">
-        <img class="article-image" src="${item.src}" alt="photo">
+        <img class="article-image-backdrop" src="${src}" alt="" aria-hidden="true">
+        <img class="article-image" src="${src}" alt="photo">
       </div>
     `;
   }
 
-  return `<img src="${item.src}" alt="photo"${idAttr}>`;
+  return `<img src="${src}" alt="photo"${idAttr}>`;
 }
 
-function getArticleVideoType(src, declaredType) {
-  var mediaType = (declaredType || "").toLowerCase();
-  if (
-    mediaType === "embed" ||
-    mediaType === "iframe" ||
-    /^(youtube|vimeo|dailymotion|tiktok|instagram|facebook|twitch|streamable)$/i.test(
-      mediaType,
-    )
-  ) {
-    return "embed";
-  }
-  if (mediaType === "video" || mediaType.startsWith("video/")) return "video";
-  if (typeof src !== "string" || !src.trim()) return null;
-
-  var url;
-  try {
-    url = new URL(src, document.baseURI);
-  } catch (error) {
-    return declaredType === "video" ? "video" : null;
-  }
-
-  var host = url.hostname.toLowerCase();
-  var isVideoPlatform =
-    host === "youtube.com" ||
-    host === "www.youtube.com" ||
-    host === "m.youtube.com" ||
-    host === "youtu.be" ||
-    host === "youtube-nocookie.com" ||
-    host === "www.youtube-nocookie.com" ||
-    host === "vimeo.com" ||
-    host === "www.vimeo.com" ||
-    host === "player.vimeo.com" ||
-    host === "dailymotion.com" ||
-    host === "www.dailymotion.com" ||
-    host === "dai.ly" ||
-    host === "tiktok.com" ||
-    host === "www.tiktok.com" ||
-    host === "vm.tiktok.com" ||
-    host === "vt.tiktok.com" ||
-    host === "instagram.com" ||
-    host === "www.instagram.com" ||
-    host === "facebook.com" ||
-    host === "www.facebook.com" ||
-    host === "m.facebook.com" ||
-    host === "fb.watch" ||
-    host === "twitch.tv" ||
-    host === "www.twitch.tv" ||
-    host === "clips.twitch.tv" ||
-    host === "streamable.com" ||
-    host === "www.streamable.com";
-
-  if (declaredType === "video" || isVideoPlatform) {
-    return isVideoPlatform ? "embed" : "video";
-  }
-
-  return /\.(mp4|m4v|webm|ogv|ogg|mov|3gp|m3u8|mpd|ts)$/i.test(url.pathname)
-    ? "video"
-    : null;
-}
-
-function renderVideoEmbed(src, type, fillFrame) {
-  if (typeof src !== "string" || !src.trim()) {
-    console.error("Cannot render article media: video source is missing.");
-    return "";
-  }
-
-  var url;
-  try {
-    url = new URL(src, document.baseURI);
-  } catch (error) {
-    console.error("Cannot render article media: invalid video URL.", error);
-    return "";
-  }
-
-  if (url.protocol !== "https:" && url.protocol !== "http:") {
-    console.error("Cannot render article media: unsupported video URL protocol.");
-    return "";
-  }
-
-  var host = url.hostname.toLowerCase();
-  var segments = url.pathname.split("/").filter(Boolean);
-  var id;
-
-  var alreadyEmbedded =
-    ((host === "www.youtube.com" ||
-      host === "www.youtube-nocookie.com") &&
-      url.pathname.startsWith("/embed/")) ||
-    (host === "player.vimeo.com" &&
-      url.pathname.startsWith("/video/")) ||
-    (host === "www.dailymotion.com" &&
-      url.pathname.startsWith("/embed/video/")) ||
-    (host === "www.tiktok.com" &&
-      url.pathname.startsWith("/embed/v2/")) ||
-    (host === "www.instagram.com" &&
-      /\/embed\/$/.test(url.pathname)) ||
-    (host === "www.facebook.com" &&
-      url.pathname === "/plugins/video.php") ||
-    (host === "player.twitch.tv" &&
-      url.searchParams.get("parent") === window.location.hostname) ||
-    (host === "streamable.com" &&
-      url.pathname.startsWith("/e/"));
-
-  if (alreadyEmbedded) {
-    type = "embed";
-  } else if (
-    host === "youtu.be" ||
-    host === "www.youtu.be" ||
-    host === "youtube.com" ||
-    host === "www.youtube.com" ||
-    host === "m.youtube.com" ||
-    host === "youtube-nocookie.com" ||
-    host === "www.youtube-nocookie.com"
-  ) {
-    id = host.endsWith("youtu.be")
-      ? segments[0]
-      : url.pathname === "/watch"
-        ? url.searchParams.get("v")
-        : url.pathname.match(/^\/(?:embed|shorts|live)\/([^/]+)/)?.[1];
-
-    if (!id || !/^[\w-]+$/.test(id)) {
-      console.error("Cannot render article media: invalid YouTube video URL.");
-      return "";
-    }
-
-    var youtubeEmbedUrl = new URL(
-      "https://www.youtube-nocookie.com/embed/" + id,
-    );
-    var startTime = url.searchParams.get("start") || url.searchParams.get("t");
-    if (startTime && /^\d+$/.test(startTime)) {
-      youtubeEmbedUrl.searchParams.set("start", startTime);
-    }
-    url = youtubeEmbedUrl;
-    type = "embed";
-  } else if (
-    host === "vimeo.com" ||
-    host === "www.vimeo.com" ||
-    host === "player.vimeo.com"
-  ) {
-    id =
-      url.pathname.match(/^\/(?:video\/)?(\d+)/)?.[1] ||
-      url.pathname.match(/^\/(?:channels\/[^/]+|groups\/[^/]+\/videos)\/(\d+)/)?.[1];
-
-    if (!id) {
-      console.error("Cannot render article media: invalid Vimeo video URL.");
-      return "";
-    }
-
-    url = new URL("https://player.vimeo.com/video/" + id);
-    type = "embed";
-  } else if (
-    host === "dailymotion.com" ||
-    host === "www.dailymotion.com" ||
-    host === "dai.ly"
-  ) {
-    id =
-      host === "dai.ly"
-        ? segments[0]
-        : url.pathname.match(/^\/(?:video|embed\/video)\/([^_/?]+)/)?.[1];
-
-    if (!id) {
-      console.error("Cannot render article media: invalid Dailymotion video URL.");
-      return "";
-    }
-
-    url = new URL("https://www.dailymotion.com/embed/video/" + id);
-    type = "embed";
-  } else if (host === "tiktok.com" || host === "www.tiktok.com") {
-    id =
-      url.pathname.match(/^\/@[^/]+\/video\/(\d+)/)?.[1] ||
-      url.pathname.match(/^\/embed\/v2\/(\d+)/)?.[1];
-    if (!id) {
-      console.error("Cannot render article media: invalid TikTok video URL.");
-      return "";
-    }
-
-    url = new URL("https://www.tiktok.com/embed/v2/" + id);
-    type = "embed";
-  } else if (
-    host === "instagram.com" ||
-    host === "www.instagram.com"
-  ) {
-    var instagramPath = url.pathname.match(
-      /^\/(reel|p|tv)\/([\w-]+)(?:\/embed\/?)?\/?$/,
-    );
-    if (!instagramPath) {
-      console.error("Cannot render article media: invalid Instagram video URL.");
-      return "";
-    }
-
-    url = new URL(
-      "https://www.instagram.com/" +
-        instagramPath[1] +
-        "/" +
-        instagramPath[2] +
-        "/embed/",
-    );
-    type = "embed";
-  } else if (
-    host === "facebook.com" ||
-    host === "www.facebook.com" ||
-    host === "m.facebook.com" ||
-    host === "fb.watch"
-  ) {
-    if (
-      host === "facebook.com" ||
-      host === "www.facebook.com" ||
-      host === "m.facebook.com"
-    ) {
-      var isFacebookVideo =
-        url.pathname === "/plugins/video.php" ||
-        url.pathname.replace(/\/+$/, "") === "/watch" ||
-        /^\/(?:reel|videos)\/[\w.-]+/.test(url.pathname) ||
-        /^\/[\w.-]+\/videos\/[\w.-]+/.test(url.pathname);
-      if (!isFacebookVideo) {
-        console.error("Cannot render article media: invalid Facebook video URL.");
-        return "";
-      }
-    }
-
-    var facebookEmbedUrl = new URL(
-      "https://www.facebook.com/plugins/video.php",
-    );
-    facebookEmbedUrl.searchParams.set("href", url.href);
-    facebookEmbedUrl.searchParams.set("show_text", "0");
-    url = facebookEmbedUrl;
-    type = "embed";
-  } else if (
-    host === "player.twitch.tv" ||
-    host === "twitch.tv" ||
-    host === "www.twitch.tv" ||
-    host === "clips.twitch.tv"
-  ) {
-    var twitchPlayerUrl = new URL("https://player.twitch.tv/");
-    var clipId =
-      host === "clips.twitch.tv"
-        ? segments[0]
-        : host === "player.twitch.tv"
-          ? url.searchParams.get("video") || url.searchParams.get("clip")
-          : url.pathname.match(/^\/(?:(?:[^/]+)\/clip\/|videos\/)([^/]+)/)?.[1];
-    var channel =
-      host === "player.twitch.tv"
-        ? url.searchParams.get("channel")
-        : segments[0];
-
-    if (clipId) {
-      twitchPlayerUrl.searchParams.set(
-        host === "clips.twitch.tv" ? "clip" : "video",
-        clipId,
-      );
-    } else if (channel && (host === "player.twitch.tv" || segments.length === 1)) {
-      twitchPlayerUrl.searchParams.set("channel", channel);
-    } else {
-      console.error("Cannot render article media: invalid Twitch video URL.");
-      return "";
-    }
-
-    twitchPlayerUrl.searchParams.set("parent", window.location.hostname);
-    url = twitchPlayerUrl;
-    type = "embed";
-  } else if (
-    host === "streamable.com" ||
-    host === "www.streamable.com"
-  ) {
-    id =
-      url.pathname.match(/^\/e\/([\w-]+)/)?.[1] ||
-      url.pathname.match(/^\/([\w-]+)/)?.[1];
-    if (!id) {
-      console.error("Cannot render article media: invalid Streamable video URL.");
-      return "";
-    }
-
-    url = new URL("https://streamable.com/e/" + id);
-    type = "embed";
-  }
-
-  var safeSrc = url.href
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-
-  if (type === "video") {
+function renderVideoEmbed(item, fillFrame) {
+  if (item.type === "video") {
+    var safeSrc = escapeHtml(item.url);
     var backdrop = fillFrame
       ? `<video class="article-image-backdrop post-video-backdrop" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1" src="${safeSrc}"></video>`
       : "";
@@ -1070,49 +941,37 @@ function renderVideoEmbed(src, type, fillFrame) {
       </div>`;
   }
 
-  var isSupportedEmbed =
-    ((url.hostname === "www.youtube.com" ||
-      url.hostname === "www.youtube-nocookie.com") &&
-      url.pathname.startsWith("/embed/")) ||
-    (url.hostname === "player.vimeo.com" &&
-      url.pathname.startsWith("/video/")) ||
-    (url.hostname === "www.dailymotion.com" &&
-      url.pathname.startsWith("/embed/video/")) ||
-    (url.hostname === "www.tiktok.com" &&
-      url.pathname.startsWith("/embed/v2/")) ||
-    (url.hostname === "www.instagram.com" &&
-      /\/embed\/$/.test(url.pathname)) ||
-    (url.hostname === "www.facebook.com" &&
-      url.pathname === "/plugins/video.php") ||
-    (url.hostname === "player.twitch.tv" &&
-      url.searchParams.get("parent") === window.location.hostname) ||
-    (url.hostname === "streamable.com" &&
-      url.pathname.startsWith("/e/"));
-
-  if (!isSupportedEmbed) {
-    console.error("Cannot render article media: unsupported video embed URL.");
+  // type === "embed": backend supplies a ready-made embedUrl
+  if (!item.embedUrl) {
+    console.error("Cannot render article media: embed has no embedUrl.");
     return "";
   }
 
-  url.searchParams.set(
-    "autoplay",
-    url.hostname === "player.twitch.tv" ? "true" : "1",
-  );
-  if (url.hostname === "player.vimeo.com") {
+  var url;
+  try {
+    url = new URL(item.embedUrl);
+  } catch (error) {
+    console.error("Cannot render article media: invalid embed URL.", error);
+    return "";
+  }
+  if (url.protocol !== "https:") {
+    console.error("Cannot render article media: embed must be https.");
+    return "";
+  }
+
+  var isTwitch = item.provider === "twitch";
+  if (isTwitch) url.searchParams.set("parent", window.location.hostname);
+
+  url.searchParams.set("autoplay", isTwitch ? "true" : "1");
+  if (item.provider === "vimeo") {
     url.searchParams.set("muted", "1");
-  } else if (url.hostname === "player.twitch.tv") {
+  } else if (isTwitch) {
     url.searchParams.set("muted", "true");
   } else {
     url.searchParams.set("mute", "1");
   }
 
-  safeSrc = url.href
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-
-  return `<iframe src="${safeSrc}" title="Article video" loading="lazy" allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+  return `<iframe src="${escapeHtml(url.href)}" title="Article video" loading="lazy" allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
 }
 
 document.addEventListener(
@@ -1386,7 +1245,7 @@ function toggleBody(postId, encodedBody) {
     el.innerHTML = formatBody(full);
     btn.textContent = "See Less";
   } else {
-    el.innerHTML = formatBody(full.substring(0, BODY_LIMIT)) + "...";
+    el.innerHTML = formatBody(truncateBody(full, BODY_LIMIT)) + "...";
     btn.textContent = "See More";
   }
 }
@@ -1396,7 +1255,7 @@ function renderBody(post) {
 
   var isLong = post.body.length > BODY_LIMIT;
   var shown = isLong
-    ? formatBody(post.body.substring(0, BODY_LIMIT)) + "..."
+    ? formatBody(truncateBody(post.body, BODY_LIMIT)) + "..."
     : formatBody(post.body);
 
   return `
