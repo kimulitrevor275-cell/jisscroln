@@ -42,6 +42,7 @@ function renderPosts(posts) {
 
   posts.forEach(function (post) {
     var article = document.createElement("article");
+    article.setAttribute("data-comments-post-id", post.id);
     article.innerHTML = renderPost(post);
     content.appendChild(article);
 

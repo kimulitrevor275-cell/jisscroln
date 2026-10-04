@@ -73,6 +73,7 @@ function renderTrends(trends, tickers, polls) {
 
   trends.forEach(function (post) {
     var div = document.createElement("div");
+    div.setAttribute("data-comments-post-id", post.id);
     div.innerHTML = renderPost(post);
     trendsEl.appendChild(div);
 

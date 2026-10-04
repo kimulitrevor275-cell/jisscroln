@@ -50,6 +50,7 @@ function renderSports(posts) {
   posts.forEach(function (post) {
     var card = document.createElement("article");
     card.className = "post-card";
+    card.setAttribute("data-comments-post-id", post.id);
     card.innerHTML = renderSportsPost(post);
     sportsEl.appendChild(card);
 

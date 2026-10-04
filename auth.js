@@ -392,8 +392,17 @@ function attachEngagementEvents(postId) {
   var badBtn = document.getElementById("bb-" + postId);
   var showMore = document.getElementById("osm-" + postId);
 
-  engageBtn.addEventListener("click", function () {
-    panel.classList.toggle("open");
+  engageBtn.addEventListener("click", function (event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    // Open the dedicated comments page for a full conversation view.
+    var commentsPage = "/comments/?post_id=" + encodeURIComponent(postId);
+    if (window.location.pathname.indexOf("/comments") === -1) {
+      window.location.href = commentsPage;
+    }
   });
 
   input.addEventListener("input", function () {
@@ -429,6 +438,23 @@ function initEngagement(postId) {
   loadRatings(postId);
   loadOpinions(postId);
 }
+
+document.addEventListener("click", function (event) {
+  var target = event.target;
+  if (!(target instanceof Element)) return;
+
+  var card = target.closest("[data-comments-post-id]");
+  if (!card || target.closest(
+    "a, button, textarea, input, select, [contenteditable='true'], " +
+    ".see-more, .post-video, iframe, video, .rate-btns, .engage-panel"
+  )) {
+    return;
+  }
+
+  var postId = card.getAttribute("data-comments-post-id");
+  if (!postId) return;
+  window.location.href = "/comments/?post_id=" + encodeURIComponent(postId);
+});
 
 // ─────────────────────────────────────────
 //  RATINGS

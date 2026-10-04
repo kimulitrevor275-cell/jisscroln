@@ -1,0 +1,974 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JisScroL Comments</title>
+  <script src="/theme.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/global.css">
+  <style>
+    :root {
+      --bg: #0c0c0c;
+      --panel: #121416;
+      --panel-2: #181b1f;
+      --border: rgba(255,255,255,0.08);
+      --text: #f3f3f3;
+      --muted: #a9afb7;
+      --accent: #c9a96e;
+      --accent-2: #76def8;
+      --danger: #ff7f7f;
+      --success: #8fe3a5;
+      --shadow: rgba(0, 0, 0, 0.35);
+    }
+
+    html.light-mode {
+      --bg: #f4f4f3;
+      --panel: #ffffff;
+      --panel-2: #f0f2f4;
+      --border: rgba(13, 18, 28, 0.08);
+      --text: #121212;
+      --muted: #4f5d6d;
+      --accent: #b98a31;
+      --accent-2: #1e78d8;
+      --danger: #d23a3a;
+      --success: #1d8a4b;
+      --shadow: rgba(24, 33, 47, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Outfit, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 25px;
+    }
+
+    body { min-height: 100vh; padding: 0 16px 120px; }
+
+    button, textarea {
+      font: inherit;
+    }
+
+    #jis-search-icon,
+    #jis-search-overlay {
+      display: none !important;
+    }
+
+    .page {
+      width: 100%;
+      margin: 0;
+      background: var(--bg);
+      min-height: 100vh;
+    }
+
+    .article-heading {
+      position: relative;
+      width: 100%;
+      padding: 8px 0 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .article-heading.has-media {
+      padding-top: 0;
+    }
+
+    .media-stage {
+      position: relative;
+      margin-left: -16px;
+      margin-right: -16px;
+    }
+
+    .media-stage:not(.has-media) {
+      display: contents;
+    }
+
+    .heading-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 0 10px;
+    }
+
+    .feed-media {
+      width: 100%;
+      margin: 0 0 14px;
+    }
+
+    .feed-media.media-fill {
+      background:
+        radial-gradient(ellipse at 18% 22%, rgba(118, 222, 248, 0.2), transparent 42%),
+        radial-gradient(ellipse at 82% 78%, rgba(201, 169, 110, 0.22), transparent 46%),
+        linear-gradient(135deg, #252a35 0%, #101114 52%, #30251a 100%);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      height: clamp(260px, 72vh, 720px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .feed-media:not(.media-fill) {
+      display: none;
+    }
+
+    .feed-media > img {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      max-height: 72vh;
+      object-fit: contain;
+      margin: 0;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+    }
+
+    .feed-media .article-image-frame {
+      max-height: 72vh;
+    }
+
+    .feed-media .post-video {
+      width: 100%;
+      height: 100%;
+      max-height: 72vh;
+      aspect-ratio: auto;
+      margin: 0;
+      background: transparent;
+    }
+
+    .comments-feed-video,
+    .comments-feed-embed {
+      display: block;
+      width: 100%;
+      height: 100%;
+      max-height: 72vh;
+      border: 0;
+      background: transparent;
+      object-fit: contain;
+    }
+
+    .media-stage.has-media::after {
+      content: "";
+      position: absolute;
+      z-index: 1;
+      inset: 0 0 auto;
+      height: clamp(260px, 72vh, 720px);
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.52) 0%,
+        rgba(0,0,0,0.08) 20%,
+        rgba(0,0,0,0.12) 43%,
+        rgba(0,0,0,0.9) 100%
+      );
+      pointer-events: none;
+    }
+
+    .icon-btn {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.32);
+      background: rgba(12,12,12,0.76);
+      color: var(--text);
+      font-size: 25px;
+      cursor: pointer;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.36);
+      backdrop-filter: blur(8px);
+      transition: background-color 150ms ease, transform 150ms ease;
+    }
+
+    .icon-btn:hover {
+      background: rgba(12,12,12,0.92);
+      transform: scale(1.05);
+    }
+
+    .icon-btn:focus-visible {
+      outline: 2px solid var(--accent-2);
+      outline-offset: 3px;
+    }
+
+    .icon-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .article-overlay {
+      position: relative;
+    }
+
+    .headline {
+      margin: 0 0 8px;
+      font-weight: 400;
+      font-size: max(25px, clamp(1.5rem, 3vw, 2.6rem));
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+
+    .headline[aria-busy="true"] {
+      display: block;
+    }
+
+    .headline .skeleton {
+      display: block;
+      height: clamp(30px, 3.3vw, 42px);
+      margin: 0 0 8px;
+    }
+
+    .headline .skeleton-headline {
+      width: 92%;
+    }
+
+    .headline .skeleton-headline-short {
+      width: 68%;
+      margin-bottom: 0;
+    }
+
+    .show-more {
+      margin-top: 8px;
+      display: inline-block;
+      color: var(--accent-2);
+      font-size: max(25px, 11px);
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .article-time {
+      display: inline-block;
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: max(25px, 0.8rem);
+      font-weight: 500;
+      line-height: 1.25;
+      letter-spacing: 0.02em;
+    }
+
+    .article-time .skeleton-time {
+      display: block;
+      width: 220px;
+      height: 30px;
+      margin-top: 0;
+    }
+
+    .article-copy {
+      margin: 14px 0 0;
+      color: var(--text);
+      font-size: max(25px, clamp(1rem, 2vw, 1.2rem));
+      line-height: 1.55;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .media-stage.has-media .heading-actions {
+      position: absolute;
+      z-index: 3;
+      top: 10px;
+      left: 12px;
+      right: 12px;
+      padding: 0;
+    }
+
+    .media-stage.has-media .article-overlay {
+      position: absolute;
+      z-index: 2;
+      left: 16px;
+      right: 16px;
+      bottom: 24px;
+      padding: 0;
+    }
+
+    .media-stage.has-media .headline {
+      color: #fff;
+      font-weight: 600;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.95), 0 0 18px rgba(0,0,0,0.95);
+    }
+
+    html.light-mode .headline {
+      color: var(--text) !important;
+    }
+
+    html.light-mode .media-stage.has-media .headline {
+      color: #fff !important;
+    }
+
+    .media-stage.has-media .article-time {
+      color: #fff;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.95);
+    }
+
+    .media-stage.has-media .icon-btn {
+      color: #fff;
+    }
+
+    .media-stage.has-media .show-more {
+      color: #9be8ff;
+    }
+
+    .content {
+      padding: 0 0 12px;
+    }
+
+    .section-title {
+      margin: 0;
+      padding: 16px 16px 8px;
+      font-size: max(25px, 1.2rem);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .opinions-list {
+      padding: 0 12px 12px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .opinion-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 12px 10px;
+      box-shadow: 0 8px 25px var(--shadow);
+    }
+
+    .opinion-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .opinion-user {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      color: var(--text);
+      font-size: max(25px, 0.9rem);
+      min-width: 0;
+    }
+
+    .signature-badge {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 18px;
+      vertical-align: middle;
+    }
+
+    .opinion-time {
+      color: var(--muted);
+      font-size: max(25px, 0.7rem);
+      white-space: nowrap;
+    }
+
+    .opinion-text {
+      color: var(--text);
+      font-size: max(25px, 0.96rem);
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .opinion-media {
+      margin-top: 10px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .opinion-media iframe,
+    .opinion-media video {
+      width: 100%;
+      max-height: 220px;
+      border: 0;
+      border-radius: 10px;
+      background: #000;
+      display: block;
+    }
+
+    .opinion-media .comments-feed-video,
+    .opinion-media .comments-feed-embed {
+      height: auto;
+      aspect-ratio: 16 / 9;
+      max-height: 220px;
+    }
+
+    .empty {
+      padding: 18px 16px 0;
+      color: var(--muted);
+      font-size: max(25px, 0.98rem);
+    }
+
+    .composer {
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+      padding: 12px 0 max(16px, env(safe-area-inset-bottom));
+      position: fixed;
+      left: 16px;
+      right: 16px;
+      bottom: calc(var(--keyboard-offset, 0px) + env(safe-area-inset-bottom));
+      z-index: 5;
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .composer textarea {
+      width: 100%;
+      min-height: 48px;
+      max-height: 120px;
+      resize: none;
+      background: var(--panel-2);
+      color: var(--text);
+      border: 1px solid rgba(201,169,110,0.35);
+      border-radius: 24px;
+      padding: 13px 16px;
+      outline: none;
+      line-height: 1.35;
+      overflow-y: auto;
+    }
+
+    .composer textarea:focus {
+      border-color: rgba(118, 222, 248, 0.8);
+      box-shadow: 0 0 0 3px rgba(118, 222, 248, 0.12);
+    }
+
+    .composer-row {
+      display: grid;
+      justify-items: end;
+      gap: 5px;
+      flex: 0 0 auto;
+    }
+
+    .char-count {
+      color: var(--muted);
+      font-size: max(25px, 0.76rem);
+    }
+
+    .post-btn {
+      border: none;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #111;
+      font-weight: 700;
+      padding: 12px 20px;
+      cursor: pointer;
+      min-width: 76px;
+      min-height: 48px;
+    }
+
+    .post-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .status {
+      min-height: 18px;
+      padding: 0 0 8px;
+      font-size: max(25px, 0.8rem);
+      color: var(--muted);
+    }
+
+    .status.error { color: var(--danger); }
+    .status.success { color: var(--success); }
+
+    @media (max-width: 680px) {
+      body { padding: 0 12px 120px; }
+      .headline { font-size: max(25px, 1.4rem); }
+      .composer { left: 12px; right: 12px; gap: 8px; }
+      .post-btn { min-width: 62px; padding: 10px 14px; }
+      .feed-media > img { max-height: 60vh; }
+      .media-stage { margin-left: -12px; margin-right: -12px; }
+      .feed-media.media-fill,
+      .media-stage.has-media::after { height: 60vh; }
+      .media-stage.has-media .article-overlay { left: 12px; right: 12px; bottom: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="article-heading">
+      <div class="media-stage" id="mediaStage">
+        <div class="feed-media" id="articleMedia"></div>
+        <div class="heading-actions">
+          <button class="icon-btn" id="backBtn" type="button" aria-label="Go back">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m7 7-7-7 7-7"/></svg>
+          </button>
+          <button class="icon-btn" id="shareBtn" type="button" aria-label="Share article">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4m-6.6 7 6.6 4.4"/></svg>
+          </button>
+        </div>
+        <div class="article-overlay">
+          <h1 class="headline" id="headline" aria-busy="true">
+            <span class="skeleton skeleton-headline"></span>
+            <span class="skeleton skeleton-headline-short"></span>
+          </h1>
+          <span class="show-more" id="showMore" style="display:none;">See more</span>
+        </div>
+      </div>
+      <div class="article-copy" id="articleBody"></div>
+      <p class="article-time" id="articleTime" aria-busy="true">
+        <span class="skeleton skeleton-time"></span>
+      </p>
+    </header>
+
+    <main class="content">
+      <h2 class="section-title">Opinions</h2>
+      <div class="status" id="status" aria-live="polite"></div>
+      <div class="opinions-list" id="opinionsList" aria-busy="true">
+        <article class="opinion-card" aria-hidden="true">
+          <div class="skeleton skeleton-headline"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text-short"></div>
+        </article>
+        <article class="opinion-card" aria-hidden="true">
+          <div class="skeleton skeleton-headline"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text-short"></div>
+        </article>
+      </div>
+    </main>
+
+    <form class="composer" id="commentForm" aria-label="Write an opinion">
+      <textarea id="commentInput" maxlength="500" placeholder="Add an opinion…" aria-label="Your opinion"></textarea>
+      <div class="composer-row">
+        <span class="char-count" id="charCount">0 / 500</span>
+        <button class="post-btn" id="postBtn" type="submit" disabled>Post</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/auth.js"></script>
+  <script>
+    const API_BASE = 'https://jisscrol-opinions.onrender.com';
+    const MAX_COMMENT_LENGTH = 500;
+    const articleHeading = document.querySelector('.article-heading');
+    const mediaStage = document.getElementById('mediaStage');
+    const params = new URLSearchParams(window.location.search);
+    const requestedId = params.get('post_id') || params.get('id') || params.get('article') || '';
+
+    const headlineEl = document.getElementById('headline');
+    const articleMedia = document.getElementById('articleMedia');
+    const articleTime = document.getElementById('articleTime');
+    const articleBody = document.getElementById('articleBody');
+    const showMore = document.getElementById('showMore');
+    const opinionsList = document.getElementById('opinionsList');
+    const statusEl = document.getElementById('status');
+    const input = document.getElementById('commentInput');
+    const charCount = document.getElementById('charCount');
+    const postBtn = document.getElementById('postBtn');
+    const commentForm = document.getElementById('commentForm');
+    let currentArticle = null;
+
+    function adjustComposerForKeyboard() {
+      const viewport = window.visualViewport;
+      const isMobile = window.matchMedia('(max-width: 680px)').matches;
+      let keyboardOffset = 0;
+
+      if (viewport && isMobile) {
+        const visibleHeight = viewport.height + viewport.offsetTop;
+        const obscuredHeight = window.innerHeight - visibleHeight;
+        if (obscuredHeight > 120) keyboardOffset = obscuredHeight;
+      }
+
+      document.documentElement.style.setProperty('--keyboard-offset', keyboardOffset + 'px');
+    }
+
+    window.addEventListener('resize', adjustComposerForKeyboard);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', adjustComposerForKeyboard);
+      window.visualViewport.addEventListener('scroll', adjustComposerForKeyboard);
+    }
+    adjustComposerForKeyboard();
+
+    function setStatus(message, type) {
+      statusEl.textContent = message || '';
+      statusEl.className = 'status' + (type ? ' ' + type : '');
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function renderSignatureBadge(tier) {
+      const colors = {
+        veteran: '#c9a96e',
+        loyal: '#4a90d9',
+        regular: '#87ceeb'
+      };
+      const color = colors[String(tier || '').toLowerCase()];
+      if (!color) return '';
+
+      return '<svg class="signature-badge" viewBox="0 0 24 24" role="img" aria-label="' +
+        escapeHtml(String(tier).toLowerCase()) +
+        ' member"><circle cx="12" cy="12" r="12" fill="' + color +
+        '"/><path d="M6.5 12.5l3.5 3.5 7-7" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    }
+
+    function formatTime(value) {
+      if (!value) return 'Just now';
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return 'Just now';
+      return d.toLocaleString([], {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit'
+      });
+    }
+
+    function getCurrentUser() {
+      const userName = sessionStorage.getItem('jis_username') || window._cachedUsername || 'Anonymous';
+      const userId = sessionStorage.getItem('jis_uid') || window._cachedUserId || null;
+      return { userName, userId };
+    }
+
+    function sanitizeText(value) {
+      return String(value || '')
+        .replace(/\u0000/g, '')
+        .trim()
+        .slice(0, MAX_COMMENT_LENGTH);
+    }
+
+    function classifyCommentMedia(url) {
+      let parsed;
+      try {
+        parsed = new URL(url);
+      } catch (error) {
+        return null;
+      }
+      if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') return null;
+      if (!/\.(mp4|m4v|webm|ogv|ogg|mov|3gp|m3u8|mpd|ts)$/i.test(parsed.pathname)) return null;
+      return { type: 'video', url: parsed.href };
+    }
+
+    function renderCommentsFeedMedia(item) {
+      if (!item || !item.type) return '';
+
+      if (item.type === 'image') {
+        return '<img src="' + escapeHtml(item.url) + '" alt="Article media">';
+      }
+
+      if (item.type === 'video') {
+        return '<video class="comments-feed-video" src="' + escapeHtml(item.url) +
+          '" autoplay loop playsinline preload="auto" tabindex="0" aria-label="Article video">' +
+          'Your browser does not support video playback.</video>';
+      }
+
+      if (item.type === 'embed' && item.embedUrl) {
+        let embedUrl;
+        try {
+          embedUrl = new URL(item.embedUrl);
+        } catch (error) {
+          console.error('Invalid article video embed URL.', error);
+          return '';
+        }
+        if (embedUrl.protocol !== 'https:') {
+          console.error('Article video embed must use HTTPS.');
+          return '';
+        }
+
+        if (item.provider === 'twitch') {
+          embedUrl.searchParams.set('parent', window.location.hostname);
+          embedUrl.searchParams.set('muted', 'false');
+          embedUrl.searchParams.set('autoplay', 'true');
+          embedUrl.searchParams.set('controls', 'false');
+        } else if (item.provider === 'vimeo') {
+          embedUrl.searchParams.set('autoplay', '1');
+          embedUrl.searchParams.set('muted', '0');
+          embedUrl.searchParams.set('controls', '0');
+        } else {
+          embedUrl.searchParams.set('autoplay', '1');
+          embedUrl.searchParams.set('mute', '0');
+          embedUrl.searchParams.set('controls', '0');
+        }
+
+        return '<iframe class="comments-feed-embed" src="' + escapeHtml(embedUrl.href) +
+          '" title="Article video" allow="autoplay; encrypted-media; picture-in-picture" ' +
+          'referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
+      }
+
+      return '';
+    }
+
+    document.addEventListener('click', function (event) {
+      const video = event.target.closest('.comments-feed-video');
+      if (!video) return;
+      if (video.paused) {
+        video.muted = false;
+        video.play().catch(function (error) {
+          console.error('Article video playback could not start.', error);
+        });
+      } else {
+        video.pause();
+      }
+    });
+
+    document.addEventListener('keydown', function (event) {
+      const video = event.target.closest('.comments-feed-video');
+      if (!video || (event.key !== 'Enter' && event.key !== ' ')) return;
+      event.preventDefault();
+      if (video.paused) {
+        video.muted = false;
+        video.play().catch(function (error) {
+          console.error('Article video playback could not start.', error);
+        });
+      } else {
+        video.pause();
+      }
+    });
+
+    function renderHeadline(article) {
+      const fullHeadline = article && article.headline ? String(article.headline) : 'Untitled article';
+      const shortHeadline = fullHeadline.length > 120 ? fullHeadline.slice(0, 120) + '…' : fullHeadline;
+      headlineEl.textContent = shortHeadline;
+      headlineEl.setAttribute('aria-busy', 'false');
+      showMore.style.display = fullHeadline.length > 120 ? 'inline-block' : 'none';
+      if (fullHeadline.length > 120) {
+        showMore.onclick = function () {
+          headlineEl.textContent = fullHeadline;
+          showMore.style.display = 'none';
+        };
+      }
+    }
+
+    function renderArticle(article) {
+      currentArticle = article;
+      renderHeadline(article);
+      articleTime.textContent = article.time || '';
+      articleTime.setAttribute('aria-busy', 'false');
+      const media = article.media && article.media.length
+        ? article.media
+        : legacyMediaFromPost(article);
+      const firstMedia = media.length ? renderCommentsFeedMedia(media[0]) : '';
+      articleMedia.innerHTML = firstMedia;
+      articleMedia.classList.toggle('media-fill', Boolean(firstMedia));
+      mediaStage.classList.toggle('has-media', Boolean(firstMedia));
+      articleHeading.classList.toggle('has-media', Boolean(firstMedia));
+      const feedVideo = articleMedia.querySelector('.comments-feed-video');
+      if (feedVideo) {
+        feedVideo.muted = false;
+        feedVideo.play().catch(function (error) {
+          console.warn('Unmuted video autoplay was blocked; click the video to play it.', error);
+        });
+      }
+      articleBody.innerHTML = article.body ? formatBody(article.body) : '';
+      syncCounter();
+    }
+
+    async function fetchArticles() {
+      const response = await fetch(API_BASE + '/articles?category=trends');
+      if (!response.ok) throw new Error('Unable to load feed articles.');
+      const articles = await response.json();
+      if (!Array.isArray(articles)) throw new Error('The feed returned invalid article data.');
+      return articles;
+    }
+
+    function findArticleById(allArticles) {
+      if (!requestedId) return null;
+      return allArticles.find(function (article) {
+        return String(article.id) === String(requestedId);
+      }) || null;
+    }
+
+    async function loadArticle() {
+      try {
+        const article = findArticleById(await fetchArticles());
+        if (!article) {
+          articleMedia.innerHTML = '';
+          articleMedia.classList.remove('media-fill');
+          mediaStage.classList.remove('has-media');
+          articleHeading.classList.remove('has-media');
+          headlineEl.textContent = requestedId ? 'Article not found' : 'No article selected';
+          headlineEl.setAttribute('aria-busy', 'false');
+          articleTime.textContent = '';
+          articleTime.setAttribute('aria-busy', 'false');
+          setStatus('Open comments from an article in the feed so the matching post can be loaded.', 'error');
+          postBtn.disabled = true;
+          opinionsList.innerHTML = '';
+          opinionsList.setAttribute('aria-busy', 'false');
+          return;
+        }
+
+        renderArticle(article);
+        await loadOpinions(article.id);
+      } catch (error) {
+        headlineEl.textContent = 'Unable to load article';
+        headlineEl.setAttribute('aria-busy', 'false');
+        articleTime.textContent = '';
+        articleTime.setAttribute('aria-busy', 'false');
+        opinionsList.innerHTML = '';
+        opinionsList.setAttribute('aria-busy', 'false');
+        setStatus(error.message || 'Unable to load the article from the live feed.', 'error');
+      }
+    }
+
+    async function loadOpinions(postId) {
+      if (!postId) {
+        opinionsList.innerHTML = '<div class="empty">No article selected.</div>';
+        return;
+      }
+
+      try {
+        const response = await fetch(API_BASE + '/opinions/' + encodeURIComponent(postId));
+        if (!response.ok) throw new Error('Unable to load opinions');
+        const opinions = await response.json();
+        opinionsList.setAttribute('aria-busy', 'false');
+
+        if (!Array.isArray(opinions) || !opinions.length) {
+          opinionsList.innerHTML = '<div class="empty">No opinions yet. Be the first to share yours.</div>';
+          return;
+        }
+
+        opinionsList.innerHTML = opinions.map(function (op) {
+          const safeUsername = escapeHtml(op.username || 'Anonymous');
+          const safeText = escapeHtml(op.text || '');
+          const videoUrls = findTextTokens(String(op.text || ''))
+            .filter(function (token) { return token.kind === 'link'; })
+            .map(function (token) { return token.text; })
+            .filter(function (url) { return classifyCommentMedia(url); });
+          const mediaHtml = videoUrls.map(function (url) {
+            const media = classifyCommentMedia(url);
+            return media ? '<div class="opinion-media">' + renderCommentsFeedMedia(media) + '</div>' : '';
+          }).join('');
+          const badge = renderSignatureBadge(op.tier);
+          return `
+            <article class="opinion-card">
+              <div class="opinion-head">
+                <div class="opinion-user">
+                  <span>${safeUsername}</span>
+                  ${badge}
+                </div>
+                <span class="opinion-time">${formatTime(op.time)}</span>
+              </div>
+              <div class="opinion-text">${safeText}</div>
+              ${mediaHtml}
+            </article>
+          `;
+        }).join('');
+        opinionsList.querySelectorAll('.comments-feed-video').forEach(function (video) {
+          video.muted = false;
+          video.play().catch(function (error) {
+            console.warn('Unmuted opinion video autoplay was blocked; click the video to play it.', error);
+          });
+        });
+      } catch (error) {
+        opinionsList.innerHTML = '<div class="empty">Unable to load opinions right now.</div>';
+        opinionsList.setAttribute('aria-busy', 'false');
+        setStatus('Could not fetch comments from the live API.', 'error');
+      }
+    }
+
+    function syncCounter() {
+      const length = input.value.length;
+      charCount.textContent = length + ' / ' + MAX_COMMENT_LENGTH;
+      postBtn.disabled = !currentArticle || length === 0 || length > MAX_COMMENT_LENGTH;
+    }
+
+    input.addEventListener('input', function () {
+      if (input.value.length > MAX_COMMENT_LENGTH) {
+        input.value = input.value.slice(0, MAX_COMMENT_LENGTH);
+      }
+      syncCounter();
+    });
+
+    document.getElementById('backBtn').addEventListener('click', function () {
+      if (document.referrer && document.referrer.indexOf(window.location.host) !== -1) {
+        window.history.back();
+      } else {
+        window.location.href = '/index.html';
+      }
+    });
+
+    document.getElementById('shareBtn').addEventListener('click', async function () {
+      const shareUrl = window.location.href;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(shareUrl);
+          setStatus('Link copied to clipboard.', 'success');
+        } else {
+          window.prompt('Copy this link:', shareUrl);
+        }
+      } catch (error) {
+        window.prompt('Copy this link:', shareUrl);
+      }
+    });
+
+    commentForm.addEventListener('submit', async function (event) {
+      event.preventDefault();
+      const user = getCurrentUser();
+      const text = sanitizeText(input.value);
+
+      if (!text) {
+        setStatus('Type a comment before posting.', 'error');
+        return;
+      }
+
+      if (!user.userName || user.userName === 'Anonymous') {
+        setStatus('Please sign in to post an opinion.', 'error');
+        return;
+      }
+
+      if (!currentArticle || !currentArticle.id) {
+        setStatus('The selected feed article is not available.', 'error');
+        return;
+      }
+
+      try {
+        postBtn.disabled = true;
+        postBtn.textContent = 'Posting…';
+        const response = await fetch(API_BASE + '/opinions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            post_id: currentArticle.id,
+            text: text,
+            username: user.userName,
+            user_id: user.userId || null
+          })
+        });
+
+        const data = await response.json();
+        if (!response.ok || !data || data.error) {
+          throw new Error(data && data.error ? data.error : 'Post failed');
+        }
+
+        input.value = '';
+        syncCounter();
+        setStatus('Opinion posted successfully.', 'success');
+        await loadOpinions(currentArticle.id);
+      } catch (error) {
+        setStatus(error.message || 'Unable to post right now.', 'error');
+      } finally {
+        postBtn.textContent = 'Post';
+        syncCounter();
+      }
+    });
+
+    syncCounter();
+    loadArticle();
+  </script>
+</body>
+</html>
