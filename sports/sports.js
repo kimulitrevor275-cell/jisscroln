@@ -22,7 +22,7 @@ function renderSportsPost(post) {
   var postId = post.id;
 
   return `
-    <b id="label">${post.label || ""}</b>
+    ${post.label && String(post.label).trim() ? `<b id="label">${post.label}</b>` : ""}
     <h2>${post.headline || ""}${
       post.link
         ? ` <a href="${post.link}" target="_blank" rel="noopener noreferrer">view ↗</a>`

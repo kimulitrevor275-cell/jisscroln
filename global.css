@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Outfit:wght@100..900&display=swap');
 
 /* ── RESET ── */
 *, *::before, *::after {
@@ -260,13 +261,13 @@ b { font-size: clamp(20px, 3.5vw, 26px); font-weight: 600; }
 
 /* ── PARAGRAPH / ARTICLE BODY ── */
 p {
-  max-width: 100%;
-  font-family: 'Outfit', sans-serif;
-  font-size: clamp(32px, 3.4vw, 40px);
+  max-width: 90%;
+  font-family: "lexend", Arial, sans-serif;
+  font-size: clamp(32px, 4.4vw, 40px);
   color: white;
   line-height: 1.6;
   margin: 20px ;
-  font-weight: 400;
+  
 }
 p::first-letter {
   font-size: 1.15em;
@@ -281,11 +282,11 @@ p::first-letter {
 }
 
 .see-more {
-  color: #6eaec9;
+  color: #020aed;
   cursor: pointer;
   font-size: inherit;
   display: inline-block;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'lexend', sans-serif;
 }
 .see-more:hover { opacity: 0.8; }
 

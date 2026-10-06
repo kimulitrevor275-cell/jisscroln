@@ -7,6 +7,9 @@
   <script src="/theme.js"></script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap">
   <link rel="stylesheet" href="/global.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #0c0c0c;
@@ -105,7 +108,7 @@
         radial-gradient(ellipse at 18% 22%, rgba(118, 222, 248, 0.2), transparent 42%),
         radial-gradient(ellipse at 82% 78%, rgba(201, 169, 110, 0.22), transparent 46%),
         linear-gradient(135deg, #252a35 0%, #101114 52%, #30251a 100%);
-      border-radius: 10px;
+      border-radius: 0px;
       overflow: hidden;
       position: relative;
       height: clamp(260px, 72vh, 720px);
@@ -124,7 +127,7 @@
       max-width: 100%;
       height: 100%;
       max-height: 72vh;
-      object-fit: contain;
+      object-fit: cover;
       margin: 0;
       border: 0;
       border-radius: 10px;
@@ -152,7 +155,7 @@
       max-height: 72vh;
       border: 0;
       background: transparent;
-      object-fit: contain;
+      object-fit: cover;
     }
 
     .media-stage.has-media::after {
@@ -214,7 +217,8 @@
 
     .headline {
       margin: 0 0 8px;
-      font-weight: 400;
+      font-family: "lexend" sans-serif;
+      font-weight: 600;
       font-size: max(25px, clamp(1.5rem, 3vw, 2.6rem));
       line-height: 1.12;
       letter-spacing: -0.03em;
@@ -244,18 +248,17 @@
       margin-top: 8px;
       display: inline-block;
       color: var(--accent-2);
-      font-size: max(25px, 11px);
+      font-size: max(15px, 17px);
       font-weight: 700;
       cursor: pointer;
       letter-spacing: 0.04em;
-      text-transform: uppercase;
     }
 
     .article-time {
       display: inline-block;
       margin: 6px 0 0;
       color: var(--muted);
-      font-size: max(25px, 0.8rem);
+      font-size: max(15px, 20px);
       font-weight: 500;
       line-height: 1.25;
       letter-spacing: 0.02em;
@@ -271,10 +274,27 @@
     .article-copy {
       margin: 14px 0 0;
       color: var(--text);
-      font-size: max(25px, clamp(1rem, 2vw, 1.2rem));
+      font-size: max(18px, clamp(1rem, 2vw, 1.2rem));
       line-height: 1.55;
       white-space: pre-wrap;
+      font-family: "lexend", Arial, sans-serif;
       overflow-wrap: anywhere;
+    }
+
+    .article-copy > p {
+      max-width: 100%;
+      margin: 0;
+      color: inherit;
+      font: inherit;
+      line-height: inherit;
+    }
+
+    .news-full-story-link {
+      margin-left: 6px;
+      color: var(--accent-2);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 3px;
     }
 
     .article-ratings {
@@ -297,7 +317,7 @@
       border-radius: 8px;
       background: transparent;
       color: var(--text);
-      font-size: 25px;
+      font-size: 20px;
       cursor: pointer;
     }
 
@@ -331,7 +351,7 @@
       display: flex;
       flex: 1;
       min-width: 60px;
-      height: 10px;
+      height: 7px;
       overflow: hidden;
       border-radius: 5px;
       background: #333;
@@ -391,10 +411,10 @@
 
     .section-title {
       margin: 0;
-      padding: 16px 16px 8px;
+      padding: 2px;
       font-size: max(25px, 1.2rem);
+      font-family: "lexend" sans-serif;
       letter-spacing: 0.1em;
-      text-transform: uppercase;
       color: var(--text);
     }
 
@@ -426,26 +446,29 @@
       gap: 6px;
       font-weight: 700;
       color: var(--text);
-      font-size: max(25px, 0.9rem);
+      font-size: max(18px, 0.9rem);
       min-width: 0;
     }
 
     .signature-badge {
-      width: 18px;
-      height: 18px;
+      width: 19px;
+      height: 19px;
       flex: 0 0 18px;
       vertical-align: middle;
     }
-
+    
     .opinion-time {
+      display: block;
+      margin-top: 8px;
       color: var(--muted);
-      font-size: max(25px, 0.7rem);
+      font-size: max(18px, 0.7rem);
       white-space: nowrap;
+      text-align: right;
     }
 
     .opinion-text {
       color: var(--text);
-      font-size: max(25px, 0.96rem);
+      font-size: max(18px, 0.96rem);
       line-height: 1.55;
       white-space: pre-wrap;
       word-break: break-word;
@@ -575,9 +598,9 @@
         max-height: 44svh;
       }
       .media-stage.has-media .article-overlay { left: 10px; right: 10px; bottom: 24px; }
-      .opinions-list { padding: 0 4px 12px; }
+      .opinions-list { padding: 0 4px 8px; }
       .opinion-card { padding: 12px; }
-      .opinion-head { align-items: flex-start; flex-direction: column; gap: 4px; }
+      .opinion-head { align-items: normal; flex-direction: column; gap: 4px; }
       .opinion-user { max-width: 100%; overflow-wrap: anywhere; }
       .opinion-time { white-space: normal; overflow-wrap: anywhere; }
       .article-copy,
@@ -586,10 +609,10 @@
         font-size: clamp(16px, 4vw, 18px);
       }
       .headline { font-size: clamp(20px, 5vw, 26px); }
-      .article-ratings { gap: 4px; }
+      .article-ratings { gap: 4px; padding: 2px; }
       .article-vote { min-width: 54px; gap: 2px; padding: 4px; }
       .article-vote img { width: 32px; height: 32px; }
-      .article-rate-bar { min-width: 32px; }
+      .article-rate-bar { min-width: auto;  }
     }
   </style>
 </head>
@@ -670,6 +693,7 @@
     const mediaStage = document.getElementById('mediaStage');
     const params = new URLSearchParams(window.location.search);
     const requestedId = params.get('post_id') || params.get('id') || params.get('article') || '';
+    const requestedNews = params.get('news') === 'uganda';
 
     const headlineEl = document.getElementById('headline');
     const articleMedia = document.getElementById('articleMedia');
@@ -978,6 +1002,73 @@
 
     async function loadArticle() {
       try {
+        if (requestedNews) {
+          const headline = params.get('headline');
+          if (!requestedId || !headline) {
+            throw new Error('This Uganda news link is incomplete.');
+          }
+
+          const imageUrl = getSafeHttpUrl(params.get('image'));
+          const sourceUrl = getSafeHttpUrl(params.get('source_url'));
+          const source = params.get('source') || 'Unknown';
+          const article = {
+            id: requestedId,
+            headline: headline,
+            time: '',
+            media: imageUrl ? [{ type: 'image', url: imageUrl }] : [],
+            body: ''
+          };
+          renderArticle(article);
+          articleTime.replaceChildren(document.createTextNode('Source: '));
+          if (sourceUrl) {
+            const sourceLink = document.createElement('a');
+            sourceLink.href = sourceUrl;
+            sourceLink.target = '_blank';
+            sourceLink.rel = 'noopener noreferrer';
+            sourceLink.textContent = source;
+            articleTime.appendChild(sourceLink);
+          } else {
+            articleTime.appendChild(document.createTextNode(source));
+          }
+
+          let newsContent = params.get('content') || '';
+          if (!newsContent) {
+            try {
+              const response = await fetch(API_BASE + '/news/uganda');
+              if (!response.ok) throw new Error('Unable to load Uganda news content.');
+              const data = await response.json();
+              const articles = Array.isArray(data.articles) ? data.articles : [];
+              const normalizedSourceUrl = sourceUrl ? new URL(sourceUrl).href : '';
+              const newsArticle = articles.find(function (item) {
+                return (normalizedSourceUrl && getSafeHttpUrl(item.link || item.url) === normalizedSourceUrl) ||
+                  (item.title && item.title === headline);
+              });
+              newsContent = newsArticle
+                ? String(newsArticle.description || newsArticle.summary || newsArticle.content || newsArticle.popularity || '')
+                  .replace(/\s*\[\+\d+\s+chars\]\s*$/, '')
+                : '';
+            } catch (error) {
+              console.error('Could not load Uganda news content:', error);
+            }
+          }
+          const paragraph = document.createElement('p');
+          paragraph.id = 'newsContent';
+          paragraph.textContent = newsContent;
+          if (sourceUrl) {
+            const fullStoryLink = document.createElement('a');
+            fullStoryLink.className = 'news-full-story-link';
+            fullStoryLink.href = sourceUrl;
+            fullStoryLink.target = '_blank';
+            fullStoryLink.rel = 'noopener noreferrer';
+            fullStoryLink.textContent = 'Read full story';
+            paragraph.appendChild(fullStoryLink);
+          }
+          articleBody.replaceChildren(paragraph);
+
+          await loadOpinions(article.id);
+          return;
+        }
+
         const article = findArticleById(await fetchArticles());
         if (!article) {
           articleMedia.innerHTML = '';
@@ -1005,6 +1096,17 @@
         opinionsList.innerHTML = '';
         opinionsList.setAttribute('aria-busy', 'false');
         setStatus(error.message || 'Unable to load the article from the live feed.', 'error');
+      }
+    }
+
+    function getSafeHttpUrl(value) {
+      if (!value) return '';
+      try {
+        const url = new URL(value);
+        return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : '';
+      } catch (error) {
+        console.warn('Invalid Uganda news URL:', error);
+        return '';
       }
     }
 
@@ -1044,10 +1146,10 @@
                   <span>${safeUsername}</span>
                   ${badge}
                 </div>
-                <span class="opinion-time">${formatTime(op.time)}</span>
               </div>
               <div class="opinion-text">${safeText}</div>
               ${mediaHtml}
+              <span class="opinion-time">${formatTime(op.time)}</span>
             </article>
           `;
         }).join('');
@@ -1109,10 +1211,7 @@
         return;
       }
 
-      if (!user.userName || user.userName === 'Anonymous') {
-        setStatus('Please sign in to post an opinion.', 'error');
-        return;
-      }
+     
 
       if (!currentArticle || !currentArticle.id) {
         setStatus('The selected feed article is not available.', 'error');
