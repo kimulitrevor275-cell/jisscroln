@@ -63,7 +63,7 @@ header {
 .navbar {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: clamp(16px, 2vw, 50px);
   margin-top: 4px;
 }
