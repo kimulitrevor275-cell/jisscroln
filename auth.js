@@ -658,38 +658,128 @@ function showTickerSkeleton() {
   el.innerHTML = '<div class="skeleton skeleton-ticker"></div>';
 }
 
-// ── Inject skeleton + link styles ──
 (function () {
   var style = document.createElement("style");
+
   style.textContent = `
     @keyframes shimmer {
       0%   { background-position: -600px 0; }
-      100% { background-position:  600px 0; }
+      100% { background-position: 600px 0; }
     }
+
     .skeleton {
-      background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      background: linear-gradient(
+        90deg,
+        #1a1a1a 25%,
+        #2a2a2a 50%,
+        #1a1a1a 75%
+      );
       background-size: 600px 100%;
       animation: shimmer 1.4s infinite linear;
       border-radius: 6px;
     }
-    .skeleton-card { padding:16px 0; border-bottom:1px solid #222; margin-bottom:12px; }
-    .skeleton-label { width:80px; height:12px; margin-bottom:10px; }
-    .skeleton-headline { width:90%; height:20px; margin-bottom:8px; }
-    .skeleton-headline-short { width:60%; height:20px; margin-bottom:14px; }
-    .skeleton-img { width:100%; height:400px; margin-bottom:10px; border-radius:8px; }
-    .skeleton-text { width:100%; height:13px; margin-bottom:6px; }
-    .skeleton-text-short { width:70%; height:13px; margin-bottom:14px; }
-    .skeleton-time { width:120px; height:11px; margin-top:8px; }
-    .skeleton-poll-img { width:100%; height:120px; border-radius:6px; margin-bottom:8px; }
-    .skeleton-poll-text { width:80%; height:13px; margin:0 auto; }
-    .skeleton-ticker { width:60%; height:14px; margin:8px auto; }
 
-    .body-link { color:#3b9cff; text-decoration:underline; word-break:break-all; cursor:pointer; }
-    .body-link:hover { opacity:0.8; }
-    .article-body a { pointer-events:auto; position:relative; z-index:5; }
-    .body-hashtag { color:#3b9cff; cursor:pointer; }
-    .body-hashtag:hover { text-decoration:underline; }
+    .skeleton-card {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 16px 0;
+      border-bottom: 1px solid #222;
+      margin-bottom: 12px;
+    }
+
+    .skeleton-label {
+      width: 80px;
+      height: 12px;
+      margin-bottom: 10px;
+    }
+
+    .skeleton-headline {
+      width: 90%;
+      height: 20px;
+      margin-bottom: 8px;
+    }
+
+    .skeleton-headline-short {
+      width: 60%;
+      height: 20px;
+      margin-bottom: 14px;
+    }
+
+    .skeleton-img {
+      width: 100%;
+      height: 400px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+
+    .skeleton-text {
+      width: 100%;
+      height: 13px;
+      margin-bottom: 6px;
+    }
+
+    .skeleton-text-short {
+      width: 70%;
+      height: 13px;
+      margin-bottom: 14px;
+    }
+
+    .skeleton-time {
+      width: 120px;
+      height: 11px;
+      margin-top: 8px;
+    }
+
+    .skeleton-poll-img {
+      width: 100%;
+      height: 120px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .skeleton-poll-text {
+      width: 80%;
+      height: 13px;
+      margin: 0 auto;
+    }
+
+    .skeleton-ticker {
+      width: 60%;
+      height: 14px;
+      margin: 8px auto;
+    }
+
+    .body-link {
+      color: #3b9cff;
+      text-decoration: underline;
+      word-break: break-all;
+      cursor: pointer;
+    }
+
+    .body-link:hover {
+      opacity: 0.8;
+    }
+
+    .article-body a {
+      pointer-events: auto;
+      position: relative;
+      z-index: 5;
+    }
+
+    .body-hashtag {
+      color: #3b9cff;
+      cursor: pointer;
+    }
+
+    .body-hashtag:hover {
+      text-decoration: underline;
+    }
   `;
+
   document.head.appendChild(style);
 })();
 

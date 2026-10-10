@@ -7,7 +7,6 @@
   margin: 0;
   padding: 0;
 }
-
 /* ── BASE ── */
 body {
   background-color: black;
@@ -32,6 +31,7 @@ h2{
 #header {
   position: sticky;
   top: 0;
+  width: 100%;
   z-index: 100;
   background: #000; /* your dark bg */
   box-shadow: #f9abab 5px;
@@ -261,19 +261,13 @@ b { font-size: clamp(20px, 3.5vw, 26px); font-weight: 600; }
 
 /* ── PARAGRAPH / ARTICLE BODY ── */
 p {
-  max-width: 90%;
-  font-family: "lexend", Arial, sans-serif;
-  font-size: clamp(32px, 4.4vw, 40px);
+  max-width: 100%;
+  font-family: "Lexend", Arial, sans-serif;
+  font-size: clamp(16px, 2vw, 20px);
   color: white;
   line-height: 1.6;
-  margin: 20px ;
-  
+  margin: 12px 0;
 }
-p::first-letter {
-  font-size: 1.15em;
-  font-weight: 500;
-}
-
 .article-body {
   line-height: 1.6;
   white-space: normal;
@@ -369,9 +363,6 @@ p::first-letter {
   justify-content: center;
   overflow: hidden;
 }
-@media (min-width: 600px)  { #poll1, #poll2, #poll3, #poll4 { width: 40vw; } }
-@media (min-width: 1024px) { #poll1, #poll2, #poll3, #poll4 { width: 420px; } }
-
 #poll1 img, #poll2 img, #poll3 img, #poll4 img {
   object-fit: cover;
   width: 100%;
