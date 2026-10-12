@@ -70,8 +70,8 @@ function signOut() {
 }
 
 function _makeBadge(tier, size) {
-  size = size || 18;
-  var colors = { veteran: "#c9a96e", loyal: "#4a90d9", regular: "#87ceeb" };
+  size = size || 1;
+  var colors = { veteran: "#c9a96e", loyal: "#1c7ade", regular: "#87ceeb" };
   var color = colors[tier];
   if (!color) return "";
   return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" style="vertical-align:middle;">
@@ -89,8 +89,18 @@ function lightModeToggleMarkup(greetingElement) {
   var toggle = document.getElementById("lightmode");
   if (toggle && !greetingElement.contains(toggle)) return "";
 
-  return `<img id="lightmode" src="/pics/lm.png" alt="Toggle light mode" role="button" tabindex="0" aria-pressed="${document.documentElement.classList.contains("light-mode")}">`;
+  return `<img id="lightmode" src="${lmIconSrc()}" alt="Toggle light mode" role="button" tabindex="0" aria-pressed="${document.documentElement.classList.contains("light-mode")}">`;
 }
+
+var LM_ICON_FOR_DARK = "/pics/lm.png";
+var LM_ICON_FOR_LIGHT = "/pics/darkmode.png";
+
+function lmIconSrc() {
+  return document.documentElement.classList.contains("light-mode")
+    ? LM_ICON_FOR_LIGHT
+    : LM_ICON_FOR_DARK;
+}
+
 
 sb.auth.getSession().then(function (r) {
   var el = document.getElementById("user-greeting");
@@ -141,7 +151,7 @@ sb.auth.getSession().then(function (r) {
       <div style="display:"flex"; width:"auto";text-align:right;" href="/login/" >
   
       <a href="/login/" style="color:white;font-size:30px;text-decoration:none;">
-      <img src="/pics/11.svg" alt="Profile" style="width:50px;height:auto;border:none;">Sign In</a> </div>
+      <img src="/pics/11.svg" alt="Profile" style="width:20px;height:auto;border:none;">Sign In</a> </div>
       ${lightModeToggleMarkup(el)}`;
     }
   }
@@ -351,7 +361,7 @@ function renderRatingsBar(postId) {
         <span id="rbp-${postId}">0</span>
       </button>
       <button class="btn-engage" id="bte-${postId}">
-        <img id="commentbtn" src="/pics/commentbtn.png" alt="comments">
+        <img id="commentbtn" src="/pics/cmt.png" alt="comments">
         <span id="cc-${postId}">0</span>
       </button>
     </div>

@@ -63,7 +63,7 @@
 
 .news-section-permanent h2 {
   margin: 0 0 12px;
-  font-size: clamp(20px, 3vw, 35px);
+  font-size: clamp(24px, 3vw, 35px);
   font-weight: 400;
   letter-spacing: 0.01em;
   color: #fff;
@@ -152,9 +152,9 @@
 .news-headline-image {
   display: block;
   flex: 0 0 clamp(96px, 24vw, 160px);
-  width: clamp(96px, 24vw, 160px);
+  width: clamp(120px, 24vw, 160px);
   height: auto;
-  max-height: 140px;
+  max-height: 170px;
   margin: 0;
   border-radius: 2px;
   object-fit: contain;
@@ -172,7 +172,7 @@
 
 .news-headline-title {
   margin: 0;
-  font-size: clamp(20px, 3vw, 35px);
+  font-size: clamp(25px, 3vw, 35px);
   font-weight: 400;
   line-height: 1.25;
   letter-spacing: 0.01em;
@@ -195,7 +195,7 @@
   border-radius: 8px;
   background: rgb(101, 99, 99);
   color: rgb(230, 227, 227);
-  font-size: clamp(14px, 2vw, 18px);
+  font-size: clamp(20px, 2vw, 25px);
   font-family: 'Lexend', sans-serif;
 }
 

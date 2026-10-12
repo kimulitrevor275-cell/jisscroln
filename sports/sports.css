@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Outfit:wght@100..900&display=swap');
+
 #sports {
   margin-top: clamp(40px, 5vw, 100px);
   margin-bottom: 60px;
@@ -63,6 +65,7 @@ html.light-mode {
   background: transparent;
   color: var(--text);
   font:100% "Outfit", sans-serif;
+  font-size: 23px;
   padding: 9px 16px;
   border-radius: 999px;
   cursor: pointer;
@@ -94,7 +97,7 @@ html.light-mode {
 /* home (left) | time or score (center) | away (right) */
 .match-card {
   flex: 0 0 auto;
-  width:  clamp(300px, 72vw, 420px);
+  width:  clamp(310px, 72vw, 420px);
   height: 170px;
   scroll-snap-align: start;
   background: var(--surface);
@@ -130,7 +133,7 @@ html.light-mode {
 .team-name {
   font-size: 23px;
 
-  font-family: "outfit" ,serif;
+  font-family: "lexend" ,sans-serif;
   font-weight: 700;
   color: var(--text);
   letter-spacing: 0.3px;
@@ -151,10 +154,10 @@ html.light-mode {
   white-space: nowrap;
 }
 .match-mid.time { font-size: 30px; color: var(--accent); }
-.match-date { font-size: 20px; color: white; font-family:"Outfit",serif; font-weight: 600; letter-spacing: 0.3px; }
+.match-date { font-size: 23px; color: rgb(136, 187, 235); font-family:"Outfit",serif; font-weight: 600; letter-spacing: 0.3px; }
 
 .match-status {
-  font-size: 17px;
+  font-size: 23px;
   font-weight: 300;
   letter-spacing: 0.5px;
   font-family: "outfit", serif;
@@ -234,7 +237,7 @@ html.light-mode {
   position: sticky;
   top: 0;
   z-index: 3;
-  font-size: 20px;
+  font-size: 25px;
   font-weight: 700;
   text-transform: uppercase;
   color: var(--muted);
@@ -263,7 +266,7 @@ html.light-mode {
 .standings-table thead .col-pos { z-index: 4; }
 
 .team-cell { display: flex; align-items: center; gap: 8px; min-width: 0; }
-.team-logo-small { width: 60px; height: 50px; object-fit: contain; flex-shrink: 0; }
+.team-logo-small { width: 75px; height: 50px; object-fit: contain; flex-shrink: 0; border: none; }
 .team-name-small {
   color: var(--text);
   font-weight: 600;

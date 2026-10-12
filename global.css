@@ -14,8 +14,35 @@ body {
   color: #e8e8e8;
   width: 100%;
   overflow-x: hidden;
+overflow: auto;
   padding: 0 16px;
   font-size: clamp(20px, 3vw, 25px);
+  flex-wrap: wrap;
+
+}
+.ptitle{
+  font-size: medium;
+  margin-right: 3px;
+}
+
+
+
+
+
+#user-greeting a { padding: 0; }
+#user-greeting img { margin: 0; width: 36px !important; }
+#user-greeting #lightmode { width: 30px !important; height: 30px; }
+
+/* navbar: shrink instead of overflowing */
+.navbar { gap: clamp(2px, 2vw, 50px); }
+.navbar .button {
+  font-size: clamp(16px, 4vw, 46px);
+  padding: 8px 6px;
+}
+
+/* on small phones, drop the "Good morning," text */
+@media (max-width: 600px) {
+  .greeting-text { display: none; }
 }
 h2{
   font-family: 'outfit', serif;
@@ -35,6 +62,7 @@ h2{
   z-index: 100;
   background: #000; /* your dark bg */
   box-shadow: #f9abab 5px;
+  flex-wrap: wrap;
   transition: transform 0.3s ease;
 }
 
@@ -47,12 +75,14 @@ header {
   width: 100%;
   background-color: black;
   z-index: 100;
-  padding: 8px 0;
+  flex-shrink: 0;
   margin-bottom: 8px;
+
+  margin: 0, !important;
 }
 
 .site-logo {
-  height: 60px;        /* change this one number: 20 / 24 / 28 */
+  height: 20px;        /* change this one number: 20 / 24 / 28 */
   width: auto;
   max-height: 100%;    /* never taller than the header */
   display: block;
@@ -96,7 +126,7 @@ header {
   align-items: center;
   gap: 16px;
   font-family: 'Outfit', sans-serif;
-  font-size: 29px;
+  font-size: 17px;
   color: white;
   white-space: nowrap;
 }
@@ -114,8 +144,8 @@ header {
 }
 
 #lightmode {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   object-fit: contain;
   cursor: pointer;
   border: none;
@@ -124,6 +154,9 @@ header {
 #user-greeting svg {
   margin-left: 0;       /* gap handles spacing now */
   vertical-align: baseline;
+  flex-wrap: wrap;
+  white-space: normal;
+  justify-content: flex-end;
 }
 #label {
   font-family: monospace;
@@ -203,7 +236,7 @@ a {
   padding: 8px 16px;
   font: 700 1.1rem "Dancing Script", cursive;
   border-radius: 8px;
-  color: rgb(0, 213, 255);
+  color: rgb(60, 13, 248);
   font: inherit;
   text-decoration:underline ;
 }
@@ -238,7 +271,7 @@ h1 {
   margin-top: 25px;
   margin-bottom: 12px;
   font-family: 'Outfit', serif;
-  font-size: clamp(18px, 4vw, 40px);
+  font-size: clamp(28px, 4vw, 40px);
   letter-spacing: 0.11em;
   color: white;
 }
@@ -263,7 +296,7 @@ b { font-size: clamp(20px, 3.5vw, 26px); font-weight: 600; }
 p {
   max-width: 100%;
   font-family: "Lexend", Arial, sans-serif;
-  font-size: clamp(16px, 2vw, 20px);
+  font-size: clamp(24px, 2vw, 30px);
   color: white;
   line-height: 1.6;
   margin: 12px 0;
@@ -344,6 +377,7 @@ p {
   scroll-snap-type: x mandatory;
   gap: 12px;
   margin-bottom: 10px;
+  background-color: #45403d13;
 }
 
 #poll1, #poll2, #poll3, #poll4 {
@@ -354,8 +388,8 @@ p {
   font-size: clamp(16px, 3.5vw, 32px);
   border-radius: 20px;
   background-color: black;
-  width: 90vw;
-  min-height: 200px;
+  width: 300px;
+  height: 230px;
   margin: 8px;
   display: flex;
   flex-direction: column;
@@ -366,7 +400,7 @@ p {
 #poll1 img, #poll2 img, #poll3 img, #poll4 img {
   object-fit: cover;
   width: 100%;
-  height:220px;
+  height:224px;
   border-radius: 20px;
   border: none;
   margin: 0;
@@ -701,6 +735,7 @@ html.light-mode .post-video-error {
 
 /* ── RATING BAR ── */
 .rate-btns {
+  
   display: flex;
   align-items: center;
   gap: 12px;
@@ -816,7 +851,7 @@ html.light-mode .post-video-error {
 }
 
 .rate-bar-wrap {
-  flex: 1;
+  flex: 0;
   display: flex;
   height: 10px;
   border-radius: 4px;
@@ -926,7 +961,7 @@ html.light-mode body {
 
 html.light-mode #header,
 html.light-mode header {
-  background: #fff;
+  background: white;
 }
 
 html.light-mode h1,
