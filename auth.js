@@ -361,7 +361,7 @@ function renderRatingsBar(postId) {
         <span id="rbp-${postId}">0</span>
       </button>
       <button class="btn-engage" id="bte-${postId}">
-        <img id="commentbtn" src="/pics/cmt.png" alt="comments">
+        <img id="commentbtn" src="/pics/commentbtn.png" alt="comments">
         <span id="cc-${postId}">0</span>
       </button>
     </div>
