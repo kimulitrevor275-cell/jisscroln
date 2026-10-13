@@ -151,13 +151,13 @@
 
 .news-headline-image {
   display: block;
-  width: clamp(220px, 24vw, 330px);
+  width: clamp(280px, 24vw, 330px);
   height: auto;
-  max-height: 170px;
+  max-height: 210px;
   margin: 0;
   border-radius: 2px;
   object-fit: contain;
-  background: #111;
+  background: black;
 }
 
 .news-headline-content {
@@ -171,7 +171,7 @@
 
 .news-headline-title {
   margin: 0;
-  font-size: clamp(29px, 3vw, 35px);
+  font-size: clamp(30px, 3vw, 35px);
   font-weight: 400;
   line-height: 1.25;
   letter-spacing: 0.01em;
