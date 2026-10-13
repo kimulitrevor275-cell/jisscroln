@@ -133,7 +133,7 @@ sb.auth.getSession().then(function (r) {
         var badge = _makeBadge(data.tier, 35);
         if (el) {
           el.innerHTML = `${getGreeting()}, <span class="greeting-name">${name}${badge}</span>  <a href="/profile.html" style="color:gray;font-size:20px;">
-          <img src="/pics/11.svg" alt="Profile" style="width:50px;height:auto;border:none;">
+          <img src="/pics/11.svg" alt="Profile" style="width:50px;height:50px;border:none;">
           </a>
          ${lightModeToggleMarkup(el)}
           `;
@@ -151,7 +151,7 @@ sb.auth.getSession().then(function (r) {
       <div style="display:"flex"; width:"auto";text-align:right;" href="/login/" >
   
       <a href="/login/" style="color:white;font-size:30px;text-decoration:none;">
-      <img src="/pics/11.svg" alt="Profile" style="width:20px;height:auto;border:none;">Sign In</a> </div>
+      <img src="/pics/11.svg" alt="Profile" style="width:50px;height:50px;border:none;">Sign In</a> </div>
       ${lightModeToggleMarkup(el)}`;
     }
   }
