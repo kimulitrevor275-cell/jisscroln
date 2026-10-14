@@ -8,9 +8,18 @@ var sb = supabase.createClient(
 
 var LIGHT_MODE_STORAGE_KEY = "jisscrol-theme";
 
+function updateLightModeToggle(toggle, enabled) {
+  toggle.src = enabled ? "/pics/icons8-dark-mode-64.png" : "/pics/lm.png";
+  toggle.alt = enabled ? "Switch to dark mode" : "Switch to white mode";
+  toggle.setAttribute("aria-pressed", String(enabled));
+  toggle.setAttribute("aria-label", toggle.alt);
+}
+
 function setLightMode(enabled) {
   document.documentElement.classList.toggle("light-mode", enabled);
   localStorage.setItem(LIGHT_MODE_STORAGE_KEY, enabled ? "true" : "false");
+  var toggle = document.getElementById("lightmode");
+  if (toggle) updateLightModeToggle(toggle, enabled);
 }
 
 if (localStorage.getItem(LIGHT_MODE_STORAGE_KEY) === "true") {
@@ -28,22 +37,13 @@ function handleLightModeInput(event) {
 
   var enabled = !document.documentElement.classList.contains("light-mode");
   setLightMode(enabled);
-  toggle.setAttribute("aria-pressed", String(enabled));
-  toggle.setAttribute(
-    "aria-label",
-    enabled ? "Switch to dark mode" : "Switch to light mode",
-  );
 }
 
 var existingLightModeToggle = document.getElementById("lightmode");
 if (existingLightModeToggle) {
   var lightModeEnabled =
     document.documentElement.classList.contains("light-mode");
-  existingLightModeToggle.setAttribute("aria-pressed", String(lightModeEnabled));
-  existingLightModeToggle.setAttribute(
-    "aria-label",
-    lightModeEnabled ? "Switch to dark mode" : "Switch to light mode",
-  );
+  updateLightModeToggle(existingLightModeToggle, lightModeEnabled);
 }
 
 if (!window._lightModeListenersInitialized) {
@@ -70,8 +70,8 @@ function signOut() {
 }
 
 function _makeBadge(tier, size) {
-  size = size || 1;
-  var colors = { veteran: "#c9a96e", loyal: "#1c7ade", regular: "#87ceeb" };
+  size = size || 18;
+  var colors = { veteran: "#c9a96e", loyal: "#4a90d9", regular: "#87ceeb" };
   var color = colors[tier];
   if (!color) return "";
   return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" style="vertical-align:middle;">
@@ -89,18 +89,11 @@ function lightModeToggleMarkup(greetingElement) {
   var toggle = document.getElementById("lightmode");
   if (toggle && !greetingElement.contains(toggle)) return "";
 
-  return `<img id="lightmode" src="${lmIconSrc()}" alt="Toggle light mode" role="button" tabindex="0" aria-pressed="${document.documentElement.classList.contains("light-mode")}">`;
+  var lightModeEnabled = document.documentElement.classList.contains("light-mode");
+  var icon = lightModeEnabled ? "/pics/icons8-dark-mode-64.png" : "/pics/lm.png";
+  var label = lightModeEnabled ? "Switch to dark mode" : "Switch to white mode";
+  return `<img id="lightmode" src="${icon}" alt="${label}" role="button" tabindex="0" aria-pressed="${lightModeEnabled}" aria-label="${label}">`;
 }
-
-var LM_ICON_FOR_DARK = "/pics/lm.png";
-var LM_ICON_FOR_LIGHT = "/pics/darkmode.png";
-
-function lmIconSrc() {
-  return document.documentElement.classList.contains("light-mode")
-    ? LM_ICON_FOR_LIGHT
-    : LM_ICON_FOR_DARK;
-}
-
 
 sb.auth.getSession().then(function (r) {
   var el = document.getElementById("user-greeting");
@@ -133,7 +126,7 @@ sb.auth.getSession().then(function (r) {
         var badge = _makeBadge(data.tier, 35);
         if (el) {
           el.innerHTML = `${getGreeting()}, <span class="greeting-name">${name}${badge}</span>  <a href="/profile.html" style="color:gray;font-size:20px;">
-          <img src="/pics/11.svg" alt="Profile" style="width:50px;height:50px;border:none;">
+          <img src="/pics/11.svg" alt="Profile" style="width:50px;height:auto;border:none;">
           </a>
          ${lightModeToggleMarkup(el)}
           `;
@@ -151,7 +144,7 @@ sb.auth.getSession().then(function (r) {
       <div style="display:"flex"; width:"auto";text-align:right;" href="/login/" >
   
       <a href="/login/" style="color:white;font-size:30px;text-decoration:none;">
-      <img src="/pics/11.svg" alt="Profile" style="width:50px;height:50px;border:none;">Sign In</a> </div>
+      <img src="/pics/11.svg" alt="Profile" style="width:50px;height:auto;border:none;">Sign In</a> </div>
       ${lightModeToggleMarkup(el)}`;
     }
   }
@@ -668,128 +661,38 @@ function showTickerSkeleton() {
   el.innerHTML = '<div class="skeleton skeleton-ticker"></div>';
 }
 
+// ── Inject skeleton + link styles ──
 (function () {
   var style = document.createElement("style");
-
   style.textContent = `
     @keyframes shimmer {
       0%   { background-position: -600px 0; }
-      100% { background-position: 600px 0; }
+      100% { background-position:  600px 0; }
     }
-
     .skeleton {
-      display: block;
-      width: 100%;
-      max-width: 100%;
-      box-sizing: border-box;
-      background: linear-gradient(
-        90deg,
-        #1a1a1a 25%,
-        #2a2a2a 50%,
-        #1a1a1a 75%
-      );
+      background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
       background-size: 600px 100%;
       animation: shimmer 1.4s infinite linear;
       border-radius: 6px;
     }
+    .skeleton-card { padding:16px 0; border-bottom:1px solid #222; margin-bottom:12px; }
+    .skeleton-label { width:80px; height:12px; margin-bottom:10px; }
+    .skeleton-headline { width:90%; height:20px; margin-bottom:8px; }
+    .skeleton-headline-short { width:60%; height:20px; margin-bottom:14px; }
+    .skeleton-img { width:100%; height:400px; margin-bottom:10px; border-radius:8px; }
+    .skeleton-text { width:100%; height:13px; margin-bottom:6px; }
+    .skeleton-text-short { width:70%; height:13px; margin-bottom:14px; }
+    .skeleton-time { width:120px; height:11px; margin-top:8px; }
+    .skeleton-poll-img { width:100%; height:120px; border-radius:6px; margin-bottom:8px; }
+    .skeleton-poll-text { width:80%; height:13px; margin:0 auto; }
+    .skeleton-ticker { width:60%; height:14px; margin:8px auto; }
 
-    .skeleton-card {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 16px 0;
-      border-bottom: 1px solid #222;
-      margin-bottom: 12px;
-    }
-
-    .skeleton-label {
-      width: 80px;
-      height: 12px;
-      margin-bottom: 10px;
-    }
-
-    .skeleton-headline {
-      width: 90%;
-      height: 20px;
-      margin-bottom: 8px;
-    }
-
-    .skeleton-headline-short {
-      width: 60%;
-      height: 20px;
-      margin-bottom: 14px;
-    }
-
-    .skeleton-img {
-      width: 100%;
-      height: 400px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-    }
-
-    .skeleton-text {
-      width: 100%;
-      height: 13px;
-      margin-bottom: 6px;
-    }
-
-    .skeleton-text-short {
-      width: 70%;
-      height: 13px;
-      margin-bottom: 14px;
-    }
-
-    .skeleton-time {
-      width: 120px;
-      height: 11px;
-      margin-top: 8px;
-    }
-
-    .skeleton-poll-img {
-      width: 100%;
-      height: 120px;
-      border-radius: 6px;
-      margin-bottom: 8px;
-    }
-
-    .skeleton-poll-text {
-      width: 80%;
-      height: 13px;
-      margin: 0 auto;
-    }
-
-    .skeleton-ticker {
-      width: 60%;
-      height: 14px;
-      margin: 8px auto;
-    }
-
-    .body-link {
-      color: #3b9cff;
-      text-decoration: underline;
-      word-break: break-all;
-      cursor: pointer;
-    }
-
-    .body-link:hover {
-      opacity: 0.8;
-    }
-
-    .article-body a {
-      pointer-events: auto;
-      position: relative;
-      z-index: 5;
-    }
-
-    .body-hashtag {
-      color: #3b9cff;
-      cursor: pointer;
-    }
-
-    .body-hashtag:hover {
-      text-decoration: underline;
-    }
+    .body-link { color:#3b9cff; text-decoration:underline; word-break:break-all; cursor:pointer; }
+    .body-link:hover { opacity:0.8; }
+    .article-body a { pointer-events:auto; position:relative; z-index:5; }
+    .body-hashtag { color:#3b9cff; cursor:pointer; }
+    .body-hashtag:hover { text-decoration:underline; }
   `;
-
   document.head.appendChild(style);
 })();
 
@@ -798,24 +701,29 @@ function showTickerSkeleton() {
 // ─────────────────────────────────────────
 
 (function () {
+  if (/^\/search(?:\/|$)/.test(window.location.pathname)) return;
+
   var style = document.createElement("style");
   style.textContent = `
     #jis-search-icon {
-      position:fixed; bottom:50px; right:20px;
-      width:78px; height:78px; border:none; background:none;
-      border-radius:50%;
+      position:fixed; bottom:24px; right:20px;
+      width:56px; height:56px; padding:0;
+      border:1px solid #444; border-radius:50%; background:#171717;
       display:flex; align-items:center; justify-content:center;
-      font-size:22px; cursor:pointer;
-      box-shadow:0 4px 16px rgba(0,0,0,0.5);
+      cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,0.35);
       z-index:999; user-select:none;
     }
+    #jis-search-icon img { width:28px; height:28px; }
     #jis-search-overlay {
       position:fixed; top:0; left:0; right:0;
       background:#0a0a0a; z-index:1000;
-      transform:translateY(-100%); transition:transform 0.3s ease;
+      transform:translateY(-100%); visibility:hidden; pointer-events:none;
+      transition:transform 0.3s ease, visibility 0.3s;
       padding:16px; border-bottom:1px solid #222;
     }
-    #jis-search-overlay.open { transform:translateY(0); }
+    #jis-search-overlay.open {
+      transform:translateY(0); visibility:visible; pointer-events:auto;
+    }
     #jis-search-wrap { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
     #jis-search-input {
       flex:1; background:#181818; border:1px solid #333; border-radius:8px;
@@ -838,6 +746,7 @@ function showTickerSkeleton() {
 
   var overlay = document.createElement("div");
   overlay.id = "jis-search-overlay";
+  overlay.setAttribute("aria-hidden", "true");
   overlay.innerHTML = `
     <div id="jis-search-wrap">
       <input id="jis-search-input" type="text" placeholder="Search articles, stories, songs...">
@@ -849,11 +758,13 @@ function showTickerSkeleton() {
 
   function openSearch() {
     overlay.classList.add("open");
+    overlay.setAttribute("aria-hidden", "false");
     document.getElementById("jis-search-input").focus();
   }
 
   function closeSearch() {
     overlay.classList.remove("open");
+    overlay.setAttribute("aria-hidden", "true");
     document.getElementById("jis-search-input").value = "";
     document.getElementById("jis-search-results").innerHTML = "";
   }
@@ -952,18 +863,17 @@ function showTickerSkeleton() {
   // lets #hashtags in post text open search
   window.openJisSearch = function (q) {
     q = String(q || "").replace(/^#/, "");
-    openSearch();
-    if (q) {
-      document.getElementById("jis-search-input").value = q;
-      doSearch(q);
-    }
+    window.location.href = "/search/" + (q ? "?q=" + encodeURIComponent(q) : "");
   };
 
-  var icon = document.createElement("span");
+  var icon = document.createElement("button");
   icon.id = "jis-search-icon";
-  icon.innerHTML =
-    '<img src="/pics/search.svg" alt="search" style="background:none;width:40px;height:40px;border:none">';
-  icon.addEventListener("click", openSearch);
+  icon.type = "button";
+  icon.setAttribute("aria-label", "Open search page");
+  icon.innerHTML = '<img src="/pics/search.svg" alt="" aria-hidden="true">';
+  icon.addEventListener("click", function () {
+    window.location.href = "/search/";
+  });
   document.body.appendChild(icon);
 })();
 function attachSeeMore(postId) {
