@@ -794,178 +794,44 @@ function showTickerSkeleton() {
 })();
 
 // ─────────────────────────────────────────
-//  SEARCH — JisScroL global search
+//  SEARCH — floating icon that opens the /search/ page
 // ─────────────────────────────────────────
 
 (function () {
+  // no floating icon on the search page itself
+  if (/^\/search(?:\/|$)/.test(window.location.pathname)) return;
+
   var style = document.createElement("style");
   style.textContent = `
     #jis-search-icon {
       position:fixed; bottom:50px; right:20px;
-      width:78px; height:78px; border:none; background:none;
+      width:78px; height:78px; padding:0; border:none; background:none;
       border-radius:50%;
       display:flex; align-items:center; justify-content:center;
-      font-size:22px; cursor:pointer;
-      box-shadow:0 4px 16px rgba(0,0,0,0.5);
+      cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,0.5);
       z-index:999; user-select:none;
     }
-    #jis-search-overlay {
-      position:fixed; top:0; left:0; right:0;
-      background:#0a0a0a; z-index:1000;
-      transform:translateY(-100%); transition:transform 0.3s ease;
-      padding:16px; border-bottom:1px solid #222;
-    }
-    #jis-search-overlay.open { transform:translateY(0); }
-    #jis-search-wrap { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
-    #jis-search-input {
-      flex:1; background:#181818; border:1px solid #333; border-radius:8px;
-      padding:8px 9px; color:#e8e8e8; width:50px; font-family:Outfit,sans-serif;
-      font-size:19px; outline:none;
-    }
-    #jis-search-input:focus { border-color:white; }
-    #jis-search-close { background:none; border:none; color:white; font-size:35px; cursor:pointer; padding:4px 8px; }
-    #jis-search-results { max-height:70vh; overflow-y:auto; scrollbar-width:none; }
-    .jis-result-section { font-size:20px; text-transform:uppercase; color:white; margin:12px 0 6px; }
-    .jis-result-item { display:flex; align-items:center; gap:12px; font-family:"outfit",serif; padding:10px 0; border-bottom:1px solid #344761; cursor:pointer; }
-    .jis-result-item:active { opacity:0.7; }
-    .jis-result-img { width:55px; height:55px; object-fit:cover; border-radius:5px; flex-shrink:0; background:#1a1a1a; }
-    .jis-result-info { flex:1; min-width:0; }
-    .jis-result-cat { font-size:20px; color:lightgray; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:3px; }
-    .jis-result-title { font-size:20px; color:white; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .jis-no-results { text-align:center; color:white; font-size:30px; padding:32px 0; }
   `;
   document.head.appendChild(style);
 
-  var overlay = document.createElement("div");
-  overlay.id = "jis-search-overlay";
-  overlay.innerHTML = `
-    <div id="jis-search-wrap">
-      <input id="jis-search-input" type="text" placeholder="Search articles, stories, songs...">
-      <button id="jis-search-close">✕</button>
-    </div>
-    <div id="jis-search-results"></div>
-  `;
-  document.body.appendChild(overlay);
-
-  function openSearch() {
-    overlay.classList.add("open");
-    document.getElementById("jis-search-input").focus();
-  }
-
-  function closeSearch() {
-    overlay.classList.remove("open");
-    document.getElementById("jis-search-input").value = "";
-    document.getElementById("jis-search-results").innerHTML = "";
-  }
-
-  document
-    .getElementById("jis-search-close")
-    .addEventListener("click", closeSearch);
-
-  var searchTimer;
-  document
-    .getElementById("jis-search-input")
-    .addEventListener("input", function () {
-      clearTimeout(searchTimer);
-      var q = this.value.trim();
-      if (!q) {
-        document.getElementById("jis-search-results").innerHTML = "";
-        return;
-      }
-      searchTimer = setTimeout(function () {
-        doSearch(q);
-      }, 350);
-    });
-
-  function resultItem(page, img, cat, title) {
-    return `
-      <div class="jis-result-item" onclick="window.location.href='${page}'">
-        <img class="jis-result-img" src="${img || ""}" alt="">
-        <div class="jis-result-info">
-          <div class="jis-result-cat">${cat}</div>
-          <div class="jis-result-title">${title}</div>
-        </div>
-      </div>
-    `;
-  }
-
-  function doSearch(q) {
-    var results = document.getElementById("jis-search-results");
-    results.innerHTML = '<p class="jis-no-results">Searching...</p>';
-
-    fetch(API + "/search?q=" + encodeURIComponent(q))
-      .then(function (r) {
-        return r.json();
-      })
-      .then(function (data) {
-        var html = "";
-        var total =
-          data.articles.length + data.stories.length + data.songs.length;
-
-        if (total === 0) {
-          results.innerHTML =
-            '<p class="jis-no-results">No results for "' +
-            escapeHtml(q) +
-            '"</p>';
-          return;
-        }
-
-        if (data.articles.length) {
-          html += '<div class="jis-result-section">Articles</div>';
-          data.articles.forEach(function (a) {
-            var page =
-              a.category === "trends"
-                ? "index.html"
-                : a.category === "newpage"
-                  ? "newpage.html"
-                  : "sports.html";
-            html += resultItem(page, a.img, a.category, a.headline);
-          });
-        }
-
-        if (data.stories.length) {
-          html += '<div class="jis-result-section">Stories</div>';
-          data.stories.forEach(function (s) {
-            html += resultItem("others.html", s.img, s.cat || "Story", s.title);
-          });
-        }
-
-        if (data.songs.length) {
-          html += '<div class="jis-result-section">Songs</div>';
-          data.songs.forEach(function (s) {
-            html += resultItem(
-              "others.html",
-              s.img,
-              "#" + s.rank,
-              s.name + " — " + s.artist,
-            );
-          });
-        }
-
-        results.innerHTML = html;
-      })
-      .catch(function () {
-        results.innerHTML = '<p class="jis-no-results">Could not connect</p>';
-      });
-  }
-
-  // lets #hashtags in post text open search
+  // lets #hashtags in post text open the search page
   window.openJisSearch = function (q) {
     q = String(q || "").replace(/^#/, "");
-    openSearch();
-    if (q) {
-      document.getElementById("jis-search-input").value = q;
-      doSearch(q);
-    }
+    window.location.href = "/search/" + (q ? "?q=" + encodeURIComponent(q) : "");
   };
 
-  var icon = document.createElement("span");
+  var icon = document.createElement("button");
   icon.id = "jis-search-icon";
+  icon.type = "button";
+  icon.setAttribute("aria-label", "Open search page");
   icon.innerHTML =
-    '<img src="/pics/search.svg" alt="search" style="background:none;width:40px;height:40px;border:none">';
-  icon.addEventListener("click", openSearch);
+    '<img src="/pics/search.svg" alt="" style="background:none;width:40px;height:40px;border:none;margin:0">';
+  icon.addEventListener("click", function () {
+    window.location.href = "/search/";
+  });
   document.body.appendChild(icon);
 })();
+
 function attachSeeMore(postId) {
   var seeMore = document.getElementById("sm-" + postId);
   if (!seeMore) return;
