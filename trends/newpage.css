@@ -142,6 +142,7 @@
   width: 100%;
   cursor: pointer;
   overflow: hidden;
+  flex-wrap: wrap;
   transition: background-color 0.2s ease;
 }
 
@@ -158,6 +159,7 @@
   
   max-height: 210px;
   margin: 0;
+  margin-right: 50px;
   border-radius: 2px;
   object-fit: contain;
   background: black;
@@ -174,8 +176,10 @@
 
 .news-headline-title {
   margin: 0;
-  font-size: 30px;
-  font-weight: 400;
+  font-size: clamp(2rem, 5vw, 4rem);
+  letter-spacing: 0.01em;
+  max-width: 90%;
+  font-weight: 500;
   overflow: none;
   flex-wrap: wrap;
   line-height: 1.25;
@@ -184,9 +188,7 @@
 }
 
 .news-headline-meta {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+ 
   flex-wrap: wrap;
   gap: 6px 12px;
   margin-top: 8px;
@@ -200,7 +202,7 @@
   border-radius: 8px;
   background: rgb(101, 99, 99);
   color: rgb(230, 227, 227);
-  font-size: clamp(12px, 1.5vw, 16px);
+  font-size: clamp(20px, 1.5vw, 25px);
   font-family: 'Lexend', sans-serif;
   overflow-wrap: anywhere;
 }

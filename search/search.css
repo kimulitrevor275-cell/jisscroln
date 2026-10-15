@@ -4,12 +4,12 @@
   --search-surface: #141413;
   --search-surface-hover: #1a1917;
   --search-border: rgba(255, 255, 255, .08);
-  --search-accent: #1d9bf0;
+  --search-accent: #1585d0;
   --search-accent-hover: #55b7ff;
   box-sizing: border-box;
   width: min(100%, 1120px);
   margin: 0 auto;
-  padding: clamp(28px, 5vw, 64px) clamp(16px, 4vw, 32px) 88px;
+  padding: 0 16px;
   color: inherit;
   font-family: inherit;
 }
@@ -70,7 +70,8 @@ html.light-mode .search-intro.is-searching {
 .section-kicker {
   margin: 0;
   color: var(--search-accent);
-  font: 600 11px Outfit, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font: 600 25px Outfit, sans-serif;
   letter-spacing: .16em;
 }
 
@@ -84,7 +85,7 @@ html.light-mode .search-intro.is-searching {
 .search-description {
   margin: 0 0 26px;
   color: #aaa69f;
-  font: 400 clamp(15px, 2vw, 18px) Outfit, sans-serif;
+  font: 400 clamp(20px, 2vw, 22px) Outfit, sans-serif;
 }
 
 #site-search-form {
@@ -115,13 +116,13 @@ html.light-mode .search-intro.is-searching {
 #site-search-input {
   flex: 1;
   min-width: 0;
-  padding: 8px 0;
+  padding: 10px 0;
   border: 0;
   outline: none;
   background: transparent;
   color: #f5f5f5;
   font-family: inherit;
-  font-size: 19px;
+  font-size: 27px;
   font-weight: 400;
   line-height: 1.4;
 }
@@ -150,7 +151,7 @@ html.light-mode .search-intro.is-searching {
   border-radius: 8px;
   background: var(--search-accent);
   color: #17130d;
-  font: 600 14px Outfit, sans-serif;
+  font: 600 20px Outfit, sans-serif;
   cursor: pointer;
   transition: background .15s ease, transform .15s ease;
 }
@@ -171,8 +172,8 @@ html.light-mode .search-intro.is-searching {
 
 .search-hint {
   margin: 12px 0 0;
-  color: #89857e;
-  font: 400 12px Outfit, sans-serif;
+  color: #eae9e7;
+  font: 400 20px Outfit, sans-serif;
 }
 
 #search-discovery {
@@ -194,7 +195,7 @@ html.light-mode .search-intro.is-searching {
 .results-heading h2 {
   margin: 4px 0 0;
   color: var(--search-text);
-  font: 500 clamp(24px, 4vw, 34px)/1.15 Outfit, sans-serif;
+  font: 500 clamp(28px, 4vw, 34px)/1.15 Outfit, sans-serif;
 }
 
 .discovery-heading a {
@@ -252,6 +253,7 @@ html.light-mode .search-intro.is-searching {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  border: none;
 }
 
 .discovery-card-backdrop,
@@ -441,14 +443,14 @@ html.light-mode .search-intro.is-searching {
 
 .song-card-title {
   color: var(--search-text);
-  font: 500 19px/1.35 Outfit, sans-serif;
+  font: 500 25px/1.35 Outfit, sans-serif;
 }
 
 .song-card-artist {
   margin-top: 3px;
   color: var(--search-muted);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 25px;
   font-weight: 400;
   line-height: 1.4;
 }
@@ -461,7 +463,7 @@ html.light-mode .search-intro.is-searching {
   border-radius: 12px;
   color: var(--search-muted);
   font-family: inherit;
-  font-size: 19px;
+  font-size: 25px;
   font-weight: 400;
   line-height: 1.4;
 }
@@ -488,7 +490,7 @@ html.light-mode .search-intro.is-searching {
   border-radius: 12px;
   color: var(--search-muted);
   font-family: inherit;
-  font-size: 19px;
+  font-size: 25px;
   font-weight: 400;
   line-height: 1.4;
 }
@@ -497,7 +499,7 @@ html.light-mode .search-intro.is-searching {
   margin: 0 0 12px;
   color: var(--search-accent);
   font-family: inherit;
-  font-size: 19px;
+  font-size: 25px;
   font-weight: 600;
   line-height: 1.4;
   letter-spacing: .15em;
@@ -554,7 +556,7 @@ html.light-mode .search-intro.is-searching {
 .search-result-image-placeholder {
   position: relative;
   color: var(--search-accent);
-  font-size: 21px;
+  font-size: 25px;
   background:
     radial-gradient(ellipse at 78% 18%, rgba(85, 183, 255, .58), transparent 42%),
     linear-gradient(135deg, #145488 0%, #123654 48%, #081522 100%);
@@ -570,7 +572,7 @@ html.light-mode .search-intro.is-searching {
   margin-bottom: 4px;
   color: var(--search-accent);
   font-family: inherit;
-  font-size: 13px;
+  font-size: 20px;
   font-weight: 600;
   line-height: 1.35;
   letter-spacing: .08em;
@@ -582,7 +584,7 @@ html.light-mode .search-intro.is-searching {
   display: -webkit-box;
   overflow: hidden;
   color: var(--search-text);
-  font: 500 19px/1.4 Outfit, sans-serif;
+  font: 500 22px/1.4 Outfit, sans-serif;
   overflow-wrap: anywhere;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;

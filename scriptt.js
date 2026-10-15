@@ -141,7 +141,7 @@ function renderHomeUgandaNews(anchor) {
           : article.source;
         source = String(source || "Unknown").trim();
         var meta = [
-          "Category: Uganda",
+          "Uganda",
           "Source: " + (sourceUrl
             ? `<a href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(source)}</a>`
             : escapeHtml(source))
@@ -192,7 +192,7 @@ function renderPost(post) {
 
   return `
     ${post.label && String(post.label).trim() ? `<b id="label">${post.label}</b>` : ""}
-    <h2>${post.headline}${post.link ? ` <a href="${post.link}" target="_blank" rel="noopener">view↗</a>` : ""}</h2>
+    <h2 class ="headlines">${post.headline}${post.link ? ` <a href="${post.link}" target="_blank" rel="noopener">view↗</a>` : ""}</h2>
     ${renderArticleImages(post)}
     ${renderBody(post)}
     ${renderRateboxAndEngagement(postId)}

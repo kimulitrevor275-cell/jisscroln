@@ -133,7 +133,7 @@ sb.auth.getSession().then(function (r) {
         var badge = _makeBadge(data.tier, 35);
         if (el) {
           el.innerHTML = `${getGreeting()}, <span class="greeting-name">${name}${badge}</span>  <a href="/profile.html" style="color:gray;font-size:20px;">
-          <img src="/pics/11.svg" alt="Profile" style="width:50px;height:50px;border:none;">
+          <img src="/pics/11.svg" alt="Profile" style="width:80px;height: 90px;border:none;">
           </a>
          ${lightModeToggleMarkup(el)}
           `;
@@ -151,7 +151,7 @@ sb.auth.getSession().then(function (r) {
       <div style="display:"flex"; width:"auto";text-align:right;" href="/login/" >
   
       <a href="/login/" style="color:white;font-size:30px;text-decoration:none;">
-      <img src="/pics/11.svg" alt="Profile" style="width:50px;height:50px;border:none;">Sign In</a> </div>
+      <img src="/pics/11.svg" alt="Profile" style="width:80px;height:90px;border:none;">Sign In</a> </div>
       ${lightModeToggleMarkup(el)}`;
     }
   }
@@ -805,10 +805,10 @@ function showTickerSkeleton() {
   style.textContent = `
     #jis-search-icon {
       position:fixed; bottom:50px; right:20px;
-      width:78px; height:78px; padding:0; border:none; background:none;
+      width:100px; height:100px; padding:0; border:none; background:none;
       border-radius:50%;
       display:flex; align-items:center; justify-content:center;
-      cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,0.5);
+      cursor:pointer; box-shadow:0 4px 16px rgba(182, 61, 61, 0.5);
       z-index:999; user-select:none;
     }
   `;
@@ -825,7 +825,7 @@ function showTickerSkeleton() {
   icon.type = "button";
   icon.setAttribute("aria-label", "Open search page");
   icon.innerHTML =
-    '<img src="/pics/search.svg" alt="" style="background:none;width:40px;height:40px;border:none;margin:0">';
+    '<img src="/pics/search.svg" alt="" style="background:none;width:80px;height:70px;border:none;margin:0">';
   icon.addEventListener("click", function () {
     window.location.href = "/search/";
   });
