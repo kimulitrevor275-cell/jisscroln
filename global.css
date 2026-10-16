@@ -17,7 +17,7 @@ body {
   padding: 0 16px;
   font-size: clamp(20px, 3vw, 25px);
   flex-wrap: wrap;
-
+overflow: auto;
 }
 .ptitle{
   font-size: medium;
@@ -26,11 +26,13 @@ body {
 
 
 
-
+.gwrap{
+  margin-left: 20px;
+}
 
 #user-greeting a { padding: 0; }
-#user-greeting img { margin: 0; width: 36px !important; }
-#user-greeting #lightmode { width: 30px !important; height: 30px; }
+#user-greeting img { margin: 0; width: 35px !important; }
+#user-greeting #lightmode { width: 35px !important; height: 35px; }
 
 /* navbar: shrink instead of overflowing */
 .navbar { gap: clamp(2px, 2vw, 50px); }
@@ -42,10 +44,11 @@ body {
 /* on small phones, drop the "Good morning," text */
 @media (max-width: 600px) {
   .greeting-text { display: none; }
+  
 }
 h2,.headline{
   font-family: 'outfit', serif;
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(2rem, 5vw, 4rem);
   letter-spacing: 0.01em;
   font-weight: light;
 }
@@ -81,7 +84,7 @@ padding: 4px;
 }
 
 .site-logo {
-  height: 50px;        /* change this one number: 20 / 24 / 28 */
+  max-height: 60px;        /* change this one number: 20 / 24 / 28 */
   width: auto;
   max-height: 100%;    /* never taller than the header */
   display: block;
@@ -90,6 +93,7 @@ padding: 4px;
 }
 /* ── NAVBAR ── */
 .navbar {
+  margin: 10px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -101,18 +105,18 @@ padding: 4px;
   background-color: transparent;
   text-decoration: none;
   padding: 8px 8px;
-  font-size: clamp(20px, 4vw, 46px);
+  font-size: clamp(20px, 3vw, 40px);
   color: gray;
   cursor: pointer;
   transition: color 0.3s ease;
-  font-weight: 300;
+  font-weight: 700;
   font-family: "poppins" serif;
   border:none;
   border-radius: 0;
 }
 
 .navbar a.active {
-  border-bottom: 3px solid white;
+  border-bottom: 5px solid white;
   color:white;
 }
 
@@ -121,20 +125,21 @@ padding: 4px;
   color: gray;
 }
 #user-greeting {
+  margin: 10px;
   display: flex;
   align-items: center;
   gap: 16px;
   font-family: 'Outfit', sans-serif;
-  font-size: 25px;
+  font-size: clamp(18px,3vw,28px) !important;
   color: white;
-  font-weight: 400;
-  white-space: nowrap;
+  font-weight: 600;
+  white-space: wrap;
 }
 
 .greeting-name {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 }
 
 #user-greeting img {
@@ -143,7 +148,7 @@ padding: 4px;
   display: block;
 }
 
-#lightmode {
+#lightmode , .profileicon{
   width: 50px;
   height: 50px;
   object-fit: contain;
@@ -159,11 +164,16 @@ padding: 4px;
   justify-content: flex-end;
 }
 #label {
-  font-family: monospace;
-  background-color: #c9bdf3;
-  font-size: clamp(18px, 4vw, 48px);
-  color: white;
-  border-radius: 4px;
+  margin: 0;
+  font-family: "lexend", serif;
+  background-color: #0eaef9;
+  font-size: clamp(22px, 4vw, 48px);
+  color: rgb(42, 239, 131)(0, 255, 115);
+  border-radius: 10px;
+  padding: 16px; border: 3px solid #0eaef9;
+  border-top-color: red;
+  box-shadow: 10px 10px 3px #0eaef983;
+border-start-end-radius: 30px;
   padding: 2px 8px;
   display: inline-block;
 }
@@ -184,15 +194,7 @@ padding: 4px;
 }
 /* ── FOOTER ── */
 #fo { margin-bottom: clamp(40px, 8vw, 100px); }
-#label {
-  font-family: monospace;
-  background-color: hsla(213, 47%, 93%, 0.434);
-  font-size: clamp(18px, 4vw, 48px);
-  color: white;
-  border-radius: 4px;
-  padding: 2px 8px;
-  display: inline-block;
-}
+
 
 /* ── ICON ── */
 #icon {
@@ -267,11 +269,11 @@ h1 {
 }
 
 #forup {
-  font-weight: 300;
+  font-weight: 400;
   margin-top: 25px;
   margin-bottom: 12px;
   font-family: 'Outfit', serif;
-  font-size: clamp(30px, 4vw, 40px);
+  font-size: clamp(30px, 4vw, 40px) !important;
   letter-spacing: 0.11em;
   color: white;
 }
@@ -294,9 +296,9 @@ b { font-size: clamp(20px, 3.5vw, 26px); font-weight: 600; }
 
 /* ── PARAGRAPH / ARTICLE BODY ── */
 p {
-  max-width: 100%;
+  max-width: 98%;
   font-family: "Lexend", Arial, sans-serif;
-  font-size: clamp(24px, 2vw, 30px);
+  font-size: clamp(24px, 2vw, 30px) !important;
   color: white;
   line-height: 1.6;
   margin: 12px 0;
@@ -309,16 +311,16 @@ p {
 }
 
 .see-more {
-  color: #020aed;
+  color:#333df5;
   cursor: pointer;
-  font-size: inherit;
+  font-size: "lexend", sans-serif;
   display: inline-block;
   font-family: 'lexend', sans-serif;
 }
 .see-more:hover { opacity: 0.8; }
 
 .body-link {
-  color: #c9a96e;
+  color: rgb(0, 204, 255);
   text-decoration: underline;
   word-break: break-all;
   cursor: pointer;
@@ -389,7 +391,7 @@ p {
   border-radius: 20px;
   background-color: black;
   width: 400px;
-  height: 270px;
+  height: 290px;
   margin: 8px;
   display: flex;
   flex-direction: column;
@@ -727,7 +729,7 @@ html.light-mode .post-video-error {
 }
 
 #time {
-  font-size: clamp(19px, 2.5vw, 25px);
+  font-size: clamp(20px, 2.5vw, 25px);
   color: gray;
   display: inline-block;
   padding: 4px 0;
@@ -983,7 +985,7 @@ html.light-mode #user-greeting img {
 }
 
 html.light-mode #label {
-  background-color: #e6e6e6;
+  background-color: #66e1f9;
   color: #333;
 }
 

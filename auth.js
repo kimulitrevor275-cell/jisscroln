@@ -130,10 +130,10 @@ sb.auth.getSession().then(function (r) {
       })
       .then(function (data) {
         window._cachedTier = data.tier;
-        var badge = _makeBadge(data.tier, 35);
+        var badge = _makeBadge(data.tier, 20);
         if (el) {
-          el.innerHTML = `${getGreeting()}, <span class="greeting-name">${name}${badge}</span>  <a href="/profile.html" style="color:gray;font-size:20px;">
-          <img src="/pics/11.svg" alt="Profile" style="width:80px;height: 90px;border:none;">
+          el.innerHTML = `<div class="gwrap">${getGreeting()}, <span class="greeting-name">${name}${badge}</span>  <a href="/profile.html" style="color:gray;font-size:20px;">
+          </div><img  class="profileicon"src="/pics/11.svg" alt="Profile" style="border:none;">
           </a>
          ${lightModeToggleMarkup(el)}
           `;
@@ -148,10 +148,10 @@ sb.auth.getSession().then(function (r) {
 
     if (el) {
       el.innerHTML = `
-      <div style="display:"flex"; width:"auto";text-align:right;" href="/login/" >
+      <div style="display:flex; flex-direction:row; width:auto;text-align:right;" href="/login/" >
   
-      <a href="/login/" style="color:white;font-size:30px;text-decoration:none;">
-      <img src="/pics/11.svg" alt="Profile" style="width:80px;height:90px;border:none;">Sign In</a> </div>
+      <a href="/login/" style="display:inline-block; color:white;font-size:30px;text-decoration:none;">
+      <img src="/pics/11.svg" alt="Profile" style="width:50px;height:90px;border:none;"></a><span></span> </div>
       ${lightModeToggleMarkup(el)}`;
     }
   }
