@@ -1,5 +1,13 @@
-  {
-    "rewrites": [
-      { "source": "/share/:id", "destination": "https://jisscrol-opinions.onrender.com/share/:id" }
-    ]
-  }
+ {
+  "rewrites": [
+    { "source": "/share/:id", "destination": "https://jisscrol-opinions.onrender.com/share/:id" }
+  ],
+  "headers": [
+    {
+      "source": "/share/:id",
+      "headers": [
+        { "key": "x-vercel-enable-rewrite-caching", "value": "1" }
+      ]
+    }
+  ]
+}
