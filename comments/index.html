@@ -446,7 +446,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/auth.js"></script>
   <script>
+  (function () {
     const API_BASE = 'https://jisscrol-opinions.onrender.com';
+    const SITE_URL = 'https://jisscroln.vercel.app';
     const MAX_COMMENT_LENGTH = 500;
 
     const params = new URLSearchParams(window.location.search);
@@ -494,17 +496,19 @@
       statusEl.className = 'status' + (type ? ' ' + type : '');
     }
 
-    /* Render's free tier sleeps. Time out slow requests and retry once so
-       the page never hangs forever on the skeleton. */
+    /* Render's free tier sleeps. Reads (GET) time out and retry so the page
+       never hangs forever on the skeleton. Writes (POST) are never retried,
+       so a slow server can't create a duplicate comment or vote. */
     async function apiFetch(path, options, attempt) {
       attempt = attempt || 0;
+      const opts = options || {};
+      const isRead = String(opts.method || 'GET').toUpperCase() === 'GET';
       const controller = new AbortController();
-      const timer = setTimeout(function () { controller.abort(); }, 20000);
+      const timer = setTimeout(function () { controller.abort(); }, isRead ? 20000 : 30000);
       try {
-        const res = await fetch(API_BASE + path, Object.assign({}, options, { signal: controller.signal }));
-        return res;
+        return await fetch(API_BASE + path, Object.assign({}, opts, { signal: controller.signal }));
       } catch (err) {
-        if (attempt < 2) {
+        if (isRead && attempt < 2) {
           setStatus('Waking up the server, hang on…');
           return apiFetch(path, options, attempt + 1);
         }
@@ -512,6 +516,11 @@
       } finally {
         clearTimeout(timer);
       }
+    }
+
+    function friendlyError(error, fallback) {
+      if (error && error.name === 'AbortError') return 'The server is slow to respond. Please try again.';
+      return (error && error.message) || fallback;
     }
 
     /* These three may already be defined in auth.js. Use those if they
@@ -695,7 +704,7 @@
         renderRatingCounts(data.good, data.bad);
         ratingStatus.className = 'status';
       } catch (error) {
-        ratingStatus.textContent = error.message || 'Unable to submit rating.';
+        ratingStatus.textContent = friendlyError(error, 'Unable to submit rating.');
         ratingStatus.className = 'status error';
       } finally {
         likeBtn.disabled = Boolean(currentVote);
@@ -747,6 +756,7 @@
     function renderArticle(article) {
       currentArticle = article;
       renderHeadline(article);
+      document.title = (article.headline ? String(article.headline).slice(0, 80) + ' | ' : '') + 'JisScroL';
       articleTime.textContent = article.time || '';
       articleTime.setAttribute('aria-busy', 'false');
 
@@ -896,7 +906,7 @@
         articleTime.setAttribute('aria-busy', 'false');
         opinionsList.innerHTML = '';
         opinionsList.setAttribute('aria-busy', 'false');
-        setStatus(error.message || 'Unable to load the article from the live feed.', 'error');
+        setStatus(friendlyError(error, 'Unable to load the article from the live feed.'), 'error');
       }
     }
 
@@ -914,6 +924,7 @@
         if (!response.ok) throw new Error('Unable to load opinions');
         const opinions = await response.json();
         opinionsList.setAttribute('aria-busy', 'false');
+        if (/^Waking up/.test(statusEl.textContent)) setStatus('');
 
         if (!Array.isArray(opinions) || !opinions.length) {
           opinionsList.innerHTML = '<div class="empty">No opinions yet. Be the first to share yours.</div>';
@@ -979,11 +990,20 @@
       }
     });
 
+    function buildShareUrl() {
+      if (!currentArticle || !currentArticle.id) return window.location.href;
+      const base = SITE_URL + '/share/' + encodeURIComponent(currentArticle.id);
+      return requestedNews ? base + '?' + params.toString() : base;
+    }
+
     $('shareBtn').addEventListener('click', async function () {
-      const shareUrl = window.location.href;
+      const shareUrl = buildShareUrl();
+      const shareTitle = currentArticle && currentArticle.headline
+        ? String(currentArticle.headline).slice(0, 100)
+        : document.title;
       try {
         if (navigator.share) {
-          await navigator.share({ title: document.title, url: shareUrl });
+          await navigator.share({ title: shareTitle, url: shareUrl });
         } else if (navigator.clipboard && navigator.clipboard.writeText) {
           await navigator.clipboard.writeText(shareUrl);
           setStatus('Link copied to clipboard.', 'success');
@@ -1034,7 +1054,7 @@
         setStatus('Opinion posted successfully.', 'success');
         await loadOpinions(currentArticle.id);
       } catch (error) {
-        setStatus(error.message || 'Unable to post right now.', 'error');
+        setStatus(friendlyError(error, 'Unable to post right now.'), 'error');
       } finally {
         postBtn.textContent = 'Post';
         syncCounter();
@@ -1043,6 +1063,7 @@
 
     syncCounter();
     loadArticle();
+  })();
   </script>
 </body>
 </html>
