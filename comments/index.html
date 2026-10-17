@@ -980,7 +980,10 @@
     });
 
     $('shareBtn').addEventListener('click', async function () {
-      const shareUrl = window.location.href;
+      const shareUrl = currentArticle && currentArticle.id
+        ? API_BASE + '/share/' + encodeURIComponent(currentArticle.id) +
+          (requestedNews ? '?' + params.toString() : '')
+        : window.location.href;
       try {
         if (navigator.share) {
           await navigator.share({ title: document.title, url: shareUrl });
