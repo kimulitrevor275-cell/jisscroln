@@ -447,6 +447,7 @@
   <script src="/auth.js"></script>
   <script>
     const API_BASE = 'https://jisscrol-opinions.onrender.com';
+    const SITE_URL = 'https://jisscroln.vercel.app';
     const MAX_COMMENT_LENGTH = 500;
 
     const params = new URLSearchParams(window.location.search);
@@ -980,7 +981,10 @@
     });
 
     $('shareBtn').addEventListener('click', async function () {
-      const shareUrl = window.location.href;
+      const shareUrl = currentArticle && currentArticle.id
+        ? SITE_URL + '/share/' + encodeURIComponent(currentArticle.id) +
+          (requestedNews ? '?' + params.toString() : '')
+        : window.location.href;
       try {
         if (navigator.share) {
           await navigator.share({ title: document.title, url: shareUrl });
