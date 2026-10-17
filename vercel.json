@@ -1,6 +1,16 @@
 {
   "rewrites": [
-    { "source": "/share/:id", "destination": "https://jisscrol-opinions.onrender.com/share/:id" },
-    { "source": "/og/:id", "destination": "https://jisscrol-opinions.onrender.com/og/:id" }
+    {
+      "source": "/comments/",
+      "has": [
+        { "type": "header", "key": "user-agent", "value": "(?i).*(whatsapp|facebookexternalhit|twitterbot|telegrambot|slackbot|linkedinbot|discordbot|skypeuripreview|googlebot).*" },
+        { "type": "query", "key": "post_id", "value": "(?<id>.+)" }
+      ],
+      "destination": "https://jisscrol-opinions.onrender.com/share/:id"
+    },
+    {
+      "source": "/og/:id",
+      "destination": "https://jisscrol-opinions.onrender.com/og/:id"
+    }
   ]
 }
