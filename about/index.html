@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+  window.va = window.va || function () { (window.va.q = window.va.q || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About JiScroL: terms of use, privacy, data sources and legal information.">
+  <title>About — JiScroL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #f2f5fb;
+      --accent-hover: #8fb0ff;
+      --accent-line: rgba(91, 140, 255, 0.3);
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --text: #e6e9f0;
+      --body: #aeb4c2;
+      --legal: #8a90a0;
+      --muted: #6f7686;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      line-height: 1.8;
+      min-height: 100vh;
+    }
+
+    /* subtle grain texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 64px 32px 100px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 40px;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      color: gray;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    /* Header */
+    .page-header { margin-bottom: 48px; animation: fadeUp 0.7s ease both; }
+
+    .brand-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 7vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+    }
+    .title-line { display: block; }
+    .title-accent { font-style: italic; color: var(--accent); }
+
+    .divider {
+      width: 48px;
+      height: 1px;
+      background: var(--accent);
+      margin-top: 28px;
+      opacity: 0.6;
+    }
+
+    .updated {
+      margin-top: 16px;
+      font-size: 1rem;
+      letter-spacing: 0.06em;
+      color: gray;
+    }
+
+    /* Contents */
+    .toc {
+      margin-bottom: 56px;
+      padding: 20px 24px;
+      background: var(--surface);
+      border: 1px solid var(--accent-line);
+      border-radius: 4px;
+    }
+    .toc .section-label { margin-bottom: 10px; }
+    .toc ol {
+      columns: 2;
+      column-gap: 32px;
+      padding-left: 20px;
+      font-size: 1.05rem;
+      color: var(--muted);
+    }
+    .toc li { margin-bottom: 4px; break-inside: avoid; }
+    .toc a { color: var(--body); text-decoration: none; transition: color 0.2s; }
+    .toc a:hover { color: var(--accent); }
+
+    /* Sections */
+    section {
+      margin-bottom: 52px;
+      scroll-margin-top: 24px;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .section-label {
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 12px;
+      letter-spacing: 0.01em;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: var(--body);
+      line-height: 1.85;
+      margin-bottom: 12px;
+    }
+    p:last-child { margin-bottom: 0; }
+
+    ul.plain {
+      margin: 0 0 12px 20px;
+      font-size: 1.1rem;
+      color: var(--body);
+      line-height: 1.85;
+    }
+    ul.plain li { margin-bottom: 8px; }
+    ul.plain li::marker { color: var(--accent); }
+    strong { color: var(--accent); font-weight: 500; }
+
+    /* Legal block */
+    .legal-block {
+      background: var(--surface);
+      border: 1px solid var(--accent-line);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      padding: 28px 32px;
+    }
+    .legal-block p { font-size: 0.88rem; color: var(--legal); line-height: 1.75; }
+    .legal-block p + p { margin-top: 10px; }
+
+    /* Links */
+    a.contact-link {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent-line);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    a.contact-link:hover { color: var(--accent-hover); border-color: var(--accent); }
+
+    /* Footer line */
+    .page-footer {
+      margin-top: 72px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(91, 140, 255, 0.15);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .copyright { font-size: 0.78rem; color: var(--muted); letter-spacing: 0.05em; margin: 0; }
+    .copyright span {
+      color: var(--accent);
+      font-style: italic;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.9rem;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 520px) {
+      .page-wrapper { padding: 48px 20px 72px; }
+      .legal-block { padding: 20px; }
+      .toc ol { columns: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .page-header, section { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <a class="back-link" href="/index.html">← Back to JiScroL</a>
+
+    <header class="page-header">
+      <span class="brand-label"><img src="/pics/logog.svg" alt="JiScroL" style="width: 100px; height: auto;"></span>
+      <h1 class="page-title">
+        <span class="title-line">About</span>
+        <span class="title-line title-accent">This Platform</span>
+      </h1>
+      <div class="divider"></div>
+      <p class="updated">Last updated: October 2026</p>
+    </header>
+
+    <nav class="toc" aria-label="Contents">
+      <span class="section-label">Contents</span>
+      <ol>
+        <li><a href="#who">Who we are</a></li>
+        <li><a href="#approach">Our approach</a></li>
+        <li><a href="#data-sources">External data &amp; services</a></li>
+        <li><a href="#privacy">Privacy &amp; your data</a></li>
+        <li><a href="#storage">Cookies &amp; local storage</a></li>
+        <li><a href="#contributions">Your contributions</a></li>
+        <li><a href="#copyright">Copyright &amp; usage</a></li>
+        <li><a href="#disclaimer">Disclaimer</a></li>
+        <li><a href="#liability">Limitation of liability</a></li>
+        <li><a href="#conduct">Acceptable use</a></li>
+        <li><a href="#links">Third-party sites</a></li>
+        <li><a href="#takedowns">Takedowns</a></li>
+        <li><a href="#law">Governing law &amp; changes</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ol>
+    </nav>
+
+    <section id="who">
+      <span class="section-label">Who We Are</span>
+      <h2>An Independent Digital Platform</h2>
+      <p>JiScroL is an independent digital platform dedicated to curating and delivering timely updates, entertainment highlights, sports and cultural insights, with a particular focus on music, trends, and everyday developments for a Ugandan audience.</p>
+      <p>Built for people who value both relevance and quality, JiScroL is designed to keep you informed and engaged without the noise. Every piece of content is selected and presented with clarity and intentionality.</p>
+    </section>
+
+    <section id="approach">
+      <span class="section-label">Our Approach</span>
+      <h2>Content With Purpose</h2>
+      <p>JiScroL operates as a news aggregation and content curation platform. Articles, updates, and media highlights are sourced from credible third parties and summarised for informational purposes. Where applicable, original source links are provided for readers who wish to explore further.</p>
+      <p>This platform is independently managed and continuously improved. Content standards, design, and delivery are regularly refined to maintain a high-quality experience.</p>
+    </section>
+
+    <section id="data-sources">
+      <span class="section-label">External Data</span>
+      <h2>Data &amp; Services We Rely On</h2>
+      <p>Some of what you see on JiScroL comes from outside providers. We fetch it through our own servers and display it on the platform. We do not create or own it.</p>
+      <ul class="plain">
+        <li><strong>Sports data.</strong> Fixtures, scores, results and league tables come from a third-party football data provider. Scores may be delayed and are not guaranteed to be live or complete. Club names, crests and logos belong to their respective owners and are shown for identification only.</li>
+        <li><strong>News.</strong> Headlines, short descriptions, images and links come from a third-party news aggregation service and the publishers behind it. Each item links back to its original source, and the publisher keeps all rights in it.</li>
+        <li><strong>Hosting &amp; infrastructure.</strong> The platform runs on third-party cloud services that host our website and servers, store our database, and may deliver and protect traffic. These providers process technical data (such as your IP address) as part of keeping the platform running.</li>
+        <li><strong>Fonts.</strong> Typefaces are loaded from Google Fonts, which means your browser contacts Google's servers when a page loads.</li>
+        <li><strong>Link previews.</strong> When a JiScroL link is shared on a platform such as X, Telegram or WhatsApp, that platform fetches the page title, description and image to build a preview.</li>
+      </ul>
+      <p>Because of these dependencies, parts of the platform may occasionally be slow, outdated or unavailable through no fault of our own. We cache some external data to keep the platform fast and to stay within provider limits. Data you see may therefore be up to a few hours old. Data we receive is used only to operate and display the platform, and we do not use it to profile you.</p>
+    </section>
+
+    <section id="privacy">
+      <span class="section-label">Privacy</span>
+      <h2>Privacy &amp; Your Data</h2>
+      <p>We keep data collection to what the platform needs to work. Here is what that means in practice:</p>
+      <ul class="plain">
+        <li><strong>What you give us.</strong> Ratings, votes and opinions you submit, together with the name or username shown beside them.</li>
+        <li><strong>What is collected automatically.</strong> Our hosting providers keep standard server logs, which may include your IP address, device and browser type, pages requested and timestamps. These are used for security, troubleshooting and measuring load.</li>
+        <li><strong>How we use it.</strong> To display your contributions, prevent abuse and spam, keep the platform running, and improve it.</li>
+        <li><strong>What we don't do.</strong> We do not sell your personal information.</li>
+        <li><strong>Sharing.</strong> Data is shared only with the service providers that run the platform, or where the law requires it.</li>
+        <li><strong>Retention &amp; deletion.</strong> We keep contributions for as long as the platform operates or until removal is requested. To have your contributions or related data removed, email us at the address below.</li>
+        <li><strong>Your rights.</strong> You may ask what data we hold about you, request corrections, or request deletion, in line with the Data Protection and Privacy Act, 2019 of Uganda and any other law that applies to you.</li>
+        <li><strong>Children.</strong> JiScroL is not intended for children under 13, and we do not knowingly collect their personal information.</li>
+      </ul>
+      <p>No online service is completely secure. We take reasonable steps to protect data, but we cannot guarantee absolute security.</p>
+    </section>
+
+    <section id="storage">
+      <span class="section-label">Cookies &amp; Storage</span>
+      <h2>Cookies &amp; Local Storage</h2>
+      <p>JiScroL may store small pieces of information in your browser, for example your light or dark mode choice or whether you have already voted on a post, so the platform remembers you between visits. This stays on your device and you can clear it at any time through your browser settings. Third-party services such as Google Fonts and embedded media may set their own cookies under their own policies.</p>
+    </section>
+
+    <section id="contributions">
+      <span class="section-label">User Contributions</span>
+      <h2>Opinions &amp; Ratings You Post</h2>
+      <p>You are responsible for anything you post. By submitting an opinion or other content, you confirm it is your own, that it is lawful, and you grant JiScroL a non-exclusive, royalty-free right to display it on the platform. Contributions represent the views of their authors, not of JiScroL.</p>
+      <p>We may remove or hide any contribution that is abusive, unlawful, misleading, spam, or otherwise breaks these terms, without notice.</p>
+    </section>
+
+    <section id="copyright">
+      <span class="section-label">Legal</span>
+      <h2>Copyright &amp; Usage</h2>
+      <div class="legal-block">
+        <p>All original content on this website, including text, design elements, layout, and structure, is the intellectual property of JiScroL unless otherwise stated. Unauthorised reproduction, distribution, or modification of any original material without prior written permission is strictly prohibited.</p>
+        <p>Third-party content featured on this platform remains the property of the respective rights holders. JiScroL makes no claim of ownership over sourced material and provides attribution and source links where applicable.</p>
+        <p>Users are welcome to share links to content on this platform, provided proper context is maintained and no misrepresentation of the source occurs.</p>
+      </div>
+    </section>
+
+    <section id="disclaimer">
+      <span class="section-label">Disclaimer</span>
+      <h2>Content Sourcing &amp; Accuracy</h2>
+      <p>JiScroL is a content curation and aggregation platform, not a registered news organisation. All summaries, highlights, scores and curated content are provided for informational purposes only. For full original reporting, please refer to the linked source provided alongside each article.</p>
+      <p>While we make every effort to feature credible and accurate information, JiScroL does not independently verify all third-party content. We make no guarantees regarding the completeness, accuracy, or timeliness of any content sourced from external parties. Nothing on this platform is professional, legal, financial or betting advice. Readers are encouraged to consult original sources before acting on any information.</p>
+    </section>
+
+    <section id="liability">
+      <span class="section-label">Limitation of Liability</span>
+      <h2>No Warranties &amp; Liability Cap</h2>
+      <div class="legal-block">
+        <p>This platform is provided on an <strong>"as is"</strong> and <strong>"as available"</strong> basis without warranties of any kind, either express or implied. JiScroL makes no warranty that the platform will be uninterrupted, error-free, or free of harmful components.</p>
+        <p>To the fullest extent permitted by applicable law, JiScroL and its owner shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising from your use of, or inability to use, this platform or any content published on it. This includes, but is not limited to, damages resulting from reliance on information obtained through this site, or from outages of third-party services we depend on.</p>
+        <p>Your use of this platform is entirely at your own risk.</p>
+      </div>
+    </section>
+
+    <section id="conduct">
+      <span class="section-label">User Conduct</span>
+      <h2>Acceptable Use</h2>
+      <p>By accessing JiScroL, you agree not to use this platform for any unlawful purpose, to post or transmit harmful, hateful, defamatory or misleading content, to attempt unauthorised access to any part of the platform, to scrape or copy it at scale, or to engage in any activity that disrupts or interferes with the platform's operation.</p>
+      <p>JiScroL reserves the right to restrict access to any user who violates these conditions, without prior notice.</p>
+    </section>
+
+    <section id="links">
+      <span class="section-label">External Links</span>
+      <h2>Third-Party Sites</h2>
+      <p>This platform contains links to external websites for reference and attribution purposes. JiScroL has no control over the content, privacy practices, or reliability of third-party sites and accepts no responsibility for them. The inclusion of any link does not constitute an endorsement of the linked site or its content.</p>
+    </section>
+
+    <section id="takedowns">
+      <span class="section-label">DMCA &amp; Takedowns</span>
+      <h2>Rights &amp; Removal Requests</h2>
+      <p>If you are a rights holder and believe that content published on this platform infringes your intellectual property, you may submit a removal request to <a href="mailto:thejisscrol@gmail.com" class="contact-link">thejisscrol@gmail.com</a>. Please include a clear description of the content in question, its location on the platform, and evidence of your ownership or authorisation to act.</p>
+      <p>We take all such requests seriously and will respond in a reasonable timeframe. JiScroL respects the rights of content creators and will act promptly on valid claims.</p>
+    </section>
+
+    <section id="law">
+      <span class="section-label">Governing Law</span>
+      <h2>Jurisdiction &amp; Changes</h2>
+      <p>This platform is operated independently from Uganda. Any disputes arising from your use of JiScroL shall be governed by the laws of the Republic of Uganda, without regard to conflict of law principles, and the courts of Uganda shall have jurisdiction over them.</p>
+      <p>JiScroL may update this page at any time. The "last updated" date at the top shows when it last changed, and continued use of the platform after a change means you accept the updated terms.</p>
+    </section>
+
+    <section id="contact">
+      <span class="section-label">Contact</span>
+      <h2>Questions or Requests</h2>
+      <p>For privacy requests, data removal, takedowns or any question about these terms, email <a href="mailto:thejisscrol@gmail.com" class="contact-link">thejisscrol@gmail.com</a>.</p>
+    </section>
+
+    <footer class="page-footer">
+      <p class="copyright">© <span id="yr">2026</span> <span>JiScroL</span>. All rights reserved.</p>
+      <p class="copyright">Independent &amp; Evolving</p>
+    </footer>
+
+  </div>
+  <script>document.getElementById("yr").textContent = new Date().getFullYear();</script>
+</body>
+</html>

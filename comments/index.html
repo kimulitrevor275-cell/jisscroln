@@ -1,14 +1,21 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    
+  window.va = window.va || function () { (window.va.q = window.va.q || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JisScroL Comments</title>
+ 
+  <title>Comments</title>
   <script src="/theme.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Outfit:wght@100..900&display=swap">
   <link rel="stylesheet" href="/global.css">
+  <script src="/global.js"></script>
   <style>
     :root {
       --bg: #0c0c0c;
@@ -147,12 +154,12 @@
     .icon-btn {
       display: grid;
       place-items: center;
-      width: 48px !important;
-      height: 48px !important;
-      padding: 0;
+      width: 38px !important;
+      height: 38px !important;
+      padding: 7px;
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,0.32);
-      background: rgba(12,12,12,0.76);
+      background: rgba(64, 64, 64, 0.76);
       color: var(--text);
       cursor: pointer;
       box-shadow: 0 3px 14px rgba(0,0,0,0.36);
@@ -177,7 +184,7 @@
       margin: 0 0 8px;
       font-family: "Lexend", sans-serif;
       font-weight: 600;
-      font-size: max(25px, clamp(1.5rem, 3vw, 2.6rem));
+      font-size: max(20px, clamp(1.5rem, 3vw, 2.6rem));
       line-height: 1.12;
       letter-spacing: -0.03em;
       color: #fff;
@@ -201,7 +208,7 @@
       display: inline-block;
       margin: 6px 0 0;
       color: var(--muted);
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 500;
       line-height: 1.25;
       letter-spacing: 0.02em;
@@ -270,7 +277,7 @@
     .section-title {
       margin: 0;
       padding: 2px;
-      font-size: max(25px, 1.2rem);
+      font-size: max(16px, 0.8rem);
       font-family: "Lexend", sans-serif;
       letter-spacing: 0.1em;
       color: var(--text);
@@ -279,17 +286,17 @@
     .opinions-list { padding: 0 12px 12px; display: grid; gap: 12px; }
 
     .opinion-card {
-      background: var(--panel);
+      background: black;
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px 12px 10px;
+      border-radius: 4px;
+      padding: 8px;
       box-shadow: 0 8px 25px var(--shadow);
     }
     .opinion-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
     .opinion-user { display: flex; align-items: center; gap: 6px; font-weight: 700; color: var(--text); font-size: 18px; min-width: 0; }
-    .signature-badge { width: 19px; height: 19px; flex: 0 0 18px; vertical-align: middle; }
-    .opinion-time { display: block; margin-top: 8px; color: var(--muted); font-size: 18px; white-space: nowrap; text-align: right; }
-    .opinion-text { color: var(--text); font-size: 18px; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
+    .signature-badge { width: 16px; height: 19px; flex: 0 0 18px; vertical-align: middle; }
+    .opinion-time { display: block; margin-top: 8px; color: var(--muted); font-size: 14px; white-space: nowrap; text-align: right; }
+    .opinion-text { color: var(--text); font-size: 16px; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
 
     .opinion-media { margin-top: 10px; display: grid; gap: 8px; }
     .opinion-media iframe, .opinion-media video { width: 100%; max-height: 220px; border: 0; border-radius: 10px; background: #000; display: block; }
@@ -305,7 +312,7 @@
       left: 16px;
       right: 16px;
       bottom: calc(var(--keyboard-offset, 0px) + env(safe-area-inset-bottom));
-      z-index: 5;
+      z-index: 100;
       display: flex;
       align-items: flex-end;
       gap: 10px;
@@ -314,14 +321,14 @@
       flex: 1 1 auto;
       width: auto;
       min-width: 0;
-      min-height: 48px;
-      max-height: 120px;
+      min-height: 20px;
+      max-height: 180px;
       resize: none;
-      background: var(--panel-2);
-      color: var(--text);
-      border: 1px solid rgba(201,169,110,0.35);
-      border-radius: 24px;
-      padding: 13px 16px;
+      background: transparent;
+      color: white;
+      border: 3px solid rgba(61, 191, 239, 0.715);
+      border-radius: 100px;
+      padding: 10px;
       outline: none;
       line-height: 1.35;
       overflow-y: auto;
@@ -329,19 +336,29 @@
     .composer textarea:focus { border-color: rgba(118, 222, 248, 0.8); box-shadow: 0 0 0 3px rgba(118, 222, 248, 0.12); }
 
     .composer-row { display: grid; justify-items: end; gap: 5px; flex: 0 0 auto; }
-    .char-count { color: var(--muted); font-size: 14px; }
+    .char-count {display: none; color: var(--muted); font-size: 14px; }
 
     .post-btn {
       border: none;
-      border-radius: 999px;
-      background: var(--accent);
-      color: #111;
-      font-weight: 700;
-      padding: 12px 20px;
+      border-radius: 100px;
+      background: transparent;
+      border: 2px solid rgb(76, 198, 254);
+      background-color: #4cccffa7;
+      color: white;
+      font-weight: 400;
+      padding: 10px;
       cursor: pointer;
-      min-width: 76px;
-      min-height: 48px;
+      min-width: 40px;
+      min-height: 58px;
     }
+   html.light-mode .composer textarea{
+    color: #000;
+   
+   }
+   html.light-mode .post-btn{
+          border: 2px solid rgb(23, 183, 219);
+           background-color:rgba(43, 171, 226, 0.562) ;
+   }
     .post-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
     .status { min-height: 18px; padding: 0 0 8px; font-size: 20px; color: var(--muted); }
@@ -490,16 +507,13 @@
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
     }
-
-    function setStatus(message, type) {
-      statusEl.textContent = message || '';
-      statusEl.className = 'status' + (type ? ' ' + type : '');
-    }
-
-    /* Render's free tier sleeps. Reads (GET) time out and retry so the page
-       never hangs forever on the skeleton. Writes (POST) are never retried,
-       so a slow server can't create a duplicate comment or vote. */
-    async function apiFetch(path, options, attempt) {
+function setStatus(message, type) {
+  if (!message) return;
+  if (type === 'success') notify(message, 'success');
+  else if (type === 'error') notify(message, 'error', 6000);
+  else notify(message, 'info', 3000);
+}
+       async function apiFetch(path, options, attempt) {
       attempt = attempt || 0;
       const opts = options || {};
       const isRead = String(opts.method || 'GET').toUpperCase() === 'GET';
@@ -509,7 +523,7 @@
         return await fetch(API_BASE + path, Object.assign({}, opts, { signal: controller.signal }));
       } catch (err) {
         if (isRead && attempt < 2) {
-          setStatus('Waking up the server, hang on…');
+          setStatus('taking so long, hang on…');
           return apiFetch(path, options, attempt + 1);
         }
         throw err;
@@ -519,12 +533,10 @@
     }
 
     function friendlyError(error, fallback) {
-      if (error && error.name === 'AbortError') return 'The server is slow to respond. Please try again.';
+      if (error && error.name === 'AbortError') return 'Taking  slow to respond. Pull down to refresh';
       return (error && error.message) || fallback;
     }
 
-    /* These three may already be defined in auth.js. Use those if they
-       exist, otherwise fall back to simple versions. */
     function safeFormatBody(text) {
       if (typeof window.formatBody === 'function') return window.formatBody(text);
       return escapeHtml(text).replace(/\n/g, '<br>');
@@ -756,7 +768,7 @@
     function renderArticle(article) {
       currentArticle = article;
       renderHeadline(article);
-      document.title = (article.headline ? String(article.headline).slice(0, 80) + ' | ' : '') + 'JisScroL';
+      document.title = (article.headline ? String(article.headline).slice(0, 80) + ' | ' : '') + 'JiScroL';
       articleTime.textContent = article.time || '';
       articleTime.setAttribute('aria-busy', 'false');
 
@@ -790,7 +802,7 @@
 
     async function fetchArticles() {
       const response = await apiFetch('/articles?category=trends');
-      if (!response.ok) throw new Error('Unable to load feed articles.');
+      if (!response.ok) throw new Error('Unable to load articles.');
       const articles = await response.json();
       if (!Array.isArray(articles)) throw new Error('The feed returned invalid article data.');
       return articles;
@@ -924,10 +936,9 @@
         if (!response.ok) throw new Error('Unable to load opinions');
         const opinions = await response.json();
         opinionsList.setAttribute('aria-busy', 'false');
-        if (/^Waking up/.test(statusEl.textContent)) setStatus('');
-
+       
         if (!Array.isArray(opinions) || !opinions.length) {
-          opinionsList.innerHTML = '<div class="empty">No opinions yet. Be the first to share yours.</div>';
+          opinionsList.innerHTML = '<div class="empty"> No opinions yet, Be the first to share yours.</div>';
           return;
         }
 
@@ -963,7 +974,7 @@
         console.error('loadOpinions failed:', error);
         opinionsList.innerHTML = '<div class="empty">Unable to load opinions right now.</div>';
         opinionsList.setAttribute('aria-busy', 'false');
-        setStatus('Could not fetch comments from the live API.', 'error');
+        setStatus('Could not fetch comments right now, try again in a momen...t', 'error');
       }
     }
 
@@ -1051,10 +1062,10 @@
 
         input.value = '';
         syncCounter();
-        setStatus('Opinion posted successfully.', 'success');
+        setStatus('Opinion posted successfully!', 'success');
         await loadOpinions(currentArticle.id);
       } catch (error) {
-        setStatus(friendlyError(error, 'Unable to post right now.'), 'error');
+        setStatus(friendlyError(error, 'Unable to post right now... try again '), 'error');
       } finally {
         postBtn.textContent = 'Post';
         syncCounter();

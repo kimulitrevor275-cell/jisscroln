@@ -194,7 +194,7 @@ async function renderNewsModulePermanent() {
     container.setAttribute('aria-busy', 'false');
   } catch (error) {
     console.error('News fetch error:', error);
-    container.textContent = 'Could not load Uganda headlines. Please try again later.';
+    container.textContent = `Sorry we couldn't  load Uganda headlines. Please try again later.`;
     container.setAttribute('aria-busy', 'false');
   }
 }

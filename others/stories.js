@@ -37,13 +37,11 @@ function render(DATA) {
         '<div class="preview-meta">' +
           '<div class="meta-left">' +
             '<div class="mini-av">' + (s.initials || 'AN') + '</div>' +
+            
             '<span class="meta-author">' + (s.author || 'Anonymous') + '</span>' +
-            '<span class="dot">·</span>' +
-            '<span>' + (s.read_time || s.read || '') + ' read</span>' +
-            '<span class="dot">·</span>' +
-            '<span>' + (s.time || '') + '</span>' +
+            
           '</div>' +
-          '<div class="read-more">see more<span class="read-arrow">⌄</span></div>' +
+          '<div class="read-more">See full story<span class="read-arrow"></span></div>' +
         '</div>' +
       '</div>' +
 

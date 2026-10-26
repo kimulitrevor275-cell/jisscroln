@@ -1,10 +1,3 @@
-// Needs jis.js loaded first
-// (API, showSkeleton, renderBody, attachSeeMore, renderRateboxAndEngagement, initEngagement)
-
-// ─────────────────────────────────────────
-//  KEEP BACKEND AWAKE
-// ─────────────────────────────────────────
-
 function keepSportsApiAwake() {
   fetch(API + "/").catch(function (error) {
     console.error("Failed to keep sports API awake:", error);
@@ -15,7 +8,7 @@ keepSportsApiAwake();
 setInterval(keepSportsApiAwake, 5 * 60 * 1000);
 
 // ─────────────────────────────────────────
-//  RENDER ENGINE
+//  ARTICLES (unchanged)
 // ─────────────────────────────────────────
 
 function renderSportsPost(post) {
@@ -28,8 +21,8 @@ function renderSportsPost(post) {
         ? ` <a href="${post.link}" target="_blank" rel="noopener noreferrer">view ↗</a>`
         : ""
     }</h2>
-    ${renderBody(post)}
     ${renderArticleImages(post)}
+     ${renderBody(post)}
     ${renderRateboxAndEngagement(postId)}
     ${post.time ? `<br><b id="time">${post.time}</b>` : ""}
     
@@ -59,78 +52,11 @@ function renderSports(posts) {
   });
 }
 
+// ─────────────────────────────────────────
+//  SHARED HELPERS
+// ─────────────────────────────────────────
 
 const BACKEND = 'https://jisscrol-opinions.onrender.com';
-
-async function loadFootball() {
-  try {
-    const response = await fetch(`${BACKEND}/footstat`);
-    const data = await response.json();
-    renderMatches(data.matches);
-  } catch (error) {
-    console.error('Football fetch error:', error);
-    document.getElementById('matches-scroll').innerHTML = 
-      '<p style="color: #999; font-size: 12px; padding: 12px;">Unable to load</p>';
-  }
-}
-
-function renderMatches(matches) {
-  const container = document.getElementById('matches-scroll');
-  
-  if (!matches || matches.length === 0) {
-    container.innerHTML = '<p style="color: #999; font-size: 12px; padding: 12px;">No matches</p>';
-    return;
-  }
-
-  container.innerHTML = matches
-    .slice(0, 20)
-    .map(match => `
-      <div class="match-card">
-        <div class="match-date">${formatDate(match.utcDate)}</div>
-        
-        <div class="match-matchup">
-          <div class="team-score">
-            <div class="team-info">
-              ${match.homeTeam.crest ? `<img src="${match.homeTeam.crest}" alt="" class="team-logo">` : '<div class="team-logo"></div>'}
-              <div class="team-name">${match.homeTeam.name.substring(0, 3).toUpperCase()}</div>
-            </div>
-            <div class="score">${match.score?.fullTime?.home ?? '-'}</div>
-          </div>
-          
-          <div class="team-score">
-            <div class="team-info">
-              ${match.awayTeam.crest ? `<img src="${match.awayTeam.crest}" alt="" class="team-logo">` : '<div class="team-logo"></div>'}
-              <div class="team-name">${match.awayTeam.name.substring(0, 3).toUpperCase()}</div>
-            </div>
-            <div class="score">${match.score?.fullTime?.away ?? '-'}</div>
-          </div>
-        </div>
-        
-        <div class="match-divider"></div>
-        <div class="match-time">${formatTime(match.utcDate)}</div>
-        <div class="match-status">${match.status}</div>
-      </div>
-    `)
-    .join('');
-}
-
-function formatDate(utcDate) {
-  const date = new Date(utcDate);
-  return date.toLocaleDateString('en-UG', { month: 'short', day: 'numeric' });
-}
-
-function formatTime(utcDate) {
-  const date = new Date(utcDate);
-  return date.toLocaleTimeString('en-UG', { hour: '2-digit', minute: '2-digit' });
-}
-
-document.addEventListener('DOMContentLoaded', loadFootball);
-setInterval(loadFootball, 1800000);
-
-
-// Replace the football + standings parts of your sports JS with this.
-// Keep your existing renderSportsPost / renderSports / articles fetch as they are.
-
 
 const emptyMsg = (t) => `<p class="empty-msg">${t}</p>`;
 
@@ -138,7 +64,6 @@ const emptyMsg = (t) => `<p class="empty-msg">${t}</p>`;
 const isPL = (code, name) => code === 'PL' || /premier league/i.test(name || '');
 const plFirst = (a, b) => Number(b.pl) - Number(a.pl);
 
-// ── Formatting ─────────────────────────
 function formatDate(utcDate) {
   return new Date(utcDate).toLocaleDateString('en-UG', { month: 'short', day: 'numeric' });
 }
@@ -146,23 +71,38 @@ function formatTime(utcDate) {
   return new Date(utcDate).toLocaleTimeString('en-UG', { hour: '2-digit', minute: '2-digit' });
 }
 function statusInfo(status) {
-  if (status === 'IN_PLAY' || status === 'PAUSED') return { label: 'Live', cls: 'live' };
+  if (status === 'IN_PLAY') return { label: 'Live', cls: 'live' };
+  if (status === 'PAUSED') return { label: 'HT', cls: 'live' };
   if (status === 'FINISHED') return { label: 'FT', cls: '' };
   if (status === 'POSTPONED') return { label: 'PPD', cls: '' };
   return { label: 'Upcoming', cls: '' };
 }
 
 // ══════════════════════════════════════
-//  MATCHES
+//  MATCHES  (Live / Played / Upcoming  +  league tabs)
 // ══════════════════════════════════════
-let allMatches = [];
-let activeMatchTab = 'ALL';
+let footData = { live: [], played: [], upcoming: [], delayed: false };
+let activeStatus = null;     // 'live' | 'played' | 'upcoming'
+let activeMatchTab = null;   // league code
+
+const STATUS_TABS = [['upcoming', 'Upcoming'],['live', 'Live'], ['played', 'Played'], ];
+const EMPTY = {
+  live: 'No live matches right now',
+  played: 'No recent results',
+  upcoming: 'No upcoming matches'
+};
 
 async function loadFootball() {
   try {
     const response = await fetch(`${BACKEND}/footstat`);
     const data = await response.json();
-    allMatches = data.matches || [];
+    footData = {
+      live: data.live || [],
+      played: data.played || [],
+      upcoming: data.upcoming || data.matches || [],   // data.matches = old backend
+      delayed: !!data.delayed
+    };
+    if (!activeStatus) activeStatus = footData.live.length ? 'live' : 'upcoming';
     renderMatches();
   } catch (error) {
     console.error('Football fetch error:', error);
@@ -174,7 +114,7 @@ function matchCard(match) {
   const st = statusInfo(match.status);
   const h = match.score?.fullTime?.home;
   const a = match.score?.fullTime?.away;
-  const started = h != null && a != null;
+  const started = st.cls === 'live' || match.status === 'FINISHED' || (h != null && a != null);
 
   const team = (t, side) => `
     <div class="team ${side}">
@@ -183,7 +123,7 @@ function matchCard(match) {
     </div>`;
 
   const middle = started
-    ? `<div class="match-mid">${h} - ${a}</div>`
+    ? `<div class="match-mid">${h ?? 0} - ${a ?? 0}</div>`
     : `<div class="match-mid time">${formatTime(match.utcDate)}</div>`;
 
   return `
@@ -198,17 +138,41 @@ function matchCard(match) {
     </div>`;
 }
 
+// creates a small host <div> right above the scroller the first time it's needed
+function ensureHost(id, scroller) {
+  let el = document.getElementById(id);
+  if (!el) {
+    el = document.createElement('div');
+    el.id = id;
+    scroller.parentNode.insertBefore(el, scroller);
+  }
+  return el;
+}
+
 function renderMatches() {
   const container = document.getElementById('matches-scroll');
+  const statusHost = ensureHost('status-tabs', container);
+  const leagueHost = ensureHost('matches-tabs', container);
 
-  if (!allMatches.length) {
-    container.innerHTML = emptyMsg('No matches');
+  // ── status pills: Live | Played | Upcoming ──
+  statusHost.innerHTML =
+    `<div class="tabs" id="status-pills">${STATUS_TABS.map(([key, label]) =>
+      `<button class="tab ${key === activeStatus ? 'active' : ''} ${key === 'live' && footData.live.length ? 'has-live' : ''}" data-status="${key}">${label} <span>${footData[key].length}</span></button>`
+    ).join('')}</div>` +
+    (activeStatus === 'live' && footData.delayed
+      ? '<p class="empty-msg">Live scores can run a few minutes behind.</p>'
+      : '');
+
+  const list = footData[activeStatus] || [];
+  if (!list.length) {
+    leagueHost.innerHTML = '';
+    container.innerHTML = emptyMsg(EMPTY[activeStatus]);
     return;
   }
 
-  // Build competition tabs only if the API provides competition info
+  // ── league tabs, built from the matches in this status ──
   const comps = [];
-  allMatches.forEach((m) => {
+  list.forEach((m) => {
     const c = m.competition;
     if (c && !comps.find((x) => x.code === (c.code || c.name))) {
       comps.push({ code: c.code || c.name, name: c.name, pl: isPL(c.code, c.name) });
@@ -216,42 +180,41 @@ function renderMatches() {
   });
   comps.sort(plFirst);
 
-  if (comps.length > 1 && activeMatchTab === 'ALL') activeMatchTab = comps[0].code;
+  const showLeagues = comps.length > 1;
+  if (showLeagues && !comps.find((c) => c.code === activeMatchTab)) activeMatchTab = comps[0].code;
 
-  const visible = comps.length > 1
-    ? allMatches.filter((m) => (m.competition?.code || m.competition?.name) === activeMatchTab)
-    : allMatches;
+  const visible = showLeagues
+    ? list.filter((m) => (m.competition?.code || m.competition?.name) === activeMatchTab)
+    : list;
 
-  const tabs = comps.length > 1
-    ? `<div class="tabs" data-tabs="matches">${comps.map((c) =>
+  leagueHost.innerHTML = showLeagues
+    ? `<div class="tabs">${comps.map((c) =>
         `<button class="tab ${c.code === activeMatchTab ? 'active' : ''}" data-code="${c.code}">${c.name}</button>`
       ).join('')}</div>`
     : '';
 
-  // tabs live above the scroller
-  let tabsHost = document.getElementById('matches-tabs');
-  if (!tabsHost) {
-    tabsHost = document.createElement('div');
-    tabsHost.id = 'matches-tabs';
-    container.parentNode.insertBefore(tabsHost, container);
-  }
-  tabsHost.innerHTML = tabs;
-
-  container.innerHTML = visible.slice(0, 20).map(matchCard).join('') || emptyMsg('No matches');
+  container.innerHTML = visible.slice(0, 20).map(matchCard).join('') || emptyMsg(EMPTY[activeStatus]);
 }
 
 document.addEventListener('click', (e) => {
+  const pill = e.target.closest('#status-pills .tab');
+  if (pill) {
+    activeStatus = pill.dataset.status;
+    renderMatches();
+    return;
+  }
   const tab = e.target.closest('#matches-tabs .tab');
-  if (!tab) return;
-  activeMatchTab = tab.dataset.code;
-  renderMatches();
+  if (tab) {
+    activeMatchTab = tab.dataset.code;
+    renderMatches();
+  }
 });
 
 document.addEventListener('DOMContentLoaded', loadFootball);
-setInterval(loadFootball, 1800000);
+setInterval(loadFootball, 60000);   // reads your own cached endpoint, so it's cheap
 
 // ══════════════════════════════════════
-//  STANDINGS
+//  STANDINGS (unchanged)
 // ══════════════════════════════════════
 let leagues = [];
 let activeLeague = 0;
@@ -354,8 +317,9 @@ document.addEventListener('click', (e) => {
 
 document.addEventListener('DOMContentLoaded', loadStandings);
 setInterval(loadStandings, 3600000);
+
 // ─────────────────────────────────────────
-//  FETCH AND RENDER
+//  FETCH AND RENDER ARTICLES (unchanged)
 // ─────────────────────────────────────────
 
 showSkeleton("sports", 3);

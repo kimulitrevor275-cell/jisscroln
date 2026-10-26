@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Lexend:wght@300..700&family=Outfit:wght@400..700&family=Tinos:wght@400;700&display=swap');
 .search-page {
   --search-text: #f5f3ed;
   --search-muted: #aaa69f;
@@ -7,9 +8,9 @@
   --search-accent: #1585d0;
   --search-accent-hover: #55b7ff;
   box-sizing: border-box;
-  width: min(100%, 1120px);
-  margin: 0 auto;
-  padding: 0 16px;
+  width: 100%, 1120px;
+  margin: 0;
+  padding: 4px;
   color: inherit;
   font-family: inherit;
 }
@@ -27,12 +28,13 @@ html.light-mode .search-page {
 .search-intro {
   position: relative;
   overflow: hidden;
-  padding: clamp(24px, 5vw, 52px);
+  padding: clamp(20px, 3vw, 52px);
   border: 1px solid rgba(29, 155, 240, .3);
   border-radius: 18px;
   background:
     radial-gradient(ellipse at 90% 0%, rgba(29, 155, 240, .16), transparent 42%),
     linear-gradient(125deg, #181715, #101010 68%);
+    
 }
 
 .search-intro.is-searching {
@@ -67,18 +69,20 @@ html.light-mode .search-intro.is-searching {
 }
 
 .search-eyebrow,
-.section-kicker {
+#forupcat {
   margin: 0;
-  color: var(--search-accent);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  font: 600 25px Outfit, sans-serif;
+  
+  color: white;
+  font-family: 'Tinos', 'Times New Roman', Times, serif;
+  font-weight: 700;
+  font: 600 20px Outfit, sans-serif;
   letter-spacing: .16em;
 }
 
 .search-intro h1 {
   margin: 10px 0 6px;
   color: #f7f5f0;
-  font: 500 clamp(34px, 7vw, 58px)/1.05 Outfit, sans-serif;
+  font: 500 clamp(20px, 2vw, 38px)/1.05 Outfit, sans-serif;
   letter-spacing: -.035em;
 }
 
@@ -108,27 +112,23 @@ html.light-mode .search-intro.is-searching {
   margin-bottom: 0;
 }
 
-.search-input-icon {
-  color: var(--search-accent);
-  font: 400 27px/1 Arial, sans-serif;
-}
 
 #site-search-input {
   flex: 1;
   min-width: 0;
-  padding: 10px 0;
+  padding: 7px 0;
   border: 0;
   outline: none;
   background: transparent;
   color: #f5f5f5;
   font-family: inherit;
-  font-size: 27px;
+  font-size: clamp(18px,2vw, 27px);
   font-weight: 400;
   line-height: 1.4;
 }
 
 #site-search-input::placeholder {
-  color: #89857e;
+  color: #dcdbd9;
 }
 
 #site-search-input:focus-visible {
@@ -151,7 +151,7 @@ html.light-mode .search-intro.is-searching {
   border-radius: 8px;
   background: var(--search-accent);
   color: #17130d;
-  font: 600 20px Outfit, sans-serif;
+  font: 600 17px Outfit, sans-serif;
   cursor: pointer;
   transition: background .15s ease, transform .15s ease;
 }
@@ -187,26 +187,20 @@ html.light-mode .search-intro.is-searching {
   display: flex;
   align-items: end;
   justify-content: space-between;
-  gap: 18px;
+  gap: 10px;
   margin-bottom: 16px;
 }
 
-.discovery-heading h2,
-.results-heading h2 {
-  margin: 4px 0 0;
-  color: var(--search-text);
-  font: 500 clamp(28px, 4vw, 34px)/1.15 Outfit, sans-serif;
-}
 
 .discovery-heading a {
-  flex: 0 0 auto;
+  flex: 1 0 auto;
   color: var(--search-accent);
-  font: 500 13px Outfit, sans-serif;
+  font: 500 23px times, sans-serif;
   text-decoration: none;
 }
 
 .discovery-heading a span {
-  padding-left: 4px;
+  font-size: 18px;
 }
 
 .discovery-heading a:hover {
@@ -316,7 +310,7 @@ html.light-mode .search-intro.is-searching {
   position: absolute;
   z-index: 0;
   color: rgb(255 255 255 / 30%);
-  content: "J";
+  content: "";
   font: 500 clamp(80px, 18vw, 160px)/.8 Outfit, sans-serif;
   letter-spacing: -.1em;
   pointer-events: none;
@@ -330,9 +324,9 @@ html.light-mode .search-intro.is-searching {
   right: 14px;
   bottom: 12px;
   color: rgb(255 255 255 / 65%);
-  content: "JISSCROL";
-  font: 600 9px Outfit, sans-serif;
-  letter-spacing: .2em;
+  content: "JiScroL";
+  font: 600 16px roboto, sans-serif;
+  letter-spacing: 0;
   pointer-events: none;
 }
 
@@ -572,7 +566,7 @@ html.light-mode .search-intro.is-searching {
   margin-bottom: 4px;
   color: var(--search-accent);
   font-family: inherit;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.35;
   letter-spacing: .08em;

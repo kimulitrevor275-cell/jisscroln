@@ -1,6 +1,4 @@
-// Needs jis.js loaded first (API, showSkeleton, formatBody, renderRateboxAndEngagement, initEngagement)
 
-// Keep the Render backend awake
 fetch(API + "/").catch(function () {});
 setInterval(
   function () {
@@ -8,24 +6,47 @@ setInterval(
   },
   5 * 60 * 1000,
 );
-
-
-
-// ─────────────────────────────────────────
-//  RENDER ENGINE
-// ─────────────────────────────────────────
-
 function renderTicker(tickers) {
   var tickerEl = document.getElementById("ticker");
   if (!tickerEl) return;
   tickerEl.innerHTML = "";
-  tickers.forEach(function (t) {
-    var span = document.createElement("span");
-    span.textContent = t;
-    tickerEl.appendChild(span);
-  });
-}
+  if (!Array.isArray(tickers) || !tickers.length) return;
 
+  var wrap = tickerEl.parentElement;
+
+  function buildGroup() {
+    var group = document.createElement("div");
+    group.className = "ticker-group";
+    tickers.forEach(function (t) {
+      var span = document.createElement("span");
+      span.textContent = t;
+      group.appendChild(span);
+    });
+    return group;
+  }
+
+  var group = buildGroup();
+  tickerEl.appendChild(group);
+
+  
+  var guard = 0;
+  while (group.offsetWidth < wrap.offsetWidth && guard++ < 10) {
+    tickers.forEach(function (t) {
+      var span = document.createElement("span");
+      span.textContent = t;
+      group.appendChild(span);
+    });
+  }
+
+  // Second identical copy makes the -50% loop seamless
+  var copy = group.cloneNode(true);
+  copy.setAttribute("aria-hidden", "true");
+  tickerEl.appendChild(copy);
+
+  // Constant speed (~60px/s) no matter how many items there are
+  var seconds = Math.max(15, group.offsetWidth / 60);
+  tickerEl.style.setProperty("--ticker-duration", seconds + "s");
+}
 function renderPolls(polls) {
   polls.forEach(function (poll) {
     var el = document.getElementById(poll.id);
@@ -38,9 +59,10 @@ function renderPolls(polls) {
       el.appendChild(img);
     }
     if (poll.text) {
-      var h4 = document.createElement("h4");
-      h4.textContent = poll.text;
-      el.appendChild(h4);
+      var h5 = document.createElement("h5");
+      h5.className = "polltext";
+      h5.textContent = poll.text;
+      el.appendChild(h5);
     }
   });
 }
@@ -97,7 +119,7 @@ function renderHomeUgandaNews(anchor) {
   section.className = "home-uganda-news news-section-permanent";
   section.setAttribute("aria-label", "Uganda headlines");
   section.innerHTML = `
-    <h2>Uganda Headlines</h2>
+ <h2 id="forup">Today - What's happening</h2> 
     <div class="news-module" aria-busy="true">
       ${Array.from({ length: 3 }, function () {
         return `<div class="news-headline-skeleton" aria-hidden="true">
@@ -141,7 +163,7 @@ function renderHomeUgandaNews(anchor) {
           : article.source;
         source = String(source || "Unknown").trim();
         var meta = [
-          "Uganda",
+        
           "Source: " + (sourceUrl
             ? `<a href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(source)}</a>`
             : escapeHtml(source))
@@ -211,7 +233,10 @@ function renderTrends(trends, tickers, polls) {
   if (!trendsEl) return;
 
   trendsEl.innerHTML =
-    '<h1 id="forup">Updates<a href="/trends/"><img id="nxtp-icon" src="pics/nxtpage.png"></a></h1>';
+    `<h1 id="forup">
+    Updates<a href="/trends/">
+    <img id="nxtp-icon" src="pics/nxtpage.png"></a>
+    </h1>`;
 
   var newsPosition = Math.min(trends.length, 2);
   var newsInserted = false;
@@ -263,3 +288,50 @@ Promise.all([
     var trendsEl = document.getElementById("trends");
     if (trendsEl) trendsEl.textContent = "Could not load trends. Please try again later.";
   });
+
+  function bindDots(scroller, itemSelector, dots) {
+  if (!scroller || !dots.length) return;
+
+  const items = () => Array.from(scroller.querySelectorAll(itemSelector));
+  let waiting = false;
+
+  function update() {
+    waiting = false;
+    const left = scroller.getBoundingClientRect().left;
+    let best = 0;
+    let bestDist = Infinity;
+    items().forEach((el, i) => {
+      const dist = Math.abs(el.getBoundingClientRect().left - left);
+      if (dist < bestDist) { bestDist = dist; best = i; }
+    });
+    dots.forEach((d, i) => d.classList.toggle('active', i === best));
+  }
+
+  scroller.addEventListener('scroll', () => {
+    if (!waiting) { waiting = true; requestAnimationFrame(update); }
+  }, { passive: true });
+
+  dots.forEach((dot, i) => dot.addEventListener('click', () => {
+    const el = items()[i];
+    if (!el) return;
+    const atEnd = scroller.scrollLeft + scroller.clientWidth >= scroller.scrollWidth - 2;
+if (atEnd) best = items().length - 1;
+  }));
+}
+
+bindDots(
+  document.querySelector('.polls'),
+  '.polls',
+  document.querySelectorAll('#pDots .dot')
+);
+
+bindDots(
+  document.querySelector('.polls'),
+  '[id^="polli"]',
+  document.querySelectorAll('#pDots .dot')
+);
+bindDots(
+  document.querySelector('.jisscrolpolls'),
+  '[id^="poll"]',
+  document.querySelectorAll('#pDots .dot')
+);

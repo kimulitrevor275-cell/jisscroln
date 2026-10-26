@@ -134,10 +134,10 @@
   align-items: center;
   gap: 14px;
   margin: 0;
-  margin-bottom: 10px;
-  padding: 10px;
+  margin-bottom: 5px;
+  padding: 13px;
   border-radius: 2px;
-  background: rgb(50, 47, 47);
+  background: black;
   color: #fff;
   text-decoration: none;
   width: 100%;
@@ -154,13 +154,13 @@
 }
 
 .news-headline-image {
-  display: block;
-  width: clamp(210px, 24vw, 330px);
+  display: flex;
+  width: clamp(179px, 20vw, 300px);
   height:100%;
-  
-  max-height: 220px;
+  border:none;
+  max-height: 200px;
   margin: 0;
-  margin-right: 30px;
+  margin-right: 10px;
   border-radius: 2px;
   object-fit: cover;
   background: black;
@@ -169,6 +169,7 @@
 .news-headline-content {
   flex: 1;
   min-width: 0;
+  overflow: anywhere;
 }
 
 .news-headline-card:hover {
@@ -177,7 +178,7 @@
 
 .news-headline-title {
   margin: 0;
-  font-size: clamp(1.3rem, 4vw, 3rem);
+  font-size: clamp(1rem, 2.5vw, 3rem);
   letter-spacing: 0.01em;
   max-width: 97%;
   font-weight: 500;
@@ -191,30 +192,28 @@
 .news-headline-meta {
  
   flex-wrap: wrap;
-  gap: 6px 12px;
-  margin-top: 8px;
+  gap: 6px;
+  margin-top: 3px;
 }
 
 .news-headline-meta span {
  min-width: 0;
   max-width: 100%;
-  margin: 5px;
-  padding: 4px 7px;
-  border-radius: 8px;
+  margin: 0;
   background: transparent;
   color: rgb(230, 227, 227);
-  font-size: clamp(20px, 2vw, 25px) !important;
+  font-size: clamp(13px, 1vw, 20px) ;
   font-family: 'Lexend', sans-serif;
-  overflow-wrap: anywhere;
+  
 }
 
 .news-headline-meta span:last-child {
-  text-align: right;
+  text-align: left;
 }
 
 .news-headline-meta a,
 .news-card-compact-source a {
-  color: inherit;
+  color: rgb(110, 203, 234);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -270,7 +269,9 @@
   color: #999;
   margin-top: auto;
 }
-
+html .news-headline-meta a{
+  color: rgb(16, 103, 234);
+}
 html.light-mode .news-headline-card {
   background: #fff;
   color: #222;

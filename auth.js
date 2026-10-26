@@ -1,24 +1,56 @@
-// ─────────────────────────────────────────
-//  SUPABASE
-// ─────────────────────────────────────────
+
 var sb = supabase.createClient(
   "https://jzspezkljbxocqboqgtk.supabase.co",
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp6c3BlemtsamJ4b2NxYm9xZ3RrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMTU4MjMsImV4cCI6MjA5Mjg5MTgyM30.VXZ4ZX9_z33ZKrWUbhs2EXKruTi1kp5IpLuGLykF1y0",
 );
 
+function onReady(fn) {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", fn);
+  } else {
+    fn();
+  }
+}
+
+// ─────────────────────────────────────────
+//  LIGHT MODE
+// ─────────────────────────────────────────
+
 var LIGHT_MODE_STORAGE_KEY = "jisscrol-theme";
+var LM_ICON_FOR_DARK = "/pics/lm.png";
+var LM_ICON_FOR_LIGHT = "/pics/darkmode.png";
+
+function lmIconSrc() {
+  return document.documentElement.classList.contains("light-mode")
+    ? LM_ICON_FOR_LIGHT
+    : LM_ICON_FOR_DARK;
+}
 
 function setLightMode(enabled) {
   document.documentElement.classList.toggle("light-mode", enabled);
-  localStorage.setItem(LIGHT_MODE_STORAGE_KEY, enabled ? "true" : "false");
+  try {
+    localStorage.setItem(LIGHT_MODE_STORAGE_KEY, enabled ? "true" : "false");
+  } catch (e) {}
 }
 
-if (localStorage.getItem(LIGHT_MODE_STORAGE_KEY) === "true") {
-  document.documentElement.classList.add("light-mode");
+try {
+  if (localStorage.getItem(LIGHT_MODE_STORAGE_KEY) === "true") {
+    document.documentElement.classList.add("light-mode");
+  }
+} catch (e) {}
+
+function syncLightModeToggle(toggle) {
+  var enabled = document.documentElement.classList.contains("light-mode");
+  toggle.setAttribute("aria-pressed", String(enabled));
+  toggle.setAttribute(
+    "aria-label",
+    enabled ? "Switch to dark mode" : "Switch to light mode",
+  );
+  toggle.src = lmIconSrc();
 }
 
 function handleLightModeInput(event) {
-  var toggle = event.target.closest("#lightmode");
+  var toggle = event.target.closest && event.target.closest("#lightmode");
   if (!toggle) return;
 
   if (event.type === "keydown") {
@@ -26,25 +58,14 @@ function handleLightModeInput(event) {
     event.preventDefault();
   }
 
-  var enabled = !document.documentElement.classList.contains("light-mode");
-  setLightMode(enabled);
-  toggle.setAttribute("aria-pressed", String(enabled));
-  toggle.setAttribute(
-    "aria-label",
-    enabled ? "Switch to dark mode" : "Switch to light mode",
-  );
+  setLightMode(!document.documentElement.classList.contains("light-mode"));
+  syncLightModeToggle(toggle);
 }
 
-var existingLightModeToggle = document.getElementById("lightmode");
-if (existingLightModeToggle) {
-  var lightModeEnabled =
-    document.documentElement.classList.contains("light-mode");
-  existingLightModeToggle.setAttribute("aria-pressed", String(lightModeEnabled));
-  existingLightModeToggle.setAttribute(
-    "aria-label",
-    lightModeEnabled ? "Switch to dark mode" : "Switch to light mode",
-  );
-}
+onReady(function () {
+  var existing = document.getElementById("lightmode");
+  if (existing) syncLightModeToggle(existing);
+});
 
 if (!window._lightModeListenersInitialized) {
   document.addEventListener("click", handleLightModeInput);
@@ -65,7 +86,7 @@ function getGreeting() {
 
 function signOut() {
   sb.auth.signOut().then(function () {
-    window.location.href = "index.html";
+    window.location.href = "/index.html";
   });
 }
 
@@ -81,30 +102,114 @@ function _makeBadge(tier, size) {
 }
 
 // ─────────────────────────────────────────
-//  SESSION
+//  SESSION + GREETING
 // ─────────────────────────────────────────
 var username = sessionStorage.getItem("jis_username") || "Anonymous";
 
+// The toggle. Returns "" if the page already has its own #lightmode elsewhere.
 function lightModeToggleMarkup(greetingElement) {
-  var toggle = document.getElementById("lightmode");
-  if (toggle && !greetingElement.contains(toggle)) return "";
+  var existing = document.getElementById("lightmode");
+  if (existing && !greetingElement.contains(existing)) return "";
 
-  return `<img id="lightmode" src="${lmIconSrc()}" alt="Toggle light mode" role="button" tabindex="0" aria-pressed="${document.documentElement.classList.contains("light-mode")}">`;
+  var enabled = document.documentElement.classList.contains("light-mode");
+  return `<img id="lightmode" src="${lmIconSrc()}" alt="Toggle light mode" aria-label="${enabled ? "Switch to dark mode" : "Switch to light mode"}" role="button" tabindex="0" aria-pressed="${enabled}">`;
 }
 
-var LM_ICON_FOR_DARK = "/pics/lm.png";
-var LM_ICON_FOR_LIGHT = "/pics/darkmode.png";
-
-function lmIconSrc() {
-  return document.documentElement.classList.contains("light-mode")
-    ? LM_ICON_FOR_LIGHT
-    : LM_ICON_FOR_DARK;
+// The profile icon is separate so it never disappears with the toggle
+function profileIconMarkup() {
+  return `<a href="/profile.html"><img class="profileicon" src="/pics/11.svg" alt="Profile" style="border:none;"></a>`;
+}
+// Menu items. Edit this list to add or remove links.
+var SIDE_LINKS = [
+  { label: "About",           href: "/about/#who" },
+  { label: "Privacy",         href: "/about/#privacy" },
+  { label: "Terms of use",    href: "/about/#terms" },
+  { label: "Data sources",    href: "/about/#data-sources" },
+  { label: "Takedown requests", href: "/about/#takedowns" },
+  { label: "Contact",         href: "/about/#contact" }
+];
+function sideMarkup() {
+  return '<button type="button" class="side-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="side-drawer">' +
+    '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">' +
+      '<path d="M4 6h16M4 12h16M4 18h16"/>' +
+    '</svg>' +
+  '</button>';
 }
 
+function initSideMenu() {
+  if (document.getElementById("side-drawer")) return;
+
+  var wrap = document.createElement("div");
+  wrap.innerHTML =
+    '<div class="side-overlay" hidden></div>' +
+    '<aside class="side-drawer" id="side-drawer" aria-label="Menu" aria-hidden="true" inert>' +
+      '<div class="side-head">' + "<img  style='width: 40px; height: auto;' src='/pics/logog.svg' alt='JiScroL' />" +
+        '<p> The JiScroL</p>' +
+        '<button type="button" class="side-close" aria-label="Close menu">✕</button>' +
+      '</div>' +
+      '<nav class="side-nav">' +
+        SIDE_LINKS.map(function (l) {
+          return '<a href="' + l.href + '">' + l.label + "</a>";
+        }).join("") +
+      "</nav>" +
+    "</aside>";
+  document.body.appendChild(wrap);
+
+  var overlay = wrap.querySelector(".side-overlay");
+  var drawer  = wrap.querySelector(".side-drawer");
+  var lastFocus = null;
+
+  function setOpen(open) {
+    var toggles = document.querySelectorAll(".side-toggle");
+    drawer.classList.toggle("open", open);
+    drawer.setAttribute("aria-hidden", String(!open));
+    if (open) drawer.removeAttribute("inert"); else drawer.setAttribute("inert", "");
+    overlay.hidden = !open;
+    overlay.classList.toggle("open", open);
+    document.body.classList.toggle("side-locked", open);
+    toggles.forEach(function (t) { t.setAttribute("aria-expanded", String(open)); });
+
+    if (open) {
+      lastFocus = document.activeElement;
+      drawer.querySelector("a").focus();
+    } else if (lastFocus) {
+      lastFocus.focus();
+    }
+  }
+
+  // delegation: works even if the button is injected later by sideMarkup()
+  document.addEventListener("click", function (e) {
+    if (e.target.closest(".side-toggle")) return setOpen(true);
+    if (e.target.closest(".side-close") || e.target === overlay) return setOpen(false);
+    if (e.target.closest(".side-nav a")) setOpen(false);
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && drawer.classList.contains("open")) setOpen(false);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initSideMenu);
+// Builds the greeting HTML when the element exists
+function renderGreeting(buildHtml) {
+  onReady(function () {
+    var el = document.getElementById("user-greeting");
+    if (el) el.innerHTML = buildHtml(el);
+  });
+}
+
+function loggedInGreeting(el, name, badge) {
+  return (
+    `<div class="gwrap">${getGreeting()}, <span class="greeting-name">${escapeHtml(name)}${badge || ""}</span></div>` +
+    `<div class="gicons">
+      ${profileIconMarkup()}
+      ${lightModeToggleMarkup(el)}
+      ${sideMarkup()}
+    </div>`
+  );
+}
 
 sb.auth.getSession().then(function (r) {
-  var el = document.getElementById("user-greeting");
-
   if (r.data.session) {
     var u = r.data.session.user;
     var name = (u.user_metadata && u.user_metadata.display_name) || u.email;
@@ -115,10 +220,10 @@ sb.auth.getSession().then(function (r) {
     sessionStorage.setItem("jis_username", name);
     sessionStorage.setItem("jis_uid", uid);
 
-    if (el) {
-      el.innerHTML = `${getGreeting()}, ${name} <a href="#" onclick="signOut()" style="color:gray;font-size:25px; margin:0"></a>
-      ${lightModeToggleMarkup(el)}`;
-    }
+    // first paint (no badge yet)
+    renderGreeting(function (el) {
+      return loggedInGreeting(el, name, "");
+    });
 
     fetch("https://jisscrol-opinions.onrender.com/visit", {
       method: "POST",
@@ -131,13 +236,9 @@ sb.auth.getSession().then(function (r) {
       .then(function (data) {
         window._cachedTier = data.tier;
         var badge = _makeBadge(data.tier, 20);
-        if (el) {
-          el.innerHTML = `<div class="gwrap">${getGreeting()}, <span class="greeting-name">${name}${badge}</span>  <a href="/profile.html" style="color:gray;font-size:20px;">
-          </div><img  class="profileicon"src="/pics/11.svg" alt="Profile" style="border:none;">
-          </a>
-         ${lightModeToggleMarkup(el)}
-          `;
-        }
+        renderGreeting(function (el) {
+          return loggedInGreeting(el, name, badge);
+        });
       })
       .catch(function () {});
   } else {
@@ -146,19 +247,12 @@ sb.auth.getSession().then(function (r) {
     window._cachedUserId = null;
     window._cachedTier = null;
 
-    if (el) {
-      el.innerHTML = `
-      <div style="display:flex; flex-direction:row; width:auto;text-align:right;" href="/login/" >
-  
-      <a href="/login/" style="display:inline-block; color:white;font-size:30px;text-decoration:none;">
-      <img src="/pics/11.svg" alt="Profile" style="width:50px;height:90px;border:none;"></a><span></span> </div>
-      ${lightModeToggleMarkup(el)}`;
-    }
+    renderGreeting(function (el) {
+      return `<div style="display:flex;align-items:center;">
+      <a href="/login/" style="color:white;font-family:'Outfit', sans-serif;font-size:19px;text-decoration:none; margin: 10px;">Login</a>${lightModeToggleMarkup(el)}${sideMarkup()}</div>`;
+    });
   }
-
 });
-
-
 
 // ─────────────────────────────────────────
 //  API
@@ -181,10 +275,6 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;");
 }
 
-// ── Link / hashtag detection ──
-// Finds, in RAW text: https://… links, www.… links, bare domains
-// (jisscrol.com, site.co.ug/page) and #hashtags. Trailing punctuation
-// ("see jisscrol.com, then…", "(https://x.com)") is kept OUT of the link.
 var BARE_TLDS =
   "com|org|net|ug|co\\.ug|or\\.ug|ac\\.ug|go\\.ug|ke|tz|rw|ng|gh|za|uk|us|ca|de|fr|in|io|me|tv|fm|to|cc|co|ly|gl|be|tk|" +
   "info|biz|app|dev|news|edu|gov|xyz|online|site|store|link|live|club|shop|tech|page|blog|wiki|media|world|today|top";
@@ -242,7 +332,7 @@ function findTextTokens(text) {
   return tokens;
 }
 
-// Escapes everything, then wraps links and hashtags
+// wraps links and hashtags
 function linkifyText(text) {
   if (!text) return "";
   text = String(text);
@@ -302,8 +392,8 @@ document.addEventListener(
 // Tapping a #hashtag opens search with that tag
 document.addEventListener("click", function (event) {
   var tag = event.target.closest && event.target.closest(".body-hashtag");
-  if (!tag || typeof window.openJisSearch !== "function") return;
-  window.openJisSearch(tag.getAttribute("data-tag"));
+  if (!tag || typeof window.openJiSearch !== "function") return;
+  window.openJiSearch(tag.getAttribute("data-tag"));
 });
 
 function formatTime(iso) {
@@ -318,6 +408,8 @@ function formatTime(iso) {
     d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })
   );
 }
+
+var toastTimer = null;
 
 function showToast(msg) {
   var toast = document.getElementById("toast");
@@ -334,17 +426,13 @@ function showToast(msg) {
   toast.textContent = msg;
   toast.style.opacity = "1";
   toast.style.transform = "translateX(-50%) translateY(0)";
-  setTimeout(function () {
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () {
     toast.style.opacity = "0";
     toast.style.transform = "translateX(-50%) translateY(20px)";
   }, 2500);
 }
 
-// ─────────────────────────────────────────
-//  REUSABLE COMPONENTS
-// ─────────────────────────────────────────
-
-// 👍 count | bar | 👎 count | 💬 count
 function renderRatingsBar(postId) {
   return `
     <div class="rate-btns">
@@ -361,7 +449,9 @@ function renderRatingsBar(postId) {
         <span id="rbp-${postId}">0</span>
       </button>
       <button class="btn-engage" id="bte-${postId}">
-        <img id="commentbtn" src="/pics/commentbtn.png" alt="comments">
+         <svg class="commentbtn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.3c-1.3 0-2.5-.3-3.6-.8L3 21l1.6-4.9A8.1 8.1 0 0 1 3.5 11.5 8.4 8.4 0 0 1 12 3.2a8.4 8.4 0 0 1 9 8.3z"/>
+  </svg>
         <span id="cc-${postId}">0</span>
       </button>
     </div>
@@ -379,7 +469,9 @@ function renderEngagementPanel(postId) {
       </div>
       <div class="opinions-list" id="ol-${postId}">
         <div class="opinions-title">OPINIONS</div>
-        <div class="no-opinions" id="oe-${postId}">No opinions yet. Be the first.</div>
+        <div class="no-opinions" id="oe-${postId}">
+        
+        No opinions yet. Be the first!</div>
       </div>
       <button class="btn-show-more" id="osm-${postId}">Show more ▾</button>
     </div>
@@ -402,44 +494,55 @@ function attachEngagementEvents(postId) {
   var badBtn = document.getElementById("bb-" + postId);
   var showMore = document.getElementById("osm-" + postId);
 
-  engageBtn.addEventListener("click", function (event) {
-    if (event) {
+  if (engageBtn) {
+    engageBtn.addEventListener("click", function (event) {
       event.preventDefault();
       event.stopPropagation();
-    }
 
-    // Open the dedicated comments page for a full conversation view.
-    var commentsPage = "/comments/?post_id=" + encodeURIComponent(postId);
-    if (window.location.pathname.indexOf("/comments") === -1) {
-      window.location.href = commentsPage;
-    }
-  });
-
-  input.addEventListener("input", function () {
-    var len = input.value.trim().length;
-    var counter = document.getElementById("oc-" + postId);
-    counter.textContent = len + " / 300";
-    counter.style.color = len > 260 ? "#e07070" : "#444";
-    submitBtn.disabled = len === 0;
-  });
-
-  submitBtn.addEventListener("click", function () {
-    submitOpinion(postId);
-  });
-  goodBtn.addEventListener("click", function () {
-    submitRating(postId, "good");
-  });
-  badBtn.addEventListener("click", function () {
-    submitRating(postId, "bad");
-  });
-
-  showMore.addEventListener("click", function () {
-    panel.querySelectorAll(".opinion-card.hidden").forEach(function (c) {
-      c.classList.remove("hidden");
-      c.style.display = "";
+      // Open the dedicated comments page for a full conversation view.
+      var commentsPage = "/comments/?post_id=" + encodeURIComponent(postId);
+      if (window.location.pathname.indexOf("/comments") === -1) {
+        window.location.href = commentsPage;
+      }
     });
-    showMore.classList.remove("visible");
-  });
+  }
+
+  if (input && submitBtn) {
+    input.addEventListener("input", function () {
+      var len = input.value.trim().length;
+      var counter = document.getElementById("oc-" + postId);
+      if (counter) {
+        counter.textContent = len + " / 300";
+        counter.style.color = len > 260 ? "#e07070" : "#444";
+      }
+      submitBtn.disabled = len === 0;
+    });
+
+    submitBtn.addEventListener("click", function () {
+      submitOpinion(postId);
+    });
+  }
+
+  if (goodBtn) {
+    goodBtn.addEventListener("click", function () {
+      submitRating(postId, "good");
+    });
+  }
+  if (badBtn) {
+    badBtn.addEventListener("click", function () {
+      submitRating(postId, "bad");
+    });
+  }
+
+  if (showMore && panel) {
+    showMore.addEventListener("click", function () {
+      panel.querySelectorAll(".opinion-card.hidden").forEach(function (c) {
+        c.classList.remove("hidden");
+        c.style.display = "";
+      });
+      showMore.classList.remove("visible");
+    });
+  }
 }
 
 // One call that does everything for a post: events + ratings + opinions
@@ -449,15 +552,19 @@ function initEngagement(postId) {
   loadOpinions(postId);
 }
 
+// Tapping a post card opens its comments page
 document.addEventListener("click", function (event) {
   var target = event.target;
   if (!(target instanceof Element)) return;
 
   var card = target.closest("[data-comments-post-id]");
-  if (!card || target.closest(
-    "a, button, textarea, input, select, [contenteditable='true'], " +
-    ".see-more, .post-video, iframe, video, .rate-btns, .engage-panel"
-  )) {
+  if (
+    !card ||
+    target.closest(
+      "a, button, textarea, input, select, [contenteditable='true'], " +
+        ".see-more, .body-hashtag, .post-video, iframe, video, .rate-btns, .engage-panel",
+    )
+  ) {
     return;
   }
 
@@ -483,17 +590,17 @@ function submitRating(postId, vote) {
     .then(function (data) {
       if (data.good !== undefined) {
         voted[postId] = vote;
-        document.getElementById("bg-" + postId).className =
-          "btn-good" + (vote === "good" ? " voted" : "");
-        document.getElementById("bb-" + postId).className =
-          "btn-bad" + (vote === "bad" ? " voted" : "");
+        var g = document.getElementById("bg-" + postId);
+        var b = document.getElementById("bb-" + postId);
+        if (g) g.className = "btn-good" + (vote === "good" ? " voted" : "");
+        if (b) b.className = "btn-bad" + (vote === "bad" ? " voted" : "");
         loadRatings(postId);
       } else {
-        showToast("Failed to rate");
+        notify("Failed to rate");
       }
     })
     .catch(function () {
-      showToast("No connection");
+      notify("No connection, please try again...");
     });
 }
 
@@ -521,10 +628,16 @@ function updateRatingBar(postId) {
   var goodPct = total ? Math.round((good / total) * 100) : 50;
   var badPct = 100 - goodPct;
 
-  document.getElementById("rg-" + postId).style.width = goodPct + "%";
-  document.getElementById("rbd-" + postId).style.width = badPct + "%";
-  document.getElementById("rgp-" + postId).textContent = good;
-  document.getElementById("rbp-" + postId).textContent = bad;
+  var rg = document.getElementById("rg-" + postId);
+  var rbd = document.getElementById("rbd-" + postId);
+  var rgp = document.getElementById("rgp-" + postId);
+  var rbp = document.getElementById("rbp-" + postId);
+  if (!rg || !rbd || !rgp || !rbp) return;
+
+  rg.style.width = goodPct + "%";
+  rbd.style.width = badPct + "%";
+  rgp.textContent = good;
+  rbp.textContent = bad;
 }
 
 // ─────────────────────────────────────────
@@ -534,6 +647,7 @@ function updateRatingBar(postId) {
 function submitOpinion(postId) {
   var input = document.getElementById("oi-" + postId);
   var btn = document.getElementById("ob-" + postId);
+  if (!input || !btn) return;
   var text = input.value.trim();
   if (!text) return;
 
@@ -565,17 +679,17 @@ function submitOpinion(postId) {
         btn.textContent = "Post";
         btn.disabled = true;
         loadOpinions(postId);
-        showToast("Opinion posted!");
+        notify("Opinion posted!");
       } else {
         btn.disabled = false;
         btn.textContent = "Post";
-        showToast("Failed to post");
+        notify("Failed to post");
       }
     })
     .catch(function () {
       btn.disabled = false;
       btn.textContent = "Post";
-      showToast("No connection");
+      notify("No connection");
     });
 }
 
@@ -591,10 +705,14 @@ function loadOpinions(postId) {
 }
 
 function renderOpinions(postId, opinions) {
+  // API can return an error object instead of a list
+  if (!Array.isArray(opinions)) return;
+
   var list = document.getElementById("ol-" + postId);
   var empty = document.getElementById("oe-" + postId);
   var showMore = document.getElementById("osm-" + postId);
   var cc = document.getElementById("cc-" + postId);
+  if (!list || !empty || !showMore) return;
 
   list.querySelectorAll(".opinion-card").forEach(function (c) {
     c.remove();
@@ -804,32 +922,34 @@ function showTickerSkeleton() {
   var style = document.createElement("style");
   style.textContent = `
     #jis-search-icon {
-      position:fixed; bottom:50px; right:20px;
-      width:100px; height:100px; padding:0; border:none; background:none;
+      position:fixed; bottom:30px; right:15px;
+      width:50px; height:50px; padding:0; border:none; background:none;
       border-radius:50%;
       display:flex; align-items:center; justify-content:center;
-      cursor:pointer; box-shadow:0 4px 16px rgba(182, 61, 61, 0.5);
+      cursor:pointer; box-shadow:0 7px 16px rgba(99, 232, 205, 0.5);
       z-index:999; user-select:none;
     }
   `;
   document.head.appendChild(style);
 
   // lets #hashtags in post text open the search page
-  window.openJisSearch = function (q) {
+  window.openJiSearch = function (q) {
     q = String(q || "").replace(/^#/, "");
     window.location.href = "/search/" + (q ? "?q=" + encodeURIComponent(q) : "");
   };
 
-  var icon = document.createElement("button");
-  icon.id = "jis-search-icon";
-  icon.type = "button";
-  icon.setAttribute("aria-label", "Open search page");
-  icon.innerHTML =
-    '<img src="/pics/search.svg" alt="" style="background:none;width:80px;height:70px;border:none;margin:0">';
-  icon.addEventListener("click", function () {
-    window.location.href = "/search/";
+  onReady(function () {
+    var icon = document.createElement("button");
+    icon.id = "jis-search-icon";
+    icon.type = "button";
+    icon.setAttribute("aria-label", "Open search page");
+    icon.innerHTML =
+      '<img src="/pics/search.svg" alt="" style="background:none;width:50px;height:50px;border:none;margin:0">';
+    icon.addEventListener("click", function () {
+      window.location.href = "/search/";
+    });
+    document.body.appendChild(icon);
   });
-  document.body.appendChild(icon);
 })();
 
 function attachSeeMore(postId) {
@@ -855,6 +975,7 @@ var BODY_LIMIT = 300;
 
 // Fallback for old API responses that only have img/img2/img_type/img2_type.
 // (Embeds can't be rebuilt here without embedUrl, so they degrade to images.)
+
 function legacyMediaFromPost(post) {
   var items = [];
   [["img", "img_type"], ["img2", "img2_type"]].forEach(function (pair) {
@@ -910,6 +1031,9 @@ function renderArticleMediaItem(item, framed, id) {
   return `<img src="${src}" alt="photo"${idAttr}>`;
 }
 
+// The main <video> has NO autoplay attribute on purpose: the
+// IntersectionObserver below starts the one that is on screen.
+// (With autoplay, every video on the page started at once.)
 function renderVideoEmbed(item, fillFrame) {
   if (item.type === "video") {
     var safeSrc = escapeHtml(item.url);
@@ -917,7 +1041,7 @@ function renderVideoEmbed(item, fillFrame) {
       ? `<video class="article-image-backdrop post-video-backdrop" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1" src="${safeSrc}"></video>`
       : "";
     return `${backdrop}
-      <video class="post-video-main" autoplay muted loop playsinline preload="auto" src="${safeSrc}">Your browser does not support video playback.</video>
+      <video class="post-video-main" muted loop playsinline preload="auto" src="${safeSrc}">Your browser does not support video playback.</video>
       <div class="post-video-controls" role="group" aria-label="Video controls">
         <button class="post-video-control post-video-mute is-muted" type="button" data-video-action="mute" aria-label="Unmute video">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z"/><path class="video-mute-mark" d="m16 9 5 6m0-6-5 6"/></svg>
@@ -1007,6 +1131,11 @@ function formatVideoClock(seconds) {
   return minutes + ":" + remainder;
 }
 
+var ICON_PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+var ICON_PAUSE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>';
+var ICON_MUTED = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z"/><path class="video-mute-mark" d="m16 9 5 6m0-6-5 6"/></svg>';
+var ICON_VOLUME = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z"/><path class="video-volume-mark" d="M16 9a5 5 0 0 1 0 6m2-9a8 8 0 0 1 0 12"/></svg>';
+
 function updateArticleVideoControls(video) {
   var wrapper = video.closest(".post-video");
   if (!wrapper) return;
@@ -1023,15 +1152,24 @@ function updateArticleVideoControls(video) {
   seek.value = duration ? String(Math.round((currentTime / duration) * 1000)) : "0";
   seek.style.setProperty("--video-progress", Number(seek.value) / 10 + "%");
   time.textContent = formatVideoClock(currentTime) + " / " + formatVideoClock(duration);
-  playButton.setAttribute("aria-label", video.paused ? "Play video" : "Pause video");
-  playButton.innerHTML = video.paused
-    ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>'
-    : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>';
-  muteButton.setAttribute("aria-label", video.muted ? "Unmute video" : "Mute video");
-  muteButton.classList.toggle("is-muted", video.muted);
-  muteButton.innerHTML = video.muted
-    ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z"/><path class="video-mute-mark" d="m16 9 5 6m0-6-5 6"/></svg>'
-    : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z"/><path class="video-volume-mark" d="M16 9a5 5 0 0 1 0 6m2-9a8 8 0 0 1 0 12"/></svg>';
+
+  // Only touch the buttons when their state changes (timeupdate fires constantly;
+  // rewriting innerHTML every time can swallow taps)
+  var playState = video.paused ? "paused" : "playing";
+  if (playButton.dataset.state !== playState) {
+    playButton.dataset.state = playState;
+    playButton.setAttribute("aria-label", video.paused ? "Play video" : "Pause video");
+    playButton.innerHTML = video.paused ? ICON_PLAY : ICON_PAUSE;
+  }
+
+  var muteState = video.muted ? "muted" : "sound";
+  if (muteButton.dataset.state !== muteState) {
+    muteButton.dataset.state = muteState;
+    muteButton.setAttribute("aria-label", video.muted ? "Unmute video" : "Mute video");
+    muteButton.classList.toggle("is-muted", video.muted);
+    muteButton.innerHTML = video.muted ? ICON_MUTED : ICON_VOLUME;
+  }
+
   fullscreenButton.setAttribute(
     "aria-label",
     document.fullscreenElement === wrapper ? "Exit fullscreen" : "Enter fullscreen",
@@ -1051,7 +1189,7 @@ function startArticleVideo(video) {
 
   activeArticleVideo = video;
   video.muted = articleVideosMuted;
-  video.play().catch(function (error) {
+  video.play().catch(function () {
     if (activeArticleVideo === video) activeArticleVideo = null;
     console.error("Article video playback could not start:", error);
     startNextVisibleArticleVideo();
@@ -1081,39 +1219,51 @@ function startNextVisibleArticleVideo() {
 }
 
 document.addEventListener("click", function (event) {
-  var button = event.target.closest("[data-video-action]");
+  var button = event.target.closest && event.target.closest("[data-video-action]");
   if (!button) return;
 
   var wrapper = button.closest(".post-video");
   var video = wrapper && wrapper.querySelector(".post-video-main");
   if (!video) return;
 
-  if (button.dataset.videoAction === "play") {
+  var action = button.dataset.videoAction;
+
+  if (action === "play") {
     if (video.paused) {
       startArticleVideo(video);
     } else {
+      // user paused on purpose: don't let scroll logic auto-restart it
+      delete video.dataset.resumeAfterScroll;
+      delete video.dataset.autoPlayPending;
       video.pause();
     }
-  } else if (button.dataset.videoAction === "mute") {
+  } else if (action === "mute") {
     articleVideosMuted = !video.muted;
     document.querySelectorAll(".post-video-main").forEach(function (articleVideo) {
       articleVideo.muted = articleVideosMuted;
       updateArticleVideoControls(articleVideo);
     });
-  } else if (button.dataset.videoAction === "fullscreen") {
-    var fullscreenRequest =
-      document.fullscreenElement === wrapper
-        ? document.exitFullscreen()
-        : wrapper.requestFullscreen();
-    fullscreenRequest.catch(function (error) {
-      console.error("Article video fullscreen could not be changed:", error);
-    });
+  } else if (action === "fullscreen") {
+    var request;
+    if (document.fullscreenElement === wrapper) {
+      if (document.exitFullscreen) request = document.exitFullscreen();
+    } else if (wrapper.requestFullscreen) {
+      request = wrapper.requestFullscreen();
+    } else if (video.webkitEnterFullscreen) {
+      // iPhone Safari can only fullscreen the <video> itself
+      video.webkitEnterFullscreen();
+    }
+    if (request && request.catch) {
+      request.catch(function (error) {
+        console.error("Article video fullscreen could not be changed:", error);
+      });
+    }
   }
   updateArticleVideoControls(video);
 });
 
 document.addEventListener("input", function (event) {
-  var seek = event.target.closest(".post-video-seek");
+  var seek = event.target.closest && event.target.closest(".post-video-seek");
   if (!seek) return;
 
   var wrapper = seek.closest(".post-video");
@@ -1220,17 +1370,20 @@ function observeArticleVideos(node) {
   });
 }
 
-document.querySelectorAll(".post-video-main").forEach(observeArticleVideos);
+onReady(function () {
+  document.querySelectorAll(".post-video-main").forEach(observeArticleVideos);
 
-new MutationObserver(function (mutations) {
-  mutations.forEach(function (mutation) {
-    mutation.addedNodes.forEach(observeArticleVideos);
-  });
-}).observe(document.documentElement, { childList: true, subtree: true });
+  new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
+      mutation.addedNodes.forEach(observeArticleVideos);
+    });
+  }).observe(document.documentElement, { childList: true, subtree: true });
+});
 
 function toggleBody(postId, encodedBody) {
   var el = document.getElementById("body-text-" + postId);
   var btn = document.getElementById("sm-" + postId);
+  if (!el || !btn) return;
   var full = decodeURIComponent(encodedBody);
 
   if (btn.textContent === "See More") {
@@ -1260,3 +1413,48 @@ function renderBody(post) {
     </p>
   `;
 }
+
+(function () {
+  var host = document.getElementById("site-footer");
+  if (!host) return;
+
+  var LINKS = {
+    terms: "about.html",
+    email: "thejisscrol@gmail.com",           // confirm this address
+    x: "https://x.com/boyslovepor",
+    whatsapp: "https://wa.me/256765247503",
+    tiktok: "https://tiktok.com/@yourhandle"  // put your real handle
+  };
+
+  var ICONS = {
+    x: '<path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>',
+    whatsapp: '<path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.38 1.26 4.8L2 22l5.43-1.37c1.37.73 2.93 1.15 4.61 1.15 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm4.96 13.06c-.21.59-1.22 1.13-1.67 1.19-.45.06-.87.21-2.94-.61-2.47-1-4.03-3.51-4.15-3.67-.12-.16-.99-1.32-.99-2.52s.63-1.79.85-2.03c.22-.24.48-.3.64-.3h.46c.15 0 .35-.06.55.42.21.49.71 1.73.77 1.86.06.12.1.27.02.43-.08.16-.12.26-.24.4-.12.14-.25.31-.36.42-.12.12-.24.24-.1.48.14.24.62.99 1.32 1.6.9.8 1.66 1.05 1.9 1.17.24.12.38.1.52-.06.14-.16.6-.7.76-.94.16-.24.32-.2.54-.12.22.08 1.39.66 1.63.78.24.12.4.18.46.28.06.1.06.56-.15 1.15z"/>',
+    tiktok: '<path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.05a8.2 8.2 0 004.79 1.52V7.13a4.85 4.85 0 01-1.02-.44z"/>'
+  };
+
+  var SOCIALS = [
+    { key: "x", label: "JiScroL on X" },
+    { key: "whatsapp", label: "JiScroL on WhatsApp", color: "#25D366" },
+    { key: "tiktok", label: "JiScroL on TikTok" }
+  ];
+
+  var social = SOCIALS.map(function (s) {
+    return '<a href="' + LINKS[s.key] + '" target="_blank" rel="noopener noreferrer" aria-label="' + s.label + '">' +
+      '<svg viewBox="0 0 24 24" fill="' + (s.color || "currentColor") + '" aria-hidden="true">' + ICONS[s.key] + "</svg></a>";
+  }).join("");
+
+  var contact = host.hasAttribute("data-full")
+    ? '<p class="foot-line">Contact: <a href="mailto:' + LINKS.email + '">' + LINKS.email + "</a></p>"
+    : "";
+
+  var year = new Date().getFullYear();
+
+  host.innerHTML =
+    '<footer class="about_us">' +
+      '<p class="foot-line">©' + year + " JiScroL · " +
+        '<a href="' + LINKS.terms + '">Terms of use</a></p>' +
+      contact +
+      '<nav class="social" aria-label="Social links">' + social + "</nav>" +
+    "</footer>";
+})();
+

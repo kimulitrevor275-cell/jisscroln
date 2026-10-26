@@ -184,7 +184,7 @@
       media,
       "search-result",
       "search-result-image-placeholder",
-      categoryText.toLowerCase().includes("song") ? "♫" : "✦",
+      categoryText.toLowerCase().includes("song") ? "♫" : "<img>",
     );
 
     var copy = document.createElement("span");
@@ -244,7 +244,7 @@
       articleCover(article),
       "discovery-card",
       "discovery-card-image-placeholder",
-      "JISSCROL STORIES",
+      "JiScroL STORIES",
     );
 
     var copy = document.createElement("span");
@@ -283,7 +283,7 @@
     title.textContent = String(song.name || "Untitled track");
     var artist = document.createElement("span");
     artist.className = "song-card-artist";
-    artist.textContent = String(song.artist || "JisScroL music");
+    artist.textContent = String(song.artist || "JiScroL music");
     copy.append(rank, title, artist);
     link.appendChild(copy);
     return link;
