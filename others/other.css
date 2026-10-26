@@ -30,6 +30,7 @@ hr {
 
 .chart-card {
   width: 240px;
+  max-height:230px ;
   background: white;
   border-radius: 12px;
   overflow: hidden;
@@ -38,12 +39,12 @@ hr {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  margin-right: 7px;margin: 2px;
+  margin-right: 3px;margin: 2px;
 }
 
 #chart-cover1, #chart-cover2, #chart-cover3, #chart-cover4, #chart-cover5 {
-  height: 200px;
-  max-width: 400px;
+  max-height: 200px;
+  max-width: 300px;
   overflow: hidden;
 }
 
@@ -106,7 +107,7 @@ hr {
   width: 96vw;
   height: auto;
   border-radius: 1px;
-  background-color: black;
+  background-color: transparent;
   margin: 2px;
   text-align: left;
   color: white;
@@ -158,7 +159,9 @@ hr {
   color: white;
   font-weight: 600;
 }
-
+html.light-mode .song .rank{
+color: black;
+}
 .song .trend { font-size: 20px; font-weight: 600; }
 .song .trend.up      { color: #3ba55d; }
 .song .trend.down    { color: #e05555; }
@@ -173,7 +176,9 @@ hr {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+html.light-mode .song .song-name{
+color: black;
+}
 .song .song-artist {
   grid-area: who;
   font-size: 14px;
@@ -182,7 +187,9 @@ hr {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+html.light-mode .song .song-artist{
+color: rgb(96, 95, 95);
+}
 .song .days {
   grid-area: days;
   justify-self: end;
@@ -191,7 +198,9 @@ hr {
   color: #f3e9e9;
   font-size: 14px;
 }
-
+html.light-mode .song .days{
+color: rgb(77, 76, 76);
+}
 
 .section-title {
   font-weight: 600;
@@ -574,4 +583,4 @@ html.light-mode #Email { border-top-color: #ccc; }
     padding: 0 12px;
   }
   #polli1, #polli2, #polli3, #polli4 { width: 100%; }
-}
+}}

@@ -923,7 +923,7 @@ function showTickerSkeleton() {
   style.textContent = `
     #jis-search-icon {
       position:fixed; bottom:30px; right:15px;
-      width:50px; height:50px; padding:0; border:none; background:none;
+      width:35px; height:50px; padding:0; border:none; background:none;
       border-radius:50%;
       display:flex; align-items:center; justify-content:center;
       cursor:pointer; box-shadow:0 7px 16px rgba(99, 232, 205, 0.5);

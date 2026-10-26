@@ -14,7 +14,7 @@ body {
   color: #e8e8e8;
   width: 100%;
   overflow-x: hidden;
-  padding: 4px;
+  padding: 8px;
   font-size: clamp(20px, 3vw, 25px);
   flex-wrap: wrap;
 overflow: auto;
@@ -46,11 +46,11 @@ overflow: auto;
   padding: 8px 6px;
 }
 .navbar svg { display: inline-block; 
-  width: 30px;
-   height: 25px; }
+  width: 20px;
+   height: 22px; }
 h2,.headline{
   font-family: 'outfit', serif;
-  font-size: clamp(1.5rem, 2.3vw, 3rem);
+  font-size: clamp(1.3rem, 2.3vw, 3rem);
   letter-spacing: 0.01em;
   font-weight: light;
 }
@@ -105,7 +105,7 @@ padding-right: 0;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  gap: clamp(10px, 2vw, 30px);
+  gap: clamp(8px, 1.6vw, 20px);
   margin-top: 4px;
 }
 
@@ -116,12 +116,12 @@ padding-right: 0;
   background-color: transparent;
   text-decoration: none;
   padding: 8px;
-  font-size: clamp(17px, 2vw, 30px);
+  font-size: clamp(17px, 2vw, 24px);
   color: gray;
   cursor: pointer;
   transition: color 0.3s ease;
   font-weight: 600;
-  font-family:  'outfit', serif;
+  font-family:  "lexend", sans-serif;
   border:none;
   border-radius: 0;
 }
@@ -141,7 +141,7 @@ padding-right: 0;
   display: flex;
   align-items: center;
   gap: 13px;
-  font-family: 'times', sans-serif;
+  font-family: 'outfit', sans-serif;
   font-size: clamp(15px, 0.9vw,20px) !important;
   color: white;
   font-weight: 600;
@@ -157,6 +157,7 @@ padding-right: 0;
   gap: 10px;
   flex-shrink: 0;
   margin: 0;
+  margin-right: 0;
 }
 .side-toggle { color: #fff; }
 html.light-mode .side-toggle { color: #161616; }
@@ -164,7 +165,7 @@ html.light-mode .side-toggle { color: #161616; }
   margin: 0;
   flex-shrink: 0;
   width: 30px;
-  height: 35px;
+  height: 30px;
   object-fit: contain;
   cursor: pointer;
   border: none;
@@ -197,7 +198,7 @@ border-start-end-radius: 30px;
   display: flex;
   gap: 10px;
   justify-content: center;
-  margin: 12px 0 60px;
+  margin: 12px 0 25px;
 }
 
 .dot {
@@ -304,7 +305,7 @@ h1 {
 #forup {
   font-family: 'Tinos', 'Times New Roman', Times, serif;
   font-weight: 700;
-  font-size: clamp(25px, 3vw, 30px) !important;
+  font-size: clamp(20px, 3vw, 30px) !important;
   letter-spacing: 0.03em;
   color: white;
   margin: 0;
@@ -333,15 +334,15 @@ h4 {
   border-radius: 50px;
 }
 
-b { font-size: clamp(20px, 3.5vw, 26px); font-weight: 600; }
+b { font-size: clamp(14px, 3.5vw, 26px); font-weight: 600; }
 
 /* ── PARAGRAPH / ARTICLE BODY ── */
 p {
   max-width: 98%;
   font-family: "Lexend", Arial, sans-serif;
-  font-size: clamp(17px, 0.5vw, 24px);
+  font-size: clamp(16px, 0.4vw, 24px);
   color: white;
-  line-height: 1.5;
+  line-height: 1.1;
   margin: 10px ;
 }
 .article-body {
@@ -354,14 +355,14 @@ p {
 .see-more {
   color: #437dfa;
   cursor: pointer;
-  font-size: clamp(19px, 1.1vw, 30px);
+  font-size: clamp(16px, 0.5vw, 30px);
   display: inline-block;
   font-family: 'lexend', sans-serif;
 }
 .see-more:hover { opacity: 0.8; }
 
 .body-link {
-  font-size: clamp(19px, 1.1vw, 30px);
+  font-size: clamp(16px, 0.5vw, 30px);
   color: #333df5;
   text-decoration: underline;
   word-break: break-all;
@@ -373,7 +374,7 @@ p {
   width: 100%;
   overflow: hidden;
   margin: 20px 0;
-  padding: 6px 0;
+  padding: 2px 0;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
           mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
 }
@@ -396,7 +397,7 @@ p {
   flex-shrink: 0;
   padding: 3px;
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(17px, 3.1vw, 25px);
+  font-size: clamp(14px, 2.1vw, 22px);
   white-space: nowrap;
   color: white;
   border: 1px solid #2a4bb8;
@@ -446,8 +447,8 @@ p {
   font-size: clamp(16px, 3.5vw, 32px);
   border-radius: 20px;
   background-color: #282a2a;
-  width: 270px;
-  height: 180px;
+  width: 240px;
+  height: 140px;
   margin: 8px;
   display: flex;
   flex-direction: column;
@@ -460,6 +461,7 @@ p {
   object-fit: cover;
   width: 100%;
   height:100%;
+  
   border-radius: 20px;
   border: none;
   margin: 0;
@@ -788,8 +790,8 @@ html.light-mode .post-video-error {
 /* ── TRENDS / POST CARDS ── */
 #trends, #content {
   width: 100%;
-  margin-top: clamp(60px, 10vw, 120px);
-  margin-bottom: 60px;
+
+  margin-bottom: 30px;
 }
 
 .post-card {
@@ -801,10 +803,11 @@ html.light-mode .post-video-error {
 }
 
 #time {
-  font-size: clamp(15px, 1.3vw, 20px);
+  font-size: clamp(14px, 1vw, 20px);
   color: rgb(224, 222, 222);
   display: inline-block;
-  padding: 2px;
+  padding: 0px;
+  
 }
 
 
@@ -817,6 +820,7 @@ html.light-mode .post-video-error {
   gap: 10px;
   margin: 0px;
   flex-wrap: wrap;
+  padding: 0;
 }
 
 .btn-good, .btn-bad, .btn-engage {
@@ -827,13 +831,13 @@ html.light-mode .post-video-error {
   margin: 2px;
   color: white;
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(18px, 1vw, 20px);
+  font-size: clamp(16px, 1vw, 20px);
   cursor: pointer;
 padding: 0;
 }
 .btn-good, .btn-bad {
   position: relative;
-  min-width: 25px;
+  min-width: 20px;
 }
 .btn-good:hover, .btn-bad:hover, .btn-engage:hover { background: #1a1a1a; }
 .btn-good.voted { color: #6ec98a; }
@@ -872,7 +876,7 @@ padding: 0;
 }
 
 .btn-good img, .btn-bad img, .commentbtn {
-  width: 25px;
+  width: 22px;
   height: 30px;
   border: none;
   border-radius: 0;
