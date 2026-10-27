@@ -5,97 +5,171 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profile | The JiScroL</title>
   <script src="/theme.js"></script>
-  <link rel="icon" type="image/png" href="/pics/logog.svg">
+  <link rel="icon" type="image/svg+xml" href="/pics/logog.svg">
   <link rel="stylesheet" href="/global.css">
+  <script src="/global.js"></script>
   <meta name="theme-color" content="#000000">
   <style>
-    body { margin-top:30px; background:#000; color:#fff; font-family:'Outfit',sans-serif;  }
-    #jis-search-icon{display:none !important;}
-    [hidden] { display:none !important; }
-    #user-greeting { display:flex; align-items:center; gap:8px; font-family:'Outfit',sans-serif; font-size:25px; color:#fff; white-space:nowrap; }
+    body { margin-top: 30px; background: #000; color: #fff; font-family: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; }
+    #jis-search-icon { display: none !important; }
+    [hidden] { display: none !important; }
 
-    .profile { max-width: 100%; margin: 10px auto 80px; padding:0 20px; font-family:'Outfit',sans-serif; color:#fff; }
+    #user-greeting {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 25px;
+      color: #fff;
+    }
 
-    .identity { display:flex; align-items:center; gap:24px; flex-wrap: nowrap; margin-bottom:32px; }
-    .avatar { width: 80px; height: 80px; flex-shrink:0; border-radius:50%; border:1px solid #333; background:#141414; display:grid; place-items:center; color:#8a8a8a; }
-    .avatar svg { width:56px; height:56px; }
-    .name { margin:0; font-size:clamp(20px,6vw,44px); font-weight:400; line-height:1.5;}
-    .name svg { width:20px; height:28px; margin-left:8px; vertical-align:middle; }
-    .name .btn { margin-left:14px; font-size:16px; padding:3px 14px; border-radius:50px; vertical-align:middle; }
-    .email-top { margin:6px 0 0; color:#b9b7b7; font-size:20px;}
-    .btn.signout {  color:#e5534b; border-color:#e5534b; margin-top:16px; }
-    .btn.signout:hover:not(:disabled) { background:#e5534b; color:#fff; }
+    .profile {
+      max-width: 100%;
+      margin: 10px auto 80px;
+      padding: 0 20px;
+      font-family: 'Outfit', sans-serif;
+      color: #fff;
+    }
 
+    /* ── Identity ── */
+    .identity { display: flex; align-items: center; gap: 24px; margin-bottom: 32px; }
+    .identity > div:last-child { min-width: 0; flex: 1 1 auto; }   /* text column can shrink */
 
+    .avatar {
+      width: 80px;
+      height: 80px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      color: #8a8a8a;
+      background: #141414;
+      border: 1px solid #333;
+      border-radius: 50%;
+    }
+    .avatar svg { width: 56px; height: 56px; }
 
-    .card { border:1px solid #201e1e; border-radius:16px; background:#141414; margin-bottom:16px; }
-    .item { padding:20px 24px; border-bottom:1px solid #2a2a2a; }
-    .item:last-child { border-bottom:none; }
-    .item-head { display:flex; align-items:center; justify-content:space-between; gap:16px; }
-    .item-label { color : rgb(219, 217, 217); font-size:16px; }
-    .item-value { margin-top:2px; font-size:22px;}
-    .card h3 { margin:0 0 8px; font-size:22px; font-weight:400; }
-    .card p { margin:0 0 14px; color:#bdbdbd; font-size:18px; line-height:1.5; }
-    .card b { font-weight:500; color:#fff; overflow-wrap:anywhere; }
+    .name {
+      margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px 10px;
+      font-size: clamp(22px, 6vw, 36px);
+      font-weight: 400;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+    .name svg { width: 20px; height: 28px; flex-shrink: 0; }
+    .name .btn { font-size: 16px; padding: 3px 14px; border-radius: 50px; }
 
-    .inline { display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin-top:8px; }
-    .profile input { flex:1; min-width:0; background:#000; border:2px solid #333; border-radius:10px; padding:11px 14px; color:#e8e8e8; font:inherit; font-size:19px; outline:none; }
-    .profile input:focus { border-color:#fff; }
-    .btn { background:transparent; color:#fff; border:2px solid #adacac; border-radius:8px; padding: 4px 8px; font:inherit; font-size:18px; cursor:pointer; transition:background .2s, color .2s; }
+    .email-top { margin: 6px 0 0; color: #b9b7b7; font-size: 20px; overflow-wrap: anywhere; }
 
-    .btn:hover:not(:disabled) { background:#fff; color:#000; }
+    /* ── Cards ── */
+    .card { margin-bottom: 16px; background: #141414; border: 1px solid #201e1e; border-radius: 16px; }
+    .item { padding: 20px 24px; border-bottom: 1px solid #2a2a2a; }
+    .item:last-child { border-bottom: none; }
+    .item-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .item-head > div:first-child { min-width: 0; }
+    .item-head .btn { flex-shrink: 0; }
+    .item-label { color: rgb(219, 217, 217); font-size: 16px; }
+    .item-value { margin-top: 2px; font-size: 22px; overflow-wrap: anywhere; }
 
-    .btn:disabled { opacity:.4; cursor:default; }
+    .card h3 { margin: 0 0 8px; font-size: 22px; font-weight: 400; }
+    .card p { margin: 0 0 14px; color: #bdbdbd; font-size: 18px; line-height: 1.5; }
+    .card b { font-weight: 500; color: #fff; overflow-wrap: anywhere; }
 
-    .btn:focus-visible, .profile input:focus-visible, .link:focus-visible {  outline-offset:2px; }
-    .link { background:none; border:none; padding:6px 4px; color:#8a8a8a; font:inherit; font-size:18px; text-decoration:underline; cursor:pointer; }
-    .link:hover { color:#fff; }
-    .msg { min-height:18px; margin:8px 0 0 !important; font-size:16px !important; color:#e07070 !important; }
-    
-    html.light-mode .profile { color:#222; }
-    html.light-mode .avatar { border-color:#ddd; background:#e8e8e8; color:#666; }
-    html.light-mode .card { border-color:#ddd; background:#fff; }
-    html.light-mode .item { border-bottom-color:#ddd; }
+    /* ── Forms and buttons ── */
+    .inline { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 8px; }
+    .profile input {
+      flex: 1;
+      min-width: 0;
+      padding: 11px 14px;
+      color: #e8e8e8;
+      font: inherit;
+      font-size: 19px;
+      background: #000;
+      border: 2px solid #333;
+      border-radius: 10px;
+      outline: none;
+    }
+    .profile input:focus { border-color: #fff; }
+
+    .btn {
+      padding: 4px 12px;
+      color: #fff;
+      font: inherit;
+      font-size: 18px;
+      background: transparent;
+      border: 2px solid #adacac;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn:hover:not(:disabled) { background: #fff; color: #000; }
+    .btn:disabled { opacity: 0.4; cursor: default; }
+    .btn:focus-visible, .profile input:focus-visible, .link:focus-visible { outline: 2px solid #6fa0ff; outline-offset: 2px; }
+
+    .btn.signout { margin-top: 16px; color: #e5534b; border-color: #e5534b; }
+    .btn.signout:hover:not(:disabled) { background: #e5534b; color: #fff; }
+
+    .link { padding: 6px 4px; color: #8a8a8a; font: inherit; font-size: 18px; text-decoration: underline; background: none; border: none; cursor: pointer; }
+    .link:hover { color: #fff; }
+
+    .msg { min-height: 18px; margin: 8px 0 0 !important; font-size: 16px !important; color: #e07070 !important; }
+
+    /* ── Phones ── */
+    @media (max-width: 480px) {
+      .profile { padding: 0 12px; }
+      .identity { gap: 14px; }
+      .avatar { width: 64px; height: 64px; }
+      .avatar svg { width: 44px; height: 44px; }
+      .item { padding: 16px; }
+      .item-value { font-size: 19px; }
+      .email-top { font-size: 17px; }
+      .inline input { flex: 1 1 100%; }                 /* input on its own line */
+      .inline .btn, .inline .link { flex: 0 0 auto; }   /* buttons underneath */
+    }
+
+    /* ── Light mode ── */
+    html.light-mode .profile { color: #222; }
+    html.light-mode .avatar { border-color: #ddd; background: #e8e8e8; color: #666; }
+    html.light-mode .card { border-color: #ddd; background: #fff; }
+    html.light-mode .item { border-bottom-color: #ddd; }
     html.light-mode .item-label,
-    html.light-mode .email-top { color:#666; }
-    html.light-mode .card p { color:#444; }
-    html.light-mode .card b { color:#222; }
-    html.light-mode .profile input { background:#fff; border-color:#ccc; color:#222; }
-    html.light-mode .profile input:focus { border-color:#555; }
-    html.light-mode .btn { color:#222; border-color:#555; }
-    html.light-mode .btn:hover:not(:disabled) { background:#222; color:#fff; }
-    html.light-mode .link { color:#555; }
-    html.light-mode .link:hover { color:#111; }
-    html.light-mode .btn.signout {  color:#e5534b; border-color:#e5534b; margin-top:16px; }
-   html.light-mode .btn.signout:hover:not(:disabled) { background:#e5534b; color:#fff; }
-
+    html.light-mode .email-top { color: #666; }
+    html.light-mode .card p { color: #444; }
+    html.light-mode .card b { color: #222; }
+    html.light-mode .profile input { background: #fff; border-color: #ccc; color: #222; }
+    html.light-mode .profile input:focus { border-color: #555; }
+    html.light-mode .btn { color: #222; border-color: #555; }
+    html.light-mode .btn:hover:not(:disabled) { background: #222; color: #fff; }
+    html.light-mode .link { color: #555; }
+    html.light-mode .link:hover { color: #111; }
+    html.light-mode .btn.signout { color: #e5534b; border-color: #e5534b; }
+    html.light-mode .btn.signout:hover:not(:disabled) { background: #e5534b; color: #fff; }
   </style>
 </head>
 <body>
-  
 
   <main class="profile">
     <section class="identity">
       <div class="avatar" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="9" r="4" fill="currentColor"/><path d="M4.5 21c1.2-4 4-6 7.5-6s6.300 2 7.500 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="9" r="4" fill="currentColor"/><path d="M4.5 21c1.2-4 4-6 7.5-6s6.3 2 7.5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
       </div>
       <div>
-        <h3 class="name"><span id="name-text">Loading...</span><span id="name-badge"></span></h3>
+        <h3 class="name"><span id="name-text">Loading…</span><span id="name-badge"></span></h3>
         <p class="email-top" id="email-top"></p>
-        
-    <button class="btn signout" id="signout-btn" type="button">Sign out</button>
-    
+        <button class="btn signout" id="signout-btn" type="button">Sign out</button>
       </div>
     </section>
 
     <section class="card" id="verify-card" hidden>
       <div class="item">
-        <h3>Get verified</h3>
-        <p>Open the confirmation email sent to <b id="verify-email"></b> (check spam too) and select the link, then press "I've verified".</p>
+        <h3>Confirm your email</h3>
+        <p>We sent a link to <b id="verify-email"></b>. Open it (check spam too), then come back and tap "I've confirmed it".</p>
         <div class="inline" style="margin-top:0">
-          <button class="btn" id="resend-btn" type="button">Resend email</button>
-          <button class="btn" id="check-btn" type="button">I've verified</button>
+          <button class="btn" id="resend-btn" type="button">Send again</button>
+          <button class="btn" id="check-btn" type="button">I've confirmed it</button>
         </div>
         <p class="msg" id="verify-msg" role="alert"></p>
       </div>
@@ -105,15 +179,15 @@
       <div class="item">
         <div class="item-head" id="name-show">
           <div>
-            <div class="item-label">Username</div>
-            <div class="item-value" id="name-val">Loading...</div>
+            <div class="item-label">Display name</div>
+            <div class="item-value" id="name-val">Loading…</div>
           </div>
-          <button class="btn" id="name-edit" type="button" disabled>Edit</button>
+          <button class="btn" id="name-edit" type="button" disabled>Change</button>
         </div>
         <div id="name-form" hidden>
-          <label class="item-label" for="name-input">Username</label>
+          <label class="item-label" for="name-input">Display name</label>
           <div class="inline">
-            <input id="name-input" type="text" maxlength="30">
+            <input id="name-input" type="text" maxlength="30" autocomplete="nickname">
             <button class="btn" id="name-save" type="button">Save</button>
             <button class="link" id="name-cancel" type="button">Cancel</button>
           </div>
@@ -125,14 +199,14 @@
         <div class="item-head" id="email-show">
           <div>
             <div class="item-label">Email</div>
-            <div class="item-value" id="email-val">Loading...</div>
+            <div class="item-value" id="email-val">Loading…</div>
           </div>
-          <button class="btn" id="email-edit" type="button" disabled>Edit</button>
+          <button class="btn" id="email-edit" type="button" disabled>Change</button>
         </div>
         <div id="email-form" hidden>
           <label class="item-label" for="email-input">Email</label>
           <div class="inline">
-            <input id="email-input" type="email">
+            <input id="email-input" type="email" autocomplete="email">
             <button class="btn" id="email-save" type="button">Save</button>
             <button class="link" id="email-cancel" type="button">Cancel</button>
           </div>
@@ -153,7 +227,7 @@
           <div class="inline">
             <input id="pw1" type="password" autocomplete="new-password">
           </div>
-          <label class="item-label" for="pw2" style="display:block; margin-top:12px">Confirm password</label>
+          <label class="item-label" for="pw2" style="display:block; margin-top:12px">Confirm new password</label>
           <div class="inline">
             <input id="pw2" type="password" autocomplete="new-password">
             <button class="btn" id="pw-save" type="button">Save</button>
@@ -165,7 +239,9 @@
     </section>
 
   </main>
-   <div id="site-footer" data-full></div>
+
+  <div id="site-footer" data-full></div>
+  <script src="/footer.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/auth.js"></script>
   <script>
@@ -176,11 +252,19 @@
       var $ = function (id) { return document.getElementById(id); };
       var say = function (id, text) { $(id).textContent = text; };
 
+      // Friendly message for any error; falls back if the shared helper isn't loaded.
+      var friendly = function (error, fallback) {
+        return typeof window.niceError === "function" ? window.niceError(error, fallback) : fallback;
+      };
+      var toast = function (message, type) {
+        if (typeof window.notify === "function") window.notify(message, type || "success");
+      };
+
       // Disables a button while a request runs; always re-enables it, even offline.
       function submit(btn, task) {
         btn.disabled = true;
         return task()
-          .catch(function () { return { error: { message: "No connection" } }; })
+          .catch(function () { return { error: { message: "Failed to fetch" } }; })
           .then(function (res) { btn.disabled = false; return res; });
       }
 
@@ -202,7 +286,7 @@
           box.innerHTML = _makeBadge(window._cachedTier, 28);
           $("verify-card").hidden = true;
         } else {
-          box.innerHTML = '<button type="button" class="btn" id="get-verified">Get verified</button>';
+          box.innerHTML = '<button type="button" class="btn" id="get-verified">Confirm email</button>';
           $("get-verified").addEventListener("click", function () {
             $("verify-card").hidden = !$("verify-card").hidden;
           });
@@ -247,19 +331,19 @@
 
       /* ── Save: display name ──────────────────── */
       $("name-save").addEventListener("click", function () {
-        var value = $("name-input").value.trim();
+        var value = $("name-input").value.trim().replace(/\s+/g, " ");
         if (value.length < 2) { say("name-msg", "Enter a name with at least 2 characters."); return; }
         if (value === currentName) { setEditing("name", false); return; }
 
         submit($("name-save"), function () {
           return sb.auth.updateUser({ data: { display_name: value } });
         }).then(function (res) {
-          if (res.error) { say("name-msg", "Could not save: " + res.error.message); return; }
+          if (res.error) { say("name-msg", friendly(res.error, "We couldn't save your name. Please try again.")); return; }
           setName(value);
           window._cachedUsername = value;
           sessionStorage.setItem("jis_username", value);
           setEditing("name", false);
-          notify("Name saved");
+          toast("Display name updated");
         });
       });
 
@@ -272,9 +356,9 @@
         submit($("email-save"), function () {
           return sb.auth.updateUser({ email: value });
         }).then(function (res) {
-          if (res.error) { say("email-msg", "Could not save: " + res.error.message); return; }
+          if (res.error) { say("email-msg", friendly(res.error, "We couldn't change your email. Please try again.")); return; }
           setEditing("email", false);
-          notify("Check your new email to confirm the change");
+          toast("Check your new email to confirm the change");
         });
       });
 
@@ -283,18 +367,18 @@
         var a = $("pw1").value;
         var b = $("pw2").value;
         if (a.length < 8) { say("pw-msg", "Use at least 8 characters."); return; }
-        if (a !== b) { say("pw-msg", "The two passwords do not match."); return; }
+        if (a !== b) { say("pw-msg", "Those passwords don't match."); return; }
 
         submit($("pw-save"), function () {
           return sb.auth.updateUser({ password: a });
         }).then(function (res) {
-          if (res.error) { say("pw-msg", "Could not save: " + res.error.message); return; }
+          if (res.error) { say("pw-msg", friendly(res.error, "We couldn't change your password. Please try again.")); return; }
           setEditing("pw", false);
-          notify("Password changed");
+          toast("Password changed");
         });
       });
 
-      /* ── Verification ────────────────────────── */
+      /* ── Email confirmation ──────────────────── */
       $("resend-btn").addEventListener("click", function () {
         var btn = $("resend-btn");
         say("verify-msg", "");
@@ -302,13 +386,13 @@
         submit(btn, function () {
           return sb.auth.resend({ type: "signup", email: user.email });
         }).then(function (res) {
-          if (res.error) { say("verify-msg", "Could not send: " + res.error.message); return; }
-          notify("Email sent");
+          if (res.error) { say("verify-msg", friendly(res.error, "We couldn't send the email. Please try again.")); return; }
+          toast("Email sent");
           var left = 60;
           btn.disabled = true;
           var timer = setInterval(function () {
             left--;
-            btn.textContent = left > 0 ? "Resend in " + left + "s" : "Resend email";
+            btn.textContent = left > 0 ? "Send again in " + left + "s" : "Send again";
             if (left <= 0) { clearInterval(timer); btn.disabled = false; }
           }, 1000);
         });
@@ -321,13 +405,13 @@
           return sb.auth.getUser();
         }).then(function (res) {
           if (res.error || !res.data || !res.data.user) {
-            say("verify-msg", "Could not check right now. Try again.");
+            say("verify-msg", "We couldn't check right now. Please try again.");
             return;
           }
           user = res.data.user;
           renderBadge();
           if (!user.email_confirmed_at) {
-            say("verify-msg", "Still not verified. Select the link in the email first.");
+            say("verify-msg", "Not confirmed yet. Tap the link in the email first, then try again.");
           }
         });
       });
@@ -351,7 +435,7 @@
         renderBadge();
         waitForTier();
       }).catch(function () {
-        say("name-msg", "Could not load your profile. Refresh the page.");
+        say("name-msg", "We couldn't load your profile. Please refresh the page.");
       });
     })();
   </script>

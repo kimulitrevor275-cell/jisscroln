@@ -929,11 +929,10 @@ function showTickerSkeleton() {
   var style = document.createElement("style");
   style.textContent = `
     #jis-search-icon {
-      position:fixed; bottom:30px; right:15px;
-      width:35px; height:50px; padding:0; border:none; background:none;
-      border-radius:50%;
+      position:fixed; bottom:10px; right:10px; font-size: 14px;
+      width:35px; height:50px; padding:0; border:none; background: transparent;
       display:flex; align-items:center; justify-content:center;
-      cursor:pointer; box-shadow:0 7px 16px rgba(99, 232, 205, 0.5);
+      cursor:pointer; 
       z-index:999; user-select:none;
     }
   `;
@@ -951,7 +950,7 @@ function showTickerSkeleton() {
     icon.type = "button";
     icon.setAttribute("aria-label", "Open search page");
     icon.innerHTML =
-      '<img src="/pics/search.svg" alt="" style="background:none;width:50px;height:50px;border:none;margin:0">';
+      '<img src="/pics/search.svg" alt="" style="background: transparent;width:50px;height:50px;border:none;margin:0">';
     icon.addEventListener("click", function () {
       window.location.href = "/search/";
     });
