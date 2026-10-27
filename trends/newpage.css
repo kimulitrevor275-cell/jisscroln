@@ -135,7 +135,7 @@
   gap: 14px;
   margin: 0;
   margin-bottom: 5px;
-  padding: 13px;
+  padding: 4px;
   border-radius: 2px;
   background: black;
   color: #fff;
@@ -154,14 +154,13 @@
 }
 
 .news-headline-image {
-  display: flex;
-  width: clamp(179px, 20vw, 300px);
+
+  width: clamp(160px, 20vw, 300px);
   height:100%;
   border:none;
-  max-height: 200px;
+  max-height: 120px;
   margin: 0;
-  margin-right: 10px;
-  border-radius: 2px;
+  margin-right: 2px;
   object-fit: cover;
   background: black;
 }

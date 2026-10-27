@@ -38,33 +38,61 @@ function renderTicker(tickers) {
     });
   }
 
-  // Second identical copy makes the -50% loop seamless
   var copy = group.cloneNode(true);
   copy.setAttribute("aria-hidden", "true");
   tickerEl.appendChild(copy);
 
-  // Constant speed (~60px/s) no matter how many items there are
+  
   var seconds = Math.max(15, group.offsetWidth / 60);
   tickerEl.style.setProperty("--ticker-duration", seconds + "s");
 }
+
 function renderPolls(polls) {
-  polls.forEach(function (poll) {
-    var el = document.getElementById(poll.id);
-    if (!el) return;
-    el.innerHTML = "";
+  var wrap = document.getElementById("polls");
+  var dots = document.getElementById("pDots");
+  if (!wrap) return;
+  wrap.innerHTML = "";
+  if (dots) dots.innerHTML = "";
+
+  if (!Array.isArray(polls) || !polls.length) {
+    var box = wrap.closest(".jisscrolpolls");
+    if (box) box.hidden = true;          
+    return;
+  }
+
+  polls.forEach(function (poll, i) {
+    var card = document.createElement(poll.link ? "a" : "div");
+    card.className = "poll-card";
+    if (poll.link) card.href = poll.link;
+
     if (poll.img) {
       var img = document.createElement("img");
       img.src = poll.img;
-      img.alt = poll.text;
-      el.appendChild(img);
+      img.alt = "";
+      img.loading = "lazy";
+      card.appendChild(img);
     }
     if (poll.text) {
       var h5 = document.createElement("h5");
       h5.className = "polltext";
       h5.textContent = poll.text;
-      el.appendChild(h5);
+      card.appendChild(h5);
+    }
+    wrap.appendChild(card);
+
+    if (dots) {
+      var dot = document.createElement("div");
+      dot.className = "dot" + (i === 0 ? " active" : "");
+      dots.appendChild(dot);
     }
   });
+
+  // connect the dots AFTER the cards exist
+  bindDots(
+    document.querySelector(".jisscrolpolls"),
+    ".poll-card",
+    document.querySelectorAll("#pDots .dot")
+  );
 }
 
 function getHomeNewsSafeUrl(value) {

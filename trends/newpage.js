@@ -172,7 +172,7 @@ async function renderNewsModulePermanent() {
             const sourceUrl = getSafeNewsUrl(article.link || article.url);
             const source = getNewsSource(article);
             const meta = [
-              'Category: Uganda',
+              '',
               `Source: ${sourceUrl !== '#'
                 ? `<a href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(source)}</a>`
                 : escapeHtml(source)}`

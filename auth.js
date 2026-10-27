@@ -79,7 +79,7 @@ if (!window._lightModeListenersInitialized) {
 
 function getGreeting() {
   var h = new Date().getHours();
-  if (h < 12) return "Good morning";
+  if (h < 12) return "Good Morning";
   if (h < 17) return "Good afternoon";
   return "Good evening";
 }
@@ -199,8 +199,15 @@ function renderGreeting(buildHtml) {
 }
 
 function loggedInGreeting(el, name, badge) {
+  var full = String(name || "");
   return (
-    `<div class="gwrap">${getGreeting()}, <span class="greeting-name">${escapeHtml(name)}${badge || ""}</span></div>` +
+    `<div class="gwrap">` +
+      `<span class="gtext">${getGreeting()},&nbsp;</span>` +
+      `<span class="greeting-name">` +
+        `<span class="gname" title="${escapeHtml(full)}">${escapeHtml(full)}</span>` +
+        `${badge || ""}` +
+      `</span>` +
+    `</div>` +
     `<div class="gicons">
       ${profileIconMarkup()}
       ${lightModeToggleMarkup(el)}
@@ -249,7 +256,7 @@ sb.auth.getSession().then(function (r) {
 
     renderGreeting(function (el) {
       return `<div style="display:flex;align-items:center;">
-      <a href="/login/" style="color:white;font-family:'Outfit', sans-serif;font-size:19px;text-decoration:none; margin: 10px;">Login</a>${lightModeToggleMarkup(el)}${sideMarkup()}</div>`;
+      <a href="/login/" style="color:white;font-family:'Outfit', sans-serif;font-size:14px;text-decoration:none; margin: 10px;">Login</a>${lightModeToggleMarkup(el)}${sideMarkup()}</div>`;
     });
   }
 });
