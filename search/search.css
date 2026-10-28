@@ -493,10 +493,10 @@ html.light-mode .search-intro.is-searching {
   margin: 0 0 12px;
   color: var(--search-accent);
   font-family: inherit;
-  font-size: 25px;
+  font-size: 17px;
   font-weight: 600;
   line-height: 1.4;
-  letter-spacing: .15em;
+  letter-spacing: .1em;
   text-transform: uppercase;
 }
 
@@ -512,7 +512,7 @@ html.light-mode .search-intro.is-searching {
   overflow: hidden;
   flex-direction: column;
   border: 1px solid var(--search-border);
-  border-radius: 6px;
+  border-radius: 2px;
   background: var(--search-surface);
   color: inherit;
   text-decoration: none;
@@ -562,7 +562,7 @@ html.light-mode .search-intro.is-searching {
 }
 
 .search-result-category {
-  display: block;
+  display: none;
   margin-bottom: 4px;
   color: var(--search-accent);
   font-family: inherit;
@@ -655,8 +655,8 @@ html.light-mode .search-message {
 @media (max-width: 520px) {
   .search-page {
     padding-top: 24px;
-    padding-right: 14px;
-    padding-left: 14px;
+    padding-right: 8px;
+    padding-left: 8px;
   }
 
   .search-intro {
@@ -671,7 +671,7 @@ html.light-mode .search-message {
   #site-search-form {
     min-height: 54px;
     gap: 8px;
-    padding-left: 12px;
+    padding-left: 8px;
   }
 
   #site-search-form button {
@@ -686,7 +686,7 @@ html.light-mode .search-message {
   }
 
   .discovery-card-copy {
-    padding: 14px;
+    padding: 8px;
   }
 
   .featured-song-grid,

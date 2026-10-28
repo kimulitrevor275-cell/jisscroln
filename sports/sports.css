@@ -39,8 +39,8 @@ html.light-mode {
 
 .footstat-section,
 .standings-section {
-  padding: 12px 0;
-  margin: 12px 0;
+  padding: 4px 0;
+  margin: 4px 0;
   max-width: 100%;
 }
 
@@ -72,11 +72,78 @@ html.light-mode {
   background: transparent;
   color: var(--dim);
   font: 400 16px "Outfit", sans-serif;
-  padding: 7px;
+  padding: 4px;
   border-radius: 999px;
   cursor: pointer;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
   white-space: nowrap;
+}
+
+#status-pills {
+  display: flex;
+  gap: 22px;
+  margin: 0 0 12px;
+  padding: 0;
+  border-bottom: 1px solid #262626;
+  background: none;
+}
+
+#status-pills .tab {
+  position: relative;
+  padding: 10px 2px;
+  font: 600 17px/1 'Outfit', sans-serif;
+  color: #8a8a8a;
+  background: none;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+}
+#status-pills .tab:hover { color: #fff; background: none; }
+
+#status-pills .tab.active { color: #fff; background: none; }
+#status-pills .tab.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 3px;
+  background: #5b8cff;
+  border-radius: 3px 3px 0 0;
+}
+
+/* the count: small, plain, no bubble */
+#status-pills .tab span {
+  margin-left: 4px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #6f6f6f;
+}
+#status-pills .tab.active span { color: #5b8cff; }
+
+/* live: red dot that pulses when matches are on */
+#status-pills .tab.has-live::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 6px;
+  vertical-align: middle;
+  background: #e07070;
+  border-radius: 50%;
+  animation: livepulse 1.5s ease-in-out infinite;
+}
+@keyframes livepulse { 50% { opacity: 0.3; } }
+
+html.light-mode #status-pills { border-bottom-color: #ddd; }
+html.light-mode #status-pills .tab { color: #666; }
+html.light-mode #status-pills .tab:hover,
+html.light-mode #status-pills .tab.active { color: #111; }
+html.light-mode #status-pills .tab.active::after { background: #2438d8; }
+html.light-mode #status-pills .tab.active span { color: #2438d8; }
+
+@media (prefers-reduced-motion: reduce) {
+  #status-pills .tab.has-live::before { animation: none; }
 }
 .tab:hover { background: var(--surface-hover); color: var(--text); }
 .tab.active {
@@ -102,7 +169,7 @@ html.light-mode {
   display: flex;
   gap: 10px;
   overflow-x: auto;
-  padding: 6px 10px 10px;
+  padding: 6px 8px 8px;
   scroll-snap-type: x proximity;
   scroll-padding: 0 10px;
   scroll-behavior: smooth;
@@ -118,7 +185,7 @@ html.light-mode {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 12px 8px;
+  padding:8px 8px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -203,7 +270,7 @@ html.light-mode .match-status { background: rgba(0, 0, 0, 0.06); }
 .standings-container { display: block; }
 
 .league-standings {
-  margin: 0 10px;
+  margin: 0 4px;
   background: var(--surface);
   border:1.3px solid var(--border);
   border-radius: 8px;
@@ -290,7 +357,7 @@ html.light-mode .match-status { background: rgba(0, 0, 0, 0.06); }
 }
 .team-name-small {
   color: var(--text);
-  font: 500 15px "lexend", sans-serif;
+  font: 500 13px "lexend", sans-serif;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

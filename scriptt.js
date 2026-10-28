@@ -246,7 +246,7 @@ function renderPost(post) {
     ${renderArticleImages(post)}
     ${renderBody(post)}
     ${renderRateboxAndEngagement(postId)}
-    <br><b id="time">${post.time}</b>
+    <b id="time">${post.time}</b>
     <hr>
   `;
 }

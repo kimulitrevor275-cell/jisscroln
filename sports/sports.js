@@ -24,7 +24,7 @@ function renderSportsPost(post) {
     ${renderArticleImages(post)}
      ${renderBody(post)}
     ${renderRateboxAndEngagement(postId)}
-    ${post.time ? `<br><b id="time">${post.time}</b>` : ""}
+    ${post.time ? `<b id="time">${post.time}</b><hr>` : ""}
     
   `;
 }

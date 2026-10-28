@@ -382,8 +382,6 @@ function truncateBody(text, limit) {
   return text.substring(0, cut);
 }
 
-// Make every body link reliably clickable, even when the post card
-// sits inside another link or has its own click handler (capture phase runs first).
 document.addEventListener(
   "click",
   function (event) {
@@ -396,7 +394,7 @@ document.addEventListener(
   true,
 );
 
-// Tapping a #hashtag opens search with that tag
+//  tag
 document.addEventListener("click", function (event) {
   var tag = event.target.closest && event.target.closest(".body-hashtag");
   if (!tag || typeof window.openJiSearch !== "function") return;
@@ -486,6 +484,7 @@ function renderEngagementPanel(postId) {
 }
 
 // Both together: this is the one you call
+
 function renderRateboxAndEngagement(postId) {
   return renderRatingsBar(postId) + renderEngagementPanel(postId);
 }
@@ -506,7 +505,6 @@ function attachEngagementEvents(postId) {
       event.preventDefault();
       event.stopPropagation();
 
-      // Open the dedicated comments page for a full conversation view.
       var commentsPage = "/comments/?post_id=" + encodeURIComponent(postId);
       if (window.location.pathname.indexOf("/comments") === -1) {
         window.location.href = commentsPage;
@@ -559,7 +557,6 @@ function initEngagement(postId) {
   loadOpinions(postId);
 }
 
-// Tapping a post card opens its comments page
 document.addEventListener("click", function (event) {
   var target = event.target;
   if (!(target instanceof Element)) return;
@@ -579,10 +576,6 @@ document.addEventListener("click", function (event) {
   if (!postId) return;
   window.location.href = "/comments/?post_id=" + encodeURIComponent(postId);
 });
-
-// ─────────────────────────────────────────
-//  RATINGS
-// ─────────────────────────────────────────
 
 function submitRating(postId, vote) {
   if (voted[postId]) return;
@@ -752,10 +745,6 @@ function renderOpinions(postId, opinions) {
 
   if (opinions.length > 1) showMore.classList.add("visible");
 }
-
-// ─────────────────────────────────────────
-//  SKELETON LOADER
-// ─────────────────────────────────────────
 
 function showSkeleton(containerId, count) {
   count = count || 3;
@@ -1413,7 +1402,7 @@ function renderBody(post) {
     <p class="article-body" id="body-${post.id}">
       <span id="body-text-${post.id}">${shown}</span>${
         isLong
-          ? ` <span class="see-more" id="sm-${post.id}" data-body="${encodeURIComponent(post.body)}">See More</span>`
+          ? ` <span class="see-more" id="sm-${post.id}" data-body="${encodeURIComponent(post.body)}">see more</span>`
           : ""
       }
     </p>
