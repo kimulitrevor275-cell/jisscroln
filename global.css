@@ -156,7 +156,7 @@ padding-top: 0;
   gap: 4px;
   font-family: 'Tinos', 'Times New Roman', Times, serif;
   
-  font-size: clamp(15px, 0.9vw,20px) !important;
+  font-size: clamp(11px, 0.8vw,16px) !important;
   color: white;
   font-weight: 600;
   white-space: wrap;
@@ -303,7 +303,8 @@ a:hover { opacity: 0.8; }
 hr {
   border: none;
   border-top: 1.2px solid #eae6e6d8;
-  margin: 15px 0;
+  margin: 8px 0;
+  margin-top: 2px;
 }
 html.light-mode hr{
  border-top: 1px solid #5b5959ad;
@@ -834,13 +835,6 @@ html.light-mode .post-video-error {
 
 
 
-#time {
-  font-size: clamp(14px, 1vw, 20px);
-  color: rgb(224, 222, 222);
-  display: inline-block;
-  padding: 0px;
-  
-}
 
 
 /* ── RATING BAR ── */
@@ -963,7 +957,7 @@ padding: 0;
   flex: 1;
   margin: 0;
   display: flex;
-  height: 10px;
+  height: 7px;
   border-radius: 4px;
   overflow: hidden;
   background: #222;
