@@ -19,6 +19,92 @@ function onReady(fn) {
 var LIGHT_MODE_STORAGE_KEY = "jisscrol-theme";
 var LM_ICON_FOR_DARK = "/pics/lm.png";
 var LM_ICON_FOR_LIGHT = "/pics/darkmode.png";
+var USER_BACKGROUND_THEMES = ["aurora", "ocean", "sunset"];
+var USER_BACKGROUND_STORAGE_PREFIX = "jisscrol-user-background:";
+var currentBackgroundUser = null;
+
+function getUserBackgroundStorageKey(userId) {
+  return USER_BACKGROUND_STORAGE_PREFIX + userId;
+}
+
+function isVerifiedBackgroundUser(user) {
+  return Boolean(user && user.id && user.email_confirmed_at);
+}
+
+function applyUserBackground(user) {
+  USER_BACKGROUND_THEMES.forEach(function (theme) {
+    document.documentElement.classList.remove("user-background-" + theme);
+  });
+
+  if (!isVerifiedBackgroundUser(user)) return;
+
+  try {
+    var selected = localStorage.getItem(getUserBackgroundStorageKey(user.id));
+    if (USER_BACKGROUND_THEMES.indexOf(selected) !== -1) {
+      document.documentElement.classList.add("user-background-" + selected);
+    }
+  } catch (error) {
+    console.warn("Unable to load the saved background preference:", error);
+  }
+}
+
+function renderSideBackgroundPicker(user) {
+  currentBackgroundUser = isVerifiedBackgroundUser(user) ? user : null;
+  var picker = document.getElementById("side-background-picker");
+  if (!picker) return;
+
+  var info = picker.querySelector(".side-background-info");
+  var action = picker.querySelector(".side-background-action");
+  picker.hidden = false;
+  info.hidden = Boolean(currentBackgroundUser);
+  action.hidden = Boolean(currentBackgroundUser);
+  if (!currentBackgroundUser) {
+    action.href = user && user.id ? "/profile.html" : "/login/";
+    action.textContent = user && user.id ? "Verify your email" : "Get premium";
+  }
+
+  var selected = "";
+  if (currentBackgroundUser) {
+    try {
+      selected = localStorage.getItem(getUserBackgroundStorageKey(currentBackgroundUser.id)) || "";
+    } catch (error) {
+      console.warn("Unable to load the saved background preference:", error);
+    }
+  }
+
+  picker.querySelectorAll("[data-background]").forEach(function (button) {
+    button.setAttribute("aria-pressed", String(button.dataset.background === selected));
+  });
+}
+
+function selectUserBackground(theme) {
+  if (!isVerifiedBackgroundUser(currentBackgroundUser)) {
+    if (typeof window.notify === "function") {
+      window.notify("Verify your email to change the site background.", "error");
+    }
+    return;
+  }
+  if (theme && USER_BACKGROUND_THEMES.indexOf(theme) === -1) return;
+
+  try {
+    var key = getUserBackgroundStorageKey(currentBackgroundUser.id);
+    if (theme) localStorage.setItem(key, theme);
+    else localStorage.removeItem(key);
+  } catch (error) {
+    console.error("Unable to save the background preference:", error);
+    if (typeof window.notify === "function") {
+      window.notify("Couldn't save your background choice.", "error");
+    }
+    return;
+  }
+
+  applyUserBackground(currentBackgroundUser);
+  renderSideBackgroundPicker(currentBackgroundUser);
+  var label = theme ? theme.charAt(0).toUpperCase() + theme.slice(1) : "Default";
+  if (typeof window.notify === "function") {
+    window.notify(label + " background applied", "success", 2500);
+  }
+}
 
 function lmIconSrc() {
   return document.documentElement.classList.contains("light-mode")
@@ -31,6 +117,9 @@ function setLightMode(enabled) {
   try {
     localStorage.setItem(LIGHT_MODE_STORAGE_KEY, enabled ? "true" : "false");
   } catch (e) {}
+  if (typeof window.notify === "function") {
+    window.notify(enabled ? "Light mode enabled" : "Dark mode enabled", "info", 2500);
+  }
 }
 
 try {
@@ -147,6 +236,23 @@ function initSideMenu() {
         '<p> The JiScroL</p>' +
         '<button type="button" class="side-close" aria-label="Close menu">✕</button>' +
       '</div>' +
+      '<section class="side-background-picker" id="side-background-picker" aria-label="Get premium">' +
+        '<h2>Get premium</h2>' +
+        '<p class="side-background-info">Sign in or create an account, then confirm your email from your profile using the link sent to your inbox. Visit JiScroL across 7 days to build your member tier. After verification, you get a verified badge and three custom site-wide backgrounds.</p>' +
+        '<div class="side-verified-preview" aria-label="Example verified badge">' +
+          '<span class="side-verified-name">Your name</span>' +
+          '<svg class="side-verified-badge" viewBox="0 0 24 24" role="img" aria-label="Verified badge"><circle cx="12" cy="12" r="12" fill="#87ceeb"/><path d="m6.5 12.5 3.5 3.5 7-7" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '<span class="side-verified-caption">Verified badge</span>' +
+        '</div>' +
+        '<a class="side-background-action" href="/login/">Sign in or create an account</a>' +
+        '<p class="side-background-label">Site background</p>' +
+        '<div class="side-background-options" role="group" aria-label="Choose a site background">' +
+          '<button type="button" class="side-background-option" data-background="aurora" aria-label="Aurora background" aria-pressed="false"><span class="side-background-swatch side-background-aurora" aria-hidden="true"></span></button>' +
+          '<button type="button" class="side-background-option" data-background="ocean" aria-label="Ocean background" aria-pressed="false"><span class="side-background-swatch side-background-ocean" aria-hidden="true"></span></button>' +
+          '<button type="button" class="side-background-option" data-background="sunset" aria-label="Sunset background" aria-pressed="false"><span class="side-background-swatch side-background-sunset" aria-hidden="true"></span></button>' +
+          '<button type="button" class="side-background-option" data-background="" aria-label="Default background" aria-pressed="false"><span class="side-background-swatch side-background-default" aria-hidden="true"></span></button>' +
+        '</div>' +
+      '</section>' +
       '<nav class="side-nav">' +
         SIDE_LINKS.map(function (l) {
           return '<a href="' + l.href + '">' + l.label + "</a>";
@@ -158,6 +264,7 @@ function initSideMenu() {
   var overlay = wrap.querySelector(".side-overlay");
   var drawer  = wrap.querySelector(".side-drawer");
   var lastFocus = null;
+  renderSideBackgroundPicker(currentBackgroundUser);
 
   function setOpen(open) {
     var toggles = document.querySelectorAll(".side-toggle");
@@ -179,6 +286,8 @@ function initSideMenu() {
 
   // delegation: works even if the button is injected later by sideMarkup()
   document.addEventListener("click", function (e) {
+    var backgroundButton = e.target.closest(".side-background-option");
+    if (backgroundButton) return selectUserBackground(backgroundButton.dataset.background);
     if (e.target.closest(".side-toggle")) return setOpen(true);
     if (e.target.closest(".side-close") || e.target === overlay) return setOpen(false);
     if (e.target.closest(".side-nav a")) setOpen(false);
@@ -222,6 +331,8 @@ sb.auth.getSession().then(function (r) {
     var name = (u.user_metadata && u.user_metadata.display_name) || u.email;
     var uid = u.id;
 
+    applyUserBackground(u);
+    renderSideBackgroundPicker(u);
     window._cachedUsername = name;
     window._cachedUserId = uid;
     sessionStorage.setItem("jis_username", name);
@@ -249,6 +360,8 @@ sb.auth.getSession().then(function (r) {
       })
       .catch(function () {});
   } else {
+    applyUserBackground(null);
+    renderSideBackgroundPicker(null);
     window._cachedUsername =
       sessionStorage.getItem("jis_username") || "Anonymous";
     window._cachedUserId = null;
@@ -414,28 +527,13 @@ function formatTime(iso) {
   );
 }
 
-var toastTimer = null;
-
 function showToast(msg) {
-  var toast = document.getElementById("toast");
-  if (!toast) {
-    toast = document.createElement("div");
-    toast.id = "toast";
-    toast.style.cssText =
-      "position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(20px);" +
-      "background:#d0c7f2;color:black;font-family:monospace;font-size:24px;" +
-      "padding:12px 28px;border-radius:50px;opacity:0;transition:opacity 0.3s,transform 0.3s;" +
-      "pointer-events:none;white-space:nowrap;z-index:999;";
-    document.body.appendChild(toast);
+  if (typeof window.notify === "function") {
+    window.notify(msg);
+    return;
   }
-  toast.textContent = msg;
-  toast.style.opacity = "1";
-  toast.style.transform = "translateX(-50%) translateY(0)";
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(function () {
-    toast.style.opacity = "0";
-    toast.style.transform = "translateX(-50%) translateY(20px)";
-  }, 2500);
+
+  console.warn("Notification unavailable:", msg);
 }
 
 function renderRatingsBar(postId) {
@@ -1452,4 +1550,3 @@ function renderBody(post) {
       '<nav class="social" aria-label="Social links">' + social + "</nav>" +
     "</footer>";
 })();
-

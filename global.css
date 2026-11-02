@@ -199,12 +199,12 @@ html.light-mode .side-toggle { color: #161616; }
   margin: 0;
   margin-bottom: 10px;
   font-family: serif;
-  background-color: rgb(118, 151, 250);
+  background-color: rgba(2, 95, 78, 0.813);
   font-size: clamp(18px, 3vw, 30px);
   border-radius: 4px;
-  padding: 10px; 
-  border-top-color: rgb(248, 228, 228);
-  box-shadow: 3px 4px 4px #d3fafa9a;
+  padding: 6px; 
+  border-top-color: rgb(15, 224, 207);
+  box-shadow: 3px 4px 4px #8fcccc9a;
   border-start-start-radius: 30px;
   border-bottom-left-radius: 4px;
   border-top-right-radius: 7px;
@@ -364,6 +364,7 @@ p {
   color: white;
   line-height: 1.1;
   margin: 8px ;
+  margin-left: 2px;
 }
 .article-body {
   line-height: 1.6;
@@ -1132,6 +1133,83 @@ padding: 0;
 }
 .side-nav a:hover, .side-nav a:focus-visible { background: #1a1a1a; opacity: 1; outline: none; }
 
+.side-background-picker {
+  margin: 8px 14px 18px;
+  padding: 14px;
+  border: 1px solid #292929;
+  border-radius: 12px;
+  background: rgb(255 255 255 / 3%);
+}
+.side-background-picker [hidden] { display: none !important; }
+.side-background-picker h2 {
+  margin: 0 0 12px;
+  color: #f2f2f2;
+  font: 600 15px/1.3 'Lexend', sans-serif;
+}
+.side-background-info {
+  margin: 0 0 12px;
+  color: #c6c6c6;
+  font: 400 12px/1.55 'Lexend', sans-serif;
+}
+.side-verified-preview {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  margin: 0 0 12px;
+  padding: 7px 10px;
+  border: 1px solid #343943;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 4%);
+  font: 500 12px/1 'Lexend', sans-serif;
+}
+.side-verified-name { color: #f2f2f2; }
+.side-verified-badge { width: 16px; height: 16px; flex: 0 0 16px; }
+.side-verified-caption {
+  margin-left: 2px;
+  color: #aeb8c2;
+  font-size: 10px;
+  font-weight: 400;
+}
+.side-background-action {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: #8ccfff;
+  font: 500 12px/1.4 'Lexend', sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.side-background-label {
+  margin: 0 0 8px;
+  color: #aaa;
+  font: 400 12px/1.3 'Lexend', sans-serif;
+}
+.side-background-options { display: flex; align-items: center; gap: 12px; }
+.side-background-option {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 4px;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+.side-background-option[aria-pressed="true"] { border-color: #fff; }
+.side-background-option:focus-visible { outline: 2px solid #8ccfff; outline-offset: 2px; }
+.side-background-swatch {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgb(255 255 255 / 30%);
+  border-radius: 50%;
+}
+.side-background-aurora { background: linear-gradient(135deg, #70dac0, #101522 55%, #8a4c91); }
+.side-background-ocean { background: linear-gradient(135deg, #2798b7, #0e3244 55%, #081927); }
+.side-background-sunset { background: linear-gradient(135deg, #c06642, #321c2d 55%, #e5a680); }
+.side-background-default { background: #0f0f0f; }
+
 body.side-locked { overflow: hidden; }
 
 /* light mode */
@@ -1140,6 +1218,16 @@ html.light-mode .side-head { border-bottom-color: #ddd; }
 html.light-mode .side-title,
 html.light-mode .side-close { color: #161616; }
 html.light-mode .side-nav a { color: #161616; border-bottom-color: #eee; }
+html.light-mode .side-background-picker { border-color: #ddd; background: rgb(0 0 0 / 2%); }
+html.light-mode .side-background-picker h2 { color: #222; }
+html.light-mode .side-background-info { color: #555; }
+html.light-mode .side-verified-preview { border-color: #d5dbe2; background: rgb(255 255 255 / 75%); }
+html.light-mode .side-verified-name { color: #222; }
+html.light-mode .side-verified-caption { color: #666; }
+html.light-mode .side-background-action { color: #1769aa; }
+html.light-mode .side-background-label { color: #666; }
+html.light-mode .side-background-option[aria-pressed="true"] { border-color: #222; }
+html.light-mode .side-background-default { background: #f5f5f5; border-color: #bbb; }
 html.light-mode .side-nav a:hover,
 html.light-mode .side-toggle:hover,
 html.light-mode .side-close:hover { background: #eee; }
@@ -1179,7 +1267,7 @@ html.light-mode #user-greeting img {
 }
 
 html.light-mode #label {
-  background-color: #cde3e3;
+  background-color: #c0eded;
   text-align: center;
   color: rgb(27, 27, 28);
   box-shadow: 3px 7px 3px gray;
@@ -1344,6 +1432,8 @@ html.light-mode .jis-result-img {
   align-items: center;
   gap: 12px;
   width: min(480px, 100%);
+  max-height: calc(100vh - env(safe-area-inset-top, 0px) - 24px);
+  overflow-y: auto;
   padding:  14px;
   font-family: 'Lexend', sans-serif;
   font-size: 16px;
@@ -1411,3 +1501,87 @@ html.light-mode .about_us { border-top-color: #ddd; background: transparent; }
 html.light-mode .foot-line { color: #555; }
 html.light-mode .social a { color: #222; }
 html.light-mode .social a:hover { background: #eee; }
+
+html.user-background-aurora body {
+  background-image: linear-gradient(135deg, #102a2a, #101522 55%, #24142b);
+  background-attachment: fixed;
+}
+
+html.user-background-ocean body {
+  background-image: linear-gradient(135deg, #071b2c, #0e3244 55%, #081927);
+  background-attachment: fixed;
+}
+
+html.user-background-sunset body {
+  background-image: linear-gradient(135deg, #2a1710, #321c2d 55%, #161b2e);
+  background-attachment: fixed;
+}
+
+html.light-mode.user-background-aurora body {
+  background-image: linear-gradient(135deg, #e1f3eb, #edf0fa 55%, #f5eafa);
+}
+
+html.light-mode.user-background-ocean body {
+  background-image: linear-gradient(135deg, #e3f1fa, #e6f5f7 55%, #edf4fb);
+}
+
+html.light-mode.user-background-sunset body {
+  background-image: linear-gradient(135deg, #faeee4, #f8eaf0 55%, #e9edf8);
+}
+
+html.user-background-aurora #header,
+html.user-background-aurora header {
+  background-image:
+    radial-gradient(ellipse at 12% 0%, rgb(25 135 118 / 28%), transparent 48%),
+    linear-gradient(110deg, rgb(13 31 34 / 96%), rgb(20 23 39 / 96%) 58%, rgb(40 23 47 / 96%));
+  border-bottom: 1px solid rgb(112 218 192 / 35%);
+  box-shadow: 0 8px 24px rgb(3 12 16 / 24%);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+}
+
+html.user-background-ocean #header,
+html.user-background-ocean header {
+  background-image:
+    radial-gradient(ellipse at 90% 0%, rgb(39 152 183 / 24%), transparent 50%),
+    linear-gradient(110deg, rgb(7 27 44 / 97%), rgb(12 48 65 / 96%) 58%, rgb(8 28 44 / 97%));
+  border-bottom: 1px solid rgb(100 202 225 / 34%);
+  box-shadow: 0 8px 24px rgb(3 12 16 / 24%);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+}
+
+html.user-background-sunset #header,
+html.user-background-sunset header {
+  background-image:
+    radial-gradient(ellipse at 12% 0%, rgb(192 102 66 / 26%), transparent 48%),
+    linear-gradient(110deg, rgb(42 25 21 / 97%), rgb(48 28 45 / 96%) 58%, rgb(25 30 49 / 97%));
+  border-bottom: 1px solid rgb(229 166 128 / 34%);
+  box-shadow: 0 8px 24px rgb(20 10 16 / 22%);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+}
+
+html.light-mode.user-background-aurora #header,
+html.light-mode.user-background-aurora header {
+  background-image:
+    radial-gradient(ellipse at 12% 0%, rgb(112 199 173 / 28%), transparent 48%),
+    linear-gradient(110deg, rgb(237 248 242 / 96%), rgb(239 241 250 / 96%) 58%, rgb(248 239 250 / 96%));
+  border-bottom: 1px solid rgb(77 157 137 / 32%);
+}
+
+html.light-mode.user-background-ocean #header,
+html.light-mode.user-background-ocean header {
+  background-image:
+    radial-gradient(ellipse at 90% 0%, rgb(99 184 207 / 26%), transparent 50%),
+    linear-gradient(110deg, rgb(235 245 252 / 97%), rgb(232 248 249 / 96%) 58%, rgb(240 246 253 / 97%));
+  border-bottom: 1px solid rgb(66 145 171 / 30%);
+}
+
+html.light-mode.user-background-sunset #header,
+html.light-mode.user-background-sunset header {
+  background-image:
+    radial-gradient(ellipse at 12% 0%, rgb(224 153 113 / 25%), transparent 48%),
+    linear-gradient(110deg, rgb(252 241 232 / 97%), rgb(250 237 244 / 96%) 58%, rgb(237 241 251 / 97%));
+  border-bottom: 1px solid rgb(184 117 97 / 30%);
+}

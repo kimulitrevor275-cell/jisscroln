@@ -32,7 +32,7 @@
     }
 
     html.light-mode {
-      --bg: #f4f4f3;
+      --bg: #f5f5f5;
       --panel: #ffffff;
       --panel-2: #f0f2f4;
       --border: rgba(13, 18, 28, 0.08);
@@ -76,8 +76,9 @@
       position: relative;
       width: 100%;
       padding: 8px 0 14px;
-      border-bottom: 1px solid var(--border);
+      background: transparent;
     }
+    html.light-mode .article-heading { background: transparent; }
     .article-heading.has-media { padding-top: 0; }
 
     .media-stage {
@@ -88,19 +89,23 @@
     .media-stage:not(.has-media) { display: contents; }
 
     .heading-actions {
+      position: fixed;
+      z-index: 1000;
+      top: max(10px, env(safe-area-inset-top));
+      left: 16px;
+      right: 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 0 10px;
+      padding: 0;
+      pointer-events: none;
     }
+    .heading-actions .icon-btn { pointer-events: auto; }
 
     .feed-media { width: 100%; margin: 0 0 14px; }
 
     .feed-media.media-fill {
-      background:
-        radial-gradient(ellipse at 18% 22%, rgba(118, 222, 248, 0.2), transparent 42%),
-        radial-gradient(ellipse at 82% 78%, rgba(201, 169, 110, 0.22), transparent 46%),
-        linear-gradient(135deg, #252a35 0%, #101114 52%, #30251a 100%);
+      background: var(--bg);
       border-radius: 0;
       overflow: hidden;
       position: relative;
@@ -114,13 +119,13 @@
     .feed-media > img {
       display: block;
       width: 100%;
-      max-width: 100%;
       height: 100%;
-      max-height: 72vh;
+      max-width: none;
+      max-height: none;
       object-fit: cover;
       margin: 0;
       border: 0;
-      border-radius: 10px;
+      border-radius: 0;
       background: transparent;
     }
 
@@ -129,7 +134,7 @@
       display: block;
       width: 100%;
       height: 100%;
-      max-height: 72vh;
+      max-height: none;
       border: 0;
       background: transparent;
       object-fit: cover;
@@ -143,10 +148,9 @@
       height: clamp(260px, 72vh, 720px);
       background: linear-gradient(
         to bottom,
-        rgba(0,0,0,0.52) 0%,
-        rgba(0,0,0,0.08) 20%,
-        rgba(0,0,0,0.12) 43%,
-        rgba(0,0,0,0.9) 100%
+        transparent 55%,
+        rgba(0, 0, 0, 0.18) 76%,
+        rgba(0, 0, 0, 0.62) 100%
       );
       pointer-events: none;
     }
@@ -163,7 +167,7 @@
       color: var(--text);
       cursor: pointer;
       box-shadow: 0 3px 14px rgba(0,0,0,0.36);
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(2px);
       transition: background-color 150ms ease, transform 150ms ease;
     }
     .icon-btn:hover { background: rgba(12,12,12,0.92); transform: scale(1.05); }
@@ -263,14 +267,39 @@
     .article-rate-good { height: 100%; background: #6ec98a; }
     .article-rate-bad { height: 100%; background: #e07070; }
 
-    .media-stage.has-media .heading-actions { position: absolute; z-index: 3; top: 10px; left: 12px; right: 12px; padding: 0; }
     .media-stage.has-media .article-overlay { position: absolute; z-index: 2; left: 16px; right: 16px; bottom: 24px; padding: 0; }
     .media-stage.has-media .headline { color: #fff; font-weight: 600; text-shadow: 0 2px 5px rgba(0,0,0,0.95), 0 0 18px rgba(0,0,0,0.95); }
-    html.light-mode .headline { color: var(--text) !important; }
-    html.light-mode .media-stage.has-media .headline { color: #fff !important; }
     .media-stage.has-media .article-time { color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.95); }
     .media-stage.has-media .icon-btn { color: #fff; }
     .media-stage.has-media .show-more { color: #9be8ff; }
+
+    html.light-mode .headline { color: var(--text) !important; }
+    html.light-mode .media-stage.has-media::after {
+      background: linear-gradient(
+        to bottom,
+        transparent 55%,
+        rgba(255, 255, 255, 0.18) 76%,
+        rgba(255, 255, 255, 0.76) 100%
+      );
+    }
+    html.light-mode .media-stage.has-media .headline {
+      color: var(--text) !important;
+      text-shadow: 0 1px 5px rgba(255,255,255,0.9), 0 0 18px rgba(255,255,255,0.72);
+    }
+    html.light-mode .media-stage.has-media .article-time {
+      color: var(--text);
+      text-shadow: 0 1px 4px rgba(255,255,255,0.9);
+    }
+    html.light-mode .media-stage.has-media .icon-btn {
+      color: var(--text);
+      border-color: rgba(13,18,28,0.18);
+      background: rgba(255,255,255,0.82);
+      box-shadow: 0 3px 14px rgba(24,33,47,0.14);
+    }
+    html.light-mode .media-stage.has-media .show-more {
+      color: var(--accent-2);
+      text-shadow: 0 1px 4px rgba(255,255,255,0.9);
+    }
 
     .content { padding: 0 0 12px; }
 
@@ -283,83 +312,114 @@
       color: var(--text);
     }
 
-    .opinions-list { padding: 0 12px 12px; display: grid; gap: 12px; }
+    .opinions-list { padding: 0 12px 12px; display: grid; }
 
-    .opinion-card {
-      background: black;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 8px;
-      box-shadow: 0 8px 25px var(--shadow);
+    .content .opinion-card {
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid var(--border);
+      border-radius: 0;
+      padding: 12px 0;
+      box-shadow: none;
     }
-    .opinion-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
-    .opinion-user { display: flex; align-items: center; gap: 6px; font-weight: 700; color: var(--text); font-size: 18px; min-width: 0; }
-    .signature-badge { width: 16px; height: 19px; flex: 0 0 18px; vertical-align: middle; }
-    .opinion-time { display: block; margin-top: 8px; color: var(--muted); font-size: 14px; white-space: nowrap; text-align: right; }
-    .opinion-text { color: var(--text); font-size: 16px; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
+    .opinion-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 5px; }
+    .opinion-user { display: flex; align-items: center; gap: 7px; font-weight: 600; color: var(--text); font-size: 15px; min-width: 0; }
+    .opinion-user > span:not(.opinion-avatar) { overflow-wrap: anywhere; }
+    .opinion-avatar {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      color: var(--text);
+      box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 2px 8px rgba(0,0,0,0.12);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+    }
+    .opinion-avatar svg { display: block; width: 21px; height: 21px; }
+    html.light-mode .opinion-avatar {
+      border-color: rgba(13,18,28,0.14);
+      background: rgba(255,255,255,0.58);
+      box-shadow: inset 0 1px 2px rgba(255,255,255,0.9), 0 2px 8px rgba(24,33,47,0.1);
+    }
+    .signature-badge { width: 15px; height: 15px; flex: 0 0 15px; vertical-align: middle; }
+    .opinion-time { display: block; flex: 0 1 auto; margin: 0; color: var(--muted); font-size: 12px; white-space: nowrap; text-align: right; }
+    .opinion-content { min-width: 0; margin-left: 34px; }
+    .opinion-text { color: var(--text); font-size: 14px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
 
     .opinion-media { margin-top: 10px; display: grid; gap: 8px; }
     .opinion-media iframe, .opinion-media video { width: 100%; max-height: 220px; border: 0; border-radius: 10px; background: #000; display: block; }
     .opinion-media .comments-feed-video, .opinion-media .comments-feed-embed { height: auto; aspect-ratio: 16 / 9; max-height: 220px; }
 
     .empty { padding: 18px 16px 0; color: var(--muted); font-size: 25px; }
+    .empty-state { display: grid; justify-items: center; gap: 10px; max-width: 420px; margin: 0 auto; padding: 36px 16px; text-align: center; font-size: 15px; line-height: 1.5; }
+    .empty-state svg { width: 64px; height: 64px; padding: 15px; border-radius: 50%; background: var(--panel-2); fill: none; stroke: var(--accent-2); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .empty-state-title { color: var(--text); font-size: 17px; font-weight: 600; }
+    .empty-state > span { color: var(--muted); }
 
     .composer {
-      border-top: 1px solid var(--border);
+      border-top: 0;
       background: var(--bg);
-      padding: 12px 0 max(16px, env(safe-area-inset-bottom));
+      padding: 10px 0 max(12px, env(safe-area-inset-bottom));
       position: fixed;
       left: 16px;
       right: 16px;
       bottom: calc(var(--keyboard-offset, 0px) + env(safe-area-inset-bottom));
       z-index: 100;
       display: flex;
-      align-items: flex-end;
-      gap: 10px;
+      align-items: center;
+      gap: 8px;
     }
     .composer textarea {
       flex: 1 1 auto;
       width: auto;
       min-width: 0;
-      height: 50px;
+      height: 48px;
+      min-height: 48px;
       resize: none;
-      background: transparent;
-      color: white;
-      border: 3px solid rgba(143, 144, 145, 0.715);
-      border-radius: 100px;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--muted);
+      border-radius: 6px;
       outline: none;
-      padding: 5px;
-      line-height: 1.35;
+      padding: 11px 15px;
+      font-size: 15px;
+      line-height: 1.5;
       overflow-y: auto;
     }
-    .composer textarea:focus { border-color: rgba(118, 222, 248, 0.8); box-shadow: 0 0 0 3px rgba(118, 222, 248, 0.12); }
+    .composer textarea::placeholder { color: var(--muted); opacity: 1; }
+    .composer textarea:focus { border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(118, 222, 248, 0.12); }
 
     .composer-row { display: grid; justify-items: end; gap: 5px; flex: 0 0 auto; }
     .char-count {display: none; color: var(--muted); font-size: 14px; }
 
     .post-btn {
-      border: none;
-      border-radius: 100px;
-      background: transparent;
-      border: 2px solid rgb(127, 131, 132);
-      background-color: #4cccffa7;
-      color: white;
-      font-weight: 400;
-      align-items: center;
-      padding: 10px;
+      display: grid;
+      place-items: center;
+      width: 50px;
+      min-width: 50px;
+      height: 48px;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: var(--accent-2);
+      color: #071116;
       cursor: pointer;
-      min-width: 30px;
-      height: 50px;
+      transition: opacity 150ms ease, transform 150ms ease, background-color 150ms ease;
     }
-   html.light-mode .composer textarea{
-    color: #000;
-   
-   }
-   html.light-mode .post-btn{
-          border: 2px solid rgb(23, 183, 219);
-           background-color:rgba(43, 171, 226, 0.562) ;
-   }
+    .post-btn:hover:not(:disabled) { transform: translateY(-1px); }
+    .post-btn svg { display: block; width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .post-btn .posting-spinner { display: none; }
+    .post-btn.is-posting .send-icon { display: none; }
+    .post-btn.is-posting .posting-spinner { display: block; animation: posting-spin 800ms linear infinite; }
+    @keyframes posting-spin { to { transform: rotate(360deg); } }
     .post-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    @media (prefers-reduced-motion: reduce) {
+      .post-btn, .post-btn.is-posting .posting-spinner { transition: none; animation-duration: 1.8s; }
+    }
 
     .status { min-height: 18px; padding: 0 0 8px; font-size: 20px; color: var(--muted); }
     .status.error { color: var(--danger); }
@@ -367,28 +427,112 @@
 
     @media (max-width: 680px) {
       body { padding: 0 10px 120px; }
+      .heading-actions { left: 10px; right: 10px; }
       .composer { left: 10px; right: 10px; gap: 8px; }
-      .post-btn { min-width: 62px; padding: 10px 12px; }
-      .feed-media > img { max-height: 44vh; max-height: 44svh; }
+      .composer textarea { height: 46px; min-height: 46px; padding: 10px 14px; font-size: 14px; }
+      .post-btn { width: 46px; min-width: 46px; height: 46px; }
       .media-stage { margin-left: -10px; margin-right: -10px; }
       .feed-media.media-fill,
       .media-stage.has-media::after {
         height: clamp(150px, 44vh, 360px);
         height: clamp(150px, 44svh, 360px);
       }
-      .comments-feed-video, .comments-feed-embed { max-height: 44vh; max-height: 44svh; }
       .media-stage.has-media .article-overlay { left: 10px; right: 10px; bottom: 24px; }
       .opinions-list { padding: 0 4px 8px; }
       .opinion-card { padding: 12px; }
-      .opinion-head { align-items: normal; flex-direction: column; gap: 4px; }
+      .opinion-head { align-items: center; gap: 6px; }
       .opinion-user { max-width: 100%; overflow-wrap: anywhere; }
-      .opinion-time { white-space: normal; overflow-wrap: anywhere; }
-      .article-copy, .opinion-text, .composer textarea { font-size: clamp(16px, 4vw, 18px); }
+      .opinion-time { white-space: normal; overflow-wrap: anywhere; font-size: 11px; }
+      .article-copy, .opinion-text { font-size: clamp(16px, 4vw, 18px); }
+      .opinion-text { font-size: 14px; }
       .headline { font-size: clamp(20px, 5vw, 26px); }
       .article-ratings { gap: 4px; padding: 2px; }
       .article-vote { min-width: 54px; gap: 2px; padding: 4px; }
       .article-vote img { width: 32px; height: 32px; }
       .article-rate-bar { min-width: auto; }
+    }
+
+    html.user-background-aurora .article-heading:not(.has-media) .article-overlay {
+      padding: 14px;
+      border-left: 3px solid #70dac0;
+      border-radius: 0 12px 12px 0;
+      background: linear-gradient(110deg, #102a2a, #101522 58%, #24142b);
+      box-shadow: 0 8px 24px rgba(3, 12, 16, 0.2);
+    }
+    html.user-background-ocean .article-heading:not(.has-media) .article-overlay {
+      padding: 14px;
+      border-left: 3px solid #64cae1;
+      border-radius: 0 12px 12px 0;
+      background: linear-gradient(110deg, #071b2c, #0e3244 58%, #081927);
+      box-shadow: 0 8px 24px rgba(3, 12, 16, 0.2);
+    }
+    html.user-background-sunset .article-heading:not(.has-media) .article-overlay {
+      padding: 14px;
+      border-left: 3px solid #e5a680;
+      border-radius: 0 12px 12px 0;
+      background: linear-gradient(110deg, #2a1710, #321c2d 58%, #161b2e);
+      box-shadow: 0 8px 24px rgba(20, 10, 16, 0.18);
+    }
+
+    html.user-background-aurora .media-stage.has-media::after {
+      background: linear-gradient(to bottom, transparent 48%, rgba(25, 135, 118, 0.08) 70%, rgba(16, 21, 34, 0.82) 100%);
+    }
+    html.user-background-ocean .media-stage.has-media::after {
+      background: linear-gradient(to bottom, transparent 48%, rgba(39, 152, 183, 0.08) 70%, rgba(7, 27, 44, 0.84) 100%);
+    }
+    html.user-background-sunset .media-stage.has-media::after {
+      background: linear-gradient(to bottom, transparent 48%, rgba(192, 102, 66, 0.08) 70%, rgba(42, 23, 16, 0.84) 100%);
+    }
+
+    html.light-mode.user-background-aurora .article-heading:not(.has-media) .article-overlay {
+      border-left-color: #4d9d89;
+      background: linear-gradient(110deg, #e1f3eb, #edf0fa 58%, #f5eafa);
+    }
+    html.light-mode.user-background-ocean .article-heading:not(.has-media) .article-overlay {
+      border-left-color: #4291ab;
+      background: linear-gradient(110deg, #e3f1fa, #e6f5f7 58%, #edf4fb);
+    }
+    html.light-mode.user-background-sunset .article-heading:not(.has-media) .article-overlay {
+      border-left-color: #b87561;
+      background: linear-gradient(110deg, #faeee4, #f8eaf0 58%, #e9edf8);
+    }
+
+    html.light-mode.user-background-aurora .media-stage.has-media::after {
+      background: linear-gradient(to bottom, transparent 48%, rgba(112, 199, 173, 0.1) 70%, rgba(237, 240, 250, 0.84) 100%);
+    }
+    html.light-mode.user-background-ocean .media-stage.has-media::after {
+      background: linear-gradient(to bottom, transparent 48%, rgba(99, 184, 207, 0.1) 70%, rgba(230, 245, 247, 0.86) 100%);
+    }
+    html.light-mode.user-background-sunset .media-stage.has-media::after {
+      background: linear-gradient(to bottom, transparent 48%, rgba(224, 153, 113, 0.1) 70%, rgba(248, 234, 240, 0.86) 100%);
+    }
+
+    html.user-background-aurora .content {
+      background: linear-gradient(115deg, rgba(16, 42, 42, 0.82), rgba(16, 21, 34, 0.64) 58%, rgba(36, 20, 43, 0.42));
+      border-top: 1px solid rgba(112, 218, 192, 0.28);
+      border-radius: 0 12px 0 0;
+    }
+    html.user-background-ocean .content {
+      background: linear-gradient(115deg, rgba(7, 27, 44, 0.84), rgba(14, 50, 68, 0.66) 58%, rgba(8, 25, 39, 0.44));
+      border-top: 1px solid rgba(100, 202, 225, 0.28);
+      border-radius: 0 12px 0 0;
+    }
+    html.user-background-sunset .content {
+      background: linear-gradient(115deg, rgba(42, 23, 16, 0.82), rgba(50, 28, 45, 0.64) 58%, rgba(22, 27, 46, 0.44));
+      border-top: 1px solid rgba(229, 166, 128, 0.28);
+      border-radius: 0 12px 0 0;
+    }
+    html.light-mode.user-background-aurora .content {
+      background: linear-gradient(115deg, rgba(225, 243, 235, 0.84), rgba(237, 240, 250, 0.74) 58%, rgba(245, 234, 250, 0.58));
+      border-top-color: rgba(77, 157, 137, 0.28);
+    }
+    html.light-mode.user-background-ocean .content {
+      background: linear-gradient(115deg, rgba(227, 241, 250, 0.86), rgba(230, 245, 247, 0.74) 58%, rgba(237, 244, 251, 0.58));
+      border-top-color: rgba(66, 145, 171, 0.28);
+    }
+    html.light-mode.user-background-sunset .content {
+      background: linear-gradient(115deg, rgba(250, 238, 228, 0.86), rgba(248, 234, 240, 0.74) 58%, rgba(233, 237, 248, 0.58));
+      border-top-color: rgba(184, 117, 97, 0.28);
     }
   </style>
 </head>
@@ -455,7 +599,10 @@
       <textarea id="commentInput" maxlength="500" placeholder="Add an opinion…" aria-label="Your opinion"></textarea>
       <div class="composer-row">
         <span class="char-count" id="charCount">0 / 500</span>
-        <button class="post-btn" id="postBtn" type="submit" disabled>Post</button>
+        <button class="post-btn" id="postBtn" type="submit" aria-label="Post comment" disabled>
+          <svg class="send-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4Z"/></svg>
+          <svg class="posting-spinner" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-dasharray="42 14"/></svg>
+        </button>
       </div>
     </form>
   </div>
@@ -496,6 +643,7 @@
 
     let currentArticle = null;
     let currentVote = null;
+    let isPosting = false;
 
     /* ---------- helpers ---------- */
 
@@ -938,7 +1086,7 @@ function setStatus(message, type) {
         opinionsList.setAttribute('aria-busy', 'false');
        
         if (!Array.isArray(opinions) || !opinions.length) {
-          opinionsList.innerHTML = '<div class="empty"> No opinions yet, Be the first to share yours.</div>';
+          opinionsList.innerHTML = '<div class="empty empty-state"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 10.5A5.5 5.5 0 0 1 13.5 5h21a5.5 5.5 0 0 1 5.5 5.5v17a5.5 5.5 0 0 1-5.5 5.5H22l-10 8v-9.2A5.5 5.5 0 0 1 8 26.5z"/><path d="M17 17h14M17 23h10"/></svg><strong class="empty-state-title">Start the conversation</strong><span>No opinions yet. Share a thoughtful reaction or question about this article and help others join in.</span></div>';
           return;
         }
 
@@ -956,11 +1104,11 @@ function setStatus(message, type) {
           const badge = renderSignatureBadge(op.tier);
           return '<article class="opinion-card">' +
             '<div class="opinion-head"><div class="opinion-user">' +
+            '<span class="opinion-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="9" r="4" fill="currentColor"/><path d="M4.5 21c1.2-4 4-6 7.5-6s6.3 2 7.5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>' +
             '<span>' + safeUsername + '</span>' + badge +
-            '</div></div>' +
-            '<div class="opinion-text">' + safeText + '</div>' +
-            mediaHtml +
-            '<span class="opinion-time">' + escapeHtml(formatTime(op.time)) + '</span>' +
+            '</div><span class="opinion-time">' + escapeHtml(formatTime(op.time)) + '</span></div>' +
+            '<div class="opinion-content"><div class="opinion-text">' + safeText + '</div>' +
+            mediaHtml + '</div>' +
             '</article>';
         }).join('');
 
@@ -983,7 +1131,7 @@ function setStatus(message, type) {
     function syncCounter() {
       const length = input.value.length;
       if (charCount) charCount.textContent = length + ' / ' + MAX_COMMENT_LENGTH;
-      postBtn.disabled = !currentArticle || length === 0 || length > MAX_COMMENT_LENGTH;
+      postBtn.disabled = isPosting || !currentArticle || length === 0 || length > MAX_COMMENT_LENGTH;
     }
 
     input.addEventListener('input', function () {
@@ -1029,6 +1177,7 @@ function setStatus(message, type) {
 
     commentForm.addEventListener('submit', async function (event) {
       event.preventDefault();
+      if (isPosting) return;
       const user = getCurrentUser();
       const text = sanitizeText(input.value);
 
@@ -1042,8 +1191,11 @@ function setStatus(message, type) {
       }
 
       try {
+        isPosting = true;
         postBtn.disabled = true;
-        postBtn.textContent = 'Posting…';
+        postBtn.classList.add('is-posting');
+        postBtn.setAttribute('aria-label', 'Posting comment');
+        input.disabled = true;
         const response = await apiFetch('/opinions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1067,7 +1219,10 @@ function setStatus(message, type) {
       } catch (error) {
         setStatus(friendlyError(error, 'Unable to post right now... try again '), 'error');
       } finally {
-        postBtn.textContent = 'Post';
+        isPosting = false;
+        postBtn.classList.remove('is-posting');
+        postBtn.setAttribute('aria-label', 'Post comment');
+        input.disabled = false;
         syncCounter();
       }
     });

@@ -117,6 +117,28 @@
 
     .msg { min-height: 18px; margin: 8px 0 0 !important; font-size: 16px !important; color: #e07070 !important; }
 
+    .background-options { display: flex; flex-wrap: wrap; gap: 10px; }
+    .background-option {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 130px;
+      padding: 8px 12px;
+      color: inherit;
+      font: inherit;
+      font-size: 16px;
+      text-align: left;
+      background: transparent;
+      border: 1px solid #555;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .background-option[aria-pressed="true"] { border-color: #6fa0ff; }
+    .background-preview { width: 30px; height: 24px; flex: 0 0 30px; border-radius: 4px; }
+    .background-preview--aurora { background: linear-gradient(135deg, #102a2a, #101522 55%, #24142b); }
+    .background-preview--ocean { background: linear-gradient(135deg, #071b2c, #0e3244 55%, #081927); }
+    .background-preview--sunset { background: linear-gradient(135deg, #2a1710, #321c2d 55%, #161b2e); }
+    .background-preview--default { background: #000; border: 1px solid #777; }
     /* ── Phones ── */
     @media (max-width: 480px) {
       .profile { padding: 0 12px; }
@@ -147,6 +169,12 @@
     html.light-mode .link:hover { color: #111; }
     html.light-mode .btn.signout { color: #e5534b; border-color: #e5534b; }
     html.light-mode .btn.signout:hover:not(:disabled) { background: #e5534b; color: #fff; }
+    html.light-mode .background-option { border-color: #aaa; }
+    html.light-mode .background-option[aria-pressed="true"] { border-color: #1a73e8; }
+    html.light-mode .background-preview--default { background: #f5f5f5; }
+    html.light-mode .background-preview--aurora { background: linear-gradient(135deg, #e1f3eb, #edf0fa 55%, #f5eafa); }
+    html.light-mode .background-preview--ocean { background: linear-gradient(135deg, #e3f1fa, #e6f5f7 55%, #edf4fb); }
+    html.light-mode .background-preview--sunset { background: linear-gradient(135deg, #faeee4, #f8eaf0 55%, #e9edf8); }
   </style>
 </head>
 <body>
@@ -172,6 +200,27 @@
           <button class="btn" id="check-btn" type="button">I've confirmed it</button>
         </div>
         <p class="msg" id="verify-msg" role="alert"></p>
+      </div>
+    </section>
+
+    <section class="card" id="background-card" hidden>
+      <div class="item">
+        <h3>Site background</h3>
+        <p>Choose a gradient to use across JiScroL on this device.</p>
+        <div class="background-options" role="group" aria-label="Site background gradient">
+          <button class="background-option" type="button" data-background="aurora" aria-pressed="false">
+            <span class="background-preview background-preview--aurora" aria-hidden="true"></span>Aurora
+          </button>
+          <button class="background-option" type="button" data-background="ocean" aria-pressed="false">
+            <span class="background-preview background-preview--ocean" aria-hidden="true"></span>Ocean
+          </button>
+          <button class="background-option" type="button" data-background="sunset" aria-pressed="false">
+            <span class="background-preview background-preview--sunset" aria-hidden="true"></span>Sunset
+          </button>
+          <button class="background-option" type="button" data-background="" aria-pressed="false">
+            <span class="background-preview background-preview--default" aria-hidden="true"></span>Default
+          </button>
+        </div>
       </div>
     </section>
 
@@ -279,6 +328,30 @@
         $("name-val").textContent = name;
       }
 
+      function renderBackgroundSettings() {
+        var card = $("background-card");
+        var verified = isVerifiedBackgroundUser(user);
+        card.hidden = !verified;
+        renderSideBackgroundPicker(user);
+        if (!verified) {
+          applyUserBackground(null);
+          return;
+        }
+
+        var selected = "";
+        try {
+          selected = localStorage.getItem(getUserBackgroundStorageKey(user.id)) || "";
+        } catch (error) {
+          console.warn("Unable to load the saved background preference:", error);
+          toast("Couldn't load your saved background choice.", "error");
+        }
+
+        document.querySelectorAll(".background-option").forEach(function (button) {
+          button.setAttribute("aria-pressed", String(button.dataset.background === selected));
+        });
+        applyUserBackground(user);
+      }
+
       function renderBadge() {
         if (!user) return;
         var box = $("name-badge");
@@ -291,6 +364,7 @@
             $("verify-card").hidden = !$("verify-card").hidden;
           });
         }
+        renderBackgroundSettings();
       }
 
       // auth.js fetches the tier in the background; redraw the badge when it arrives.
@@ -413,6 +487,35 @@
           if (!user.email_confirmed_at) {
             say("verify-msg", "Not confirmed yet. Tap the link in the email first, then try again.");
           }
+        });
+      });
+
+      document.querySelectorAll(".background-option").forEach(function (button) {
+        button.addEventListener("click", function () {
+          if (!isVerifiedBackgroundUser(user)) {
+            toast("Verify your email to change the site background.", "error");
+            return;
+          }
+
+          var selected = button.dataset.background;
+          try {
+            if (selected) {
+              if (USER_BACKGROUND_THEMES.indexOf(selected) === -1) return;
+              localStorage.setItem(getUserBackgroundStorageKey(user.id), selected);
+            } else {
+              localStorage.removeItem(getUserBackgroundStorageKey(user.id));
+            }
+          } catch (error) {
+            console.error("Unable to save the background preference:", error);
+            toast("Couldn't save your choice. Check browser storage and try again.", "error");
+            return;
+          }
+
+          document.querySelectorAll(".background-option").forEach(function (option) {
+            option.setAttribute("aria-pressed", String(option === button));
+          });
+          applyUserBackground(user);
+          toast("Background updated across JiScroL.");
         });
       });
 

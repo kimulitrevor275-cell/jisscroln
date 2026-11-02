@@ -164,34 +164,92 @@ async function renderNewsModulePermanent() {
       return;
     }
 
+    const renderHeadlineCard = (article, isDuplicate) => {
+      const imageUrl = getSafeNewsUrl(article.image || article.urlToImage);
+      const sourceUrl = getSafeNewsUrl(article.link || article.url);
+      const source = getNewsSource(article);
+      const sourceMarkup = sourceUrl !== '#'
+        ? `<a href="${escapeHtml(sourceUrl)}" tabindex="${isDuplicate ? '-1' : '0'}" target="_blank" rel="noopener noreferrer">${escapeHtml(source)}</a>`
+        : escapeHtml(source);
+
+      return `
+        <article class="news-headline-card" role="link" tabindex="${isDuplicate ? '-1' : '0'}" data-comments-url="${escapeHtml(getNewsCommentsUrl(article))}">
+          ${imageUrl !== '#' ? `<img class="news-headline-image" src="${escapeHtml(imageUrl)}" alt="" loading="lazy">` : ''}
+          <div class="news-headline-content">
+            <h3 class="news-headline-title">${escapeHtml(getNewsTitle(article))}</h3>
+            <div class="news-headline-meta">
+              <span>Source: ${sourceMarkup}</span>
+            </div>
+          </div>
+        </article>
+      `;
+    };
+    const visibleArticles = articles.filter(article =>
+      getSafeNewsUrl(article.image || article.urlToImage) !== '#'
+    );
+    if (!visibleArticles.length) {
+      container.textContent = 'No image headlines available.';
+      container.setAttribute('aria-busy', 'false');
+      return;
+    }
+    const pages = [];
+    for (let index = 0; index < visibleArticles.length; index += 3) {
+      pages.push(visibleArticles.slice(index, index + 3));
+    }
+    const renderPage = (page, isDuplicate) => `
+      <div class="news-page"${isDuplicate ? ' aria-hidden="true"' : ''}>
+        ${page.map(article => renderHeadlineCard(article, isDuplicate)).join('')}
+      </div>
+    `;
+    const originalPages = pages.map(page => renderPage(page, false)).join('');
+    const duplicatePages = pages.length > 1
+      ? pages.map(page => renderPage(page, true)).join('')
+      : '';
     container.innerHTML = `
-      <div class="news-module">
-        ${articles.slice(0, 6)
-          .map(article => {
-            const imageUrl = getSafeNewsUrl(article.image || article.urlToImage);
-            const sourceUrl = getSafeNewsUrl(article.link || article.url);
-            const source = getNewsSource(article);
-            const meta = [
-              '',
-              `Source: ${sourceUrl !== '#'
-                ? `<a href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(source)}</a>`
-                : escapeHtml(source)}`
-            ].filter(Boolean);
-            return `
-            <article class="news-headline-card" role="link" tabindex="0" data-comments-url="${escapeHtml(getNewsCommentsUrl(article))}">
-              ${imageUrl !== '#' ? `<img class="news-headline-image" src="${escapeHtml(imageUrl)}" alt="" loading="lazy">` : ''}
-              <div class="news-headline-content">
-                <h3 class="news-headline-title">${escapeHtml(getNewsTitle(article))}</h3>
-                <div class="news-headline-meta">
-                  ${meta.map(label => `<span>${label}</span>`).join('')}
-                </div>
-              </div>
-            </article>
-          `;
-          }).join('')}
+      <div class="news-module" role="region" aria-label="Uganda news headlines" tabindex="0">
+        <div class="news-track">${originalPages}${duplicatePages}</div>
       </div>
     `;
     container.setAttribute('aria-busy', 'false');
+
+    if (pages.length > 1) {
+      const newsModule = container.querySelector('.news-module');
+      const headlinePages = Array.from(newsModule.querySelectorAll('.news-page'));
+      let paused = false;
+      const getCurrentPage = function () {
+        return headlinePages.reduce(function (closestIndex, page, index) {
+          const closestDistance = Math.abs(headlinePages[closestIndex].offsetLeft - newsModule.scrollLeft);
+          const pageDistance = Math.abs(page.offsetLeft - newsModule.scrollLeft);
+          return pageDistance < closestDistance ? index : closestIndex;
+        }, 0);
+      };
+      const scrollToPage = function (pageIndex) {
+        const page = headlinePages[pageIndex];
+        if (page) newsModule.scrollTo({ left: page.offsetLeft, behavior: 'smooth' });
+      };
+      const advanceHeadlines = function () {
+        if (paused || document.hidden) return;
+        const currentPage = getCurrentPage();
+        const totalPages = headlinePages.length;
+        if (currentPage >= totalPages - 1) {
+          newsModule.scrollTo({ left: 0, behavior: 'auto' });
+          return;
+        }
+        scrollToPage(currentPage + 1);
+      };
+      const timer = window.setInterval(advanceHeadlines, 8000);
+      newsModule.addEventListener('pointerenter', function () { paused = true; });
+      newsModule.addEventListener('pointerleave', function () { paused = false; });
+      newsModule.addEventListener('pointerdown', function () { paused = true; });
+      newsModule.addEventListener('pointerup', function () {
+        window.setTimeout(function () { paused = false; }, 2500);
+      });
+      newsModule.addEventListener('focusin', function () { paused = true; });
+      newsModule.addEventListener('focusout', function (event) {
+        if (!newsModule.contains(event.relatedTarget)) paused = false;
+      });
+      window.addEventListener('pagehide', function () { window.clearInterval(timer); }, { once: true });
+    }
   } catch (error) {
     console.error('News fetch error:', error);
     container.textContent = `Sorry we couldn't  load Uganda headlines. Please try again later.`;

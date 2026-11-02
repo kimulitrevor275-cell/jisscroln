@@ -148,7 +148,7 @@ function renderHomeUgandaNews(anchor) {
   section.setAttribute("aria-label", "Uganda headlines");
   section.innerHTML = `
  <h2 id="forup">Today - What's happening</h2> 
-    <div class="news-module" aria-busy="true">
+    <div class="news-module is-loading" aria-busy="true">
       ${Array.from({ length: 3 }, function () {
         return `<div class="news-headline-skeleton" aria-hidden="true">
           <div class="news-skeleton-image"></div>
@@ -174,16 +174,19 @@ function renderHomeUgandaNews(anchor) {
       return response.json();
     })
     .then(function (data) {
-      var articles = Array.isArray(data.articles) ? data.articles.slice(0, 6) : [];
+      var articles = Array.isArray(data.articles) ? data.articles.filter(function (article) {
+        return Boolean(getHomeNewsSafeUrl(article.image || article.urlToImage));
+      }) : [];
       var newsModule = section.querySelector(".news-module");
       if (!newsModule) return;
       if (!articles.length) {
-        newsModule.textContent = "No Uganda headlines available.";
+        newsModule.classList.remove("is-loading");
+        newsModule.textContent = "No image headlines available.";
         newsModule.setAttribute("aria-busy", "false");
         return;
       }
 
-      newsModule.innerHTML = articles.map(function (article) {
+      function renderHeadlineCard(article, isDuplicate) {
         var imageUrl = getHomeNewsSafeUrl(article.image || article.urlToImage);
         var sourceUrl = getHomeNewsSafeUrl(article.link || article.url);
         var source = article.source && typeof article.source === "object"
@@ -191,13 +194,12 @@ function renderHomeUgandaNews(anchor) {
           : article.source;
         source = String(source || "Unknown").trim();
         var meta = [
-        
           "Source: " + (sourceUrl
-            ? `<a href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(source)}</a>`
+            ? `<a href="${escapeHtml(sourceUrl)}" tabindex="${isDuplicate ? "-1" : "0"}" target="_blank" rel="noopener noreferrer">${escapeHtml(source)}</a>`
             : escapeHtml(source))
         ].filter(Boolean);
-        return `<article class="news-headline-card" role="link" tabindex="0" data-comments-url="${escapeHtml(getHomeNewsCommentsUrl(article))}">
-          ${imageUrl ? `<img class="news-headline-image" src="${escapeHtml(imageUrl)}" alt="" loading="lazy">` : ""}
+        return `<article class="news-headline-card" role="link" tabindex="${isDuplicate ? "-1" : "0"}" ${isDuplicate ? 'aria-hidden="true"' : ""} data-comments-url="${escapeHtml(getHomeNewsCommentsUrl(article))}">
+          <img class="news-headline-image" src="${escapeHtml(imageUrl)}" alt="" loading="lazy">
           <div class="news-headline-content">
             <h3 class="news-headline-title">${escapeHtml(article.title || article.headline || "Untitled")}</h3>
             <div class="news-headline-meta">
@@ -207,8 +209,66 @@ function renderHomeUgandaNews(anchor) {
             </div>
           </div>
         </article>`;
-      }).join("");
+      }
+
+      var pages = [];
+      for (var index = 0; index < articles.length; index += 3) {
+        pages.push(articles.slice(index, index + 3));
+      }
+      function renderPage(page, isDuplicate) {
+        return `<div class="news-page"${isDuplicate ? ' aria-hidden="true"' : ""}>` +
+          page.map(function (article) { return renderHeadlineCard(article, isDuplicate); }).join("") +
+          "</div>";
+      }
+      var originalPages = pages.map(function (page) { return renderPage(page, false); }).join("");
+      var duplicatePages = pages.length > 1
+        ? pages.map(function (page) { return renderPage(page, true); }).join("")
+        : "";
+      newsModule.classList.remove("is-loading");
+      newsModule.outerHTML = `<div class="news-module" role="region" aria-label="Uganda news headlines" tabindex="0"><div class="news-track">${originalPages}${duplicatePages}</div></div>`;
+      newsModule = section.querySelector(".news-module");
       newsModule.setAttribute("aria-busy", "false");
+
+      if (pages.length > 1) {
+        var headlinePages = Array.from(newsModule.querySelectorAll(".news-page"));
+        var paused = false;
+        function getCurrentPage() {
+          return headlinePages.reduce(function (closestIndex, page, pageIndex) {
+            var closestDistance = Math.abs(headlinePages[closestIndex].offsetLeft - newsModule.scrollLeft);
+            var pageDistance = Math.abs(page.offsetLeft - newsModule.scrollLeft);
+            return pageDistance < closestDistance ? pageIndex : closestIndex;
+          }, 0);
+        }
+        function scrollToPage(pageIndex) {
+          var page = headlinePages[pageIndex];
+          if (page) {
+            newsModule.scrollTo({
+              left: page.offsetLeft,
+              behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
+            });
+          }
+        }
+        var timer = window.setInterval(function () {
+          if (paused || document.hidden) return;
+          var currentPage = getCurrentPage();
+          if (currentPage >= headlinePages.length - 1) {
+            newsModule.scrollTo({ left: 0, behavior: "auto" });
+          } else {
+            scrollToPage(currentPage + 1);
+          }
+        }, 8000);
+        newsModule.addEventListener("pointerenter", function () { paused = true; });
+        newsModule.addEventListener("pointerleave", function () { paused = false; });
+        newsModule.addEventListener("pointerdown", function () { paused = true; });
+        newsModule.addEventListener("pointerup", function () {
+          window.setTimeout(function () { paused = false; }, 2500);
+        });
+        newsModule.addEventListener("focusin", function () { paused = true; });
+        newsModule.addEventListener("focusout", function (event) {
+          if (!newsModule.contains(event.relatedTarget)) paused = false;
+        });
+        window.addEventListener("pagehide", function () { window.clearInterval(timer); }, { once: true });
+      }
     })
     .catch(function (error) {
       console.error("Failed to load Uganda headlines:", error);

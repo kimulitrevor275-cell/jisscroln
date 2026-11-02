@@ -280,8 +280,10 @@
   /* ── TOAST ── */
   #toast {
     position: fixed;
-    bottom: 30px;
+    top: max(10px, env(safe-area-inset-top));
+    bottom: auto;
     left: 50%;
+    width: min(480px, calc(100vw - 24px));
     transform: translateX(-50%) translateY(20px);
     background: var(--surface);
     border: 1px solid var(--border);
@@ -293,7 +295,8 @@
     transition: all 0.3s;
     pointer-events: none;
     z-index: 999;
-    white-space: nowrap;
+    overflow-wrap: anywhere;
+    text-align: center;
   }
 
   #toast.show {
