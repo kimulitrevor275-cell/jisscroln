@@ -9,18 +9,71 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="About JiScroL: terms of use, privacy, data sources and legal information.">
   <title>About — JiScroL</title>
+  <script src="/theme.js"></script>
+  <link rel="stylesheet" href="/global.css">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
+      color-scheme: light;
+      --accent: #171717;
+      --accent-hover: #444;
+      --accent-line: rgba(0, 0, 0, 0.2);
+      --bg: #fff;
+      --surface: #f6f6f6;
+      --text: #111;
+      --body: #333;
+      --legal: #454545;
+      --muted: #686868;
+    }
+
+    html:not(.light-mode) {
+      color-scheme: dark;
       --accent: #f2f5fb;
-      --accent-hover: #8fb0ff;
-      --accent-line: rgba(91, 140, 255, 0.3);
-      --bg: #0a0a0a;
-      --surface: #111111;
-      --text: #e6e9f0;
-      --body: #aeb4c2;
-      --legal: #8a90a0;
-      --muted: #6f7686;
+      --accent-hover: #cbd6ff;
+      --accent-line: rgba(255, 255, 255, 0.2);
+      --bg: #000;
+      --surface: #111;
+      --text: #f5f5f5;
+      --body: #c7c7c7;
+      --legal: #aaa;
+      --muted: #8a8a8a;
+    }
+
+    html.user-background-yellow,
+    html.light-mode.user-background-yellow {
+      --accent: #302400;
+      --accent-hover: #614800;
+      --accent-line: rgba(48, 36, 0, 0.35);
+      --surface: rgba(255, 255, 255, 0.58);
+      --text: #211800;
+      --body: #302400;
+      --legal: #403200;
+      --muted: #594800;
+    }
+
+    html.user-background-aurora:not(.light-mode),
+    html.user-background-ocean:not(.light-mode),
+    html.user-background-sunset:not(.light-mode),
+    html.user-background-crystal:not(.light-mode) {
+      --surface: rgba(8, 15, 24, 0.76);
+      --text: #f5f5f5;
+      --body: #d0d5df;
+      --legal: #b7bfcc;
+      --muted: #a0a9b8;
+    }
+
+    html.light-mode.user-background-aurora,
+    html.light-mode.user-background-ocean,
+    html.light-mode.user-background-sunset,
+    html.light-mode.user-background-crystal {
+      --accent: #17212b;
+      --accent-hover: #354d60;
+      --accent-line: rgba(23, 33, 43, 0.24);
+      --surface: rgba(255, 255, 255, 0.66);
+      --text: #17212b;
+      --body: #2e3b46;
+      --legal: #40505c;
+      --muted: #586976;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,9 +83,25 @@
       background-color: var(--bg);
       color: var(--text);
       font-family: 'Outfit', sans-serif;
+      font-size: 16px;
       font-weight: 300;
       line-height: 1.8;
       min-height: 100vh;
+    }
+
+    .page-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    #lightmode {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      cursor: pointer;
     }
 
     /* subtle grain texture overlay */
@@ -215,6 +284,7 @@
       .page-wrapper { padding: 48px 20px 72px; }
       .legal-block { padding: 20px; }
       .toc ol { columns: 1; }
+      .page-controls { margin-bottom: 32px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -226,7 +296,10 @@
 <body>
   <div class="page-wrapper">
 
-    <a class="back-link" href="/index.html">← Back to JiScroL</a>
+    <div class="page-controls">
+      <a class="back-link" href="/index.html">← Back to JiScroL</a>
+      <img id="lightmode" src="/pics/darkmode.png" alt="Toggle color theme" role="button" tabindex="0" aria-pressed="true">
+    </div>
 
     <header class="page-header">
       <span class="brand-label"><img src="/pics/logog.svg" alt="JiScroL" style="width: 100px; height: auto;"></span>
@@ -383,5 +456,7 @@
 
   </div>
   <script>document.getElementById("yr").textContent = new Date().getFullYear();</script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/auth.js"></script>
 </body>
 </html>

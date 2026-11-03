@@ -221,17 +221,13 @@ function renderHomeUgandaNews(anchor) {
         var paused = false;
         var timer = window.setInterval(function () {
           if (paused || document.hidden) return;
-          var moduleLeft = newsModule.getBoundingClientRect().left + newsModule.clientLeft;
-          var getPageLeft = function (page) {
-            return newsModule.scrollLeft + page.getBoundingClientRect().left - moduleLeft;
-          };
           var current = headlinePages.reduce(function (closest, page, pageIndex) {
-            return Math.abs(getPageLeft(page) - newsModule.scrollLeft) <
-              Math.abs(getPageLeft(headlinePages[closest]) - newsModule.scrollLeft)
+            return Math.abs(page.offsetLeft - newsModule.scrollLeft) <
+              Math.abs(headlinePages[closest].offsetLeft - newsModule.scrollLeft)
               ? pageIndex : closest;
           }, 0);
           if (current >= pages.length - 1) newsModule.scrollTo({ left: 0, behavior: "auto" });
-          else newsModule.scrollTo({ left: getPageLeft(headlinePages[current + 1]), behavior: "smooth" });
+          else newsModule.scrollTo({ left: headlinePages[current + 1].offsetLeft, behavior: "smooth" });
         }, 8000);
         newsModule.addEventListener("pointerenter", function () { paused = true; });
         newsModule.addEventListener("pointerleave", function () { paused = false; });
