@@ -17,7 +17,7 @@ function onReady(fn) {
 var LIGHT_MODE_STORAGE_KEY = "jisscrol-theme";
 var LM_ICON_FOR_DARK = "/pics/lm.png";
 var LM_ICON_FOR_LIGHT = "/pics/darkmode.png";
-var USER_BACKGROUND_THEMES = ["aurora", "ocean", "sunset"];
+var USER_BACKGROUND_THEMES = ["aurora", "ocean", "sunset", "yellow", "crystal"];
 var USER_BACKGROUND_STORAGE_PREFIX = "jisscrol-user-background:";
 var currentBackgroundUser = null;
 
@@ -235,7 +235,7 @@ function initSideMenu() {
       '</div>' +
       '<section class="side-background-picker" id="side-background-picker" aria-label="Get premium">' +
         '<h2>Get premium</h2>' +
-        '<p class="side-background-info">Sign in or create an account, then confirm your email from your profile using the link sent to your inbox. Visit JiScroL across 7 days to build your member tier. After verification, you get a verified badge and three custom site-wide backgrounds.</p>' +
+        '<p class="side-background-info">Sign in or create an account, then confirm your email from your profile using the link sent to your inbox. Visit JiScroL across 7 days to build your member tier. After verification, you get a verified badge and custom site-wide backgrounds.</p>' +
         '<div class="side-verified-preview" aria-label="Example verified badge">' +
           '<span class="side-verified-name">Your name</span>' +
           '<svg class="side-verified-badge" viewBox="0 0 24 24" role="img" aria-label="Verified badge"><circle cx="12" cy="12" r="12" fill="#87ceeb"/><path d="m6.5 12.5 3.5 3.5 7-7" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
@@ -247,6 +247,8 @@ function initSideMenu() {
           '<button type="button" class="side-background-option" data-background="aurora" aria-label="Aurora background" aria-pressed="false"><span class="side-background-swatch side-background-aurora" aria-hidden="true"></span></button>' +
           '<button type="button" class="side-background-option" data-background="ocean" aria-label="Ocean background" aria-pressed="false"><span class="side-background-swatch side-background-ocean" aria-hidden="true"></span></button>' +
           '<button type="button" class="side-background-option" data-background="sunset" aria-label="Sunset background" aria-pressed="false"><span class="side-background-swatch side-background-sunset" aria-hidden="true"></span></button>' +
+          '<button type="button" class="side-background-option" data-background="yellow" aria-label="Bright yellow background" aria-pressed="false"><span class="side-background-swatch side-background-yellow" aria-hidden="true"></span></button>' +
+          '<button type="button" class="side-background-option" data-background="crystal" aria-label="Crystal ice and water background" aria-pressed="false"><span class="side-background-swatch side-background-crystal" aria-hidden="true"></span></button>' +
           '<button type="button" class="side-background-option" data-background="" aria-label="Default background" aria-pressed="false"><span class="side-background-swatch side-background-default" aria-hidden="true"></span></button>' +
         '</div>' +
       '</section>' +

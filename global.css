@@ -17,7 +17,6 @@ body {
   padding: 8px;
   font-size: clamp(20px, 3vw, 25px);
   flex-wrap: wrap;
-overflow: auto;
 }
 .ptitle{
   font-size: 10px;
@@ -311,7 +310,7 @@ hr {
   border: none;
   border-top: 1.2px solid #eae6e6d8;
   margin: 8px 0;
-  margin-top: 2px;
+  margin-top: 6px;
 }
 html.light-mode hr{
  border-top: 1px solid #5b5959ad;
@@ -336,6 +335,7 @@ h1 {
   color: white;
   margin: 0;
   margin-bottom: 5px;
+  margin-top: 10px;
 
 }
 .sec-mark {
@@ -1191,11 +1191,18 @@ padding: 0;
   color: #aaa;
   font: 400 12px/1.3 'Lexend', sans-serif;
 }
-.side-background-options { display: flex; align-items: center; gap: 12px; }
+.side-background-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(42px, 1fr));
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
 .side-background-option {
   display: grid;
   place-items: center;
   width: 42px;
+  max-width: 100%;
   height: 42px;
   padding: 4px;
   border: 1px solid transparent;
@@ -1215,6 +1222,16 @@ padding: 0;
 .side-background-aurora { background: linear-gradient(135deg, #70dac0, #101522 55%, #8a4c91); }
 .side-background-ocean { background: linear-gradient(135deg, #2798b7, #0e3244 55%, #081927); }
 .side-background-sunset { background: linear-gradient(135deg, #c06642, #321c2d 55%, #e5a680); }
+.side-background-yellow { background: linear-gradient(135deg, #fff000, #ffc400 55%, #ff8f00); }
+.side-background-crystal {
+  background-color: #0c3548;
+  background-image:
+    radial-gradient(circle at 25% 35%, rgb(255 255 255 / 85%) 0 1px, transparent 2px),
+    repeating-radial-gradient(ellipse at 70% 80%, transparent 0 8px, rgb(151 235 255 / 50%) 9px 10px, transparent 11px 16px),
+    conic-gradient(from 26deg, rgb(196 243 255 / 60%) 0deg 54deg, transparent 54deg 150deg, rgb(115 206 231 / 52%) 150deg 202deg, transparent 202deg 300deg, rgb(225 250 255 / 65%) 300deg 330deg, transparent 330deg),
+    linear-gradient(145deg, #b9f4ff, #2783a9 55%, #dffbff);
+  background-size: 30px 30px, 30px 30px, 22px 22px, auto;
+}
 .side-background-default { background: #0f0f0f; }
 
 body.side-locked { overflow: hidden; }
@@ -1446,9 +1463,10 @@ html.light-mode .jis-result-img {
   font-size: 16px;
   text-align: center;
   line-height: 1.4;
-  color: #f2f2f2;
+  color: #0463f1;
+  font-weight: 700;
   background: transparent;
-  border: 1px solid #333;
+  border: 1.3px solid #333;
   border-left: 4px solid #5b8cff;
   border-radius: 100px;
   box-shadow: 0 8px 24px rgb(0 0 0 / 45%);
@@ -1480,7 +1498,7 @@ html.light-mode .jis-result-img {
 html.light-mode .toast {
   color: green;
   font-weight: 500;
-  background: rgba(227, 227, 227, 0.6);
+  background: rgba(203, 196, 196, 0.6);
   border-color:  rgb(0 0 0 / 10%);
   box-shadow: 0 8px 24px rgba(39, 38, 38, 0.15);
 }
@@ -1536,6 +1554,63 @@ html.light-mode.user-background-sunset body {
   background-image: linear-gradient(135deg, #faeee4, #f8eaf0 55%, #e9edf8);
 }
 
+html.user-background-yellow body {
+  background-image: linear-gradient(135deg, #ffe600, #ffd000 48%, #ffad00);
+  background-attachment: fixed;
+}
+
+html.light-mode.user-background-yellow body {
+  background-image: linear-gradient(135deg, #fff8a8, #ffed75 48%, #ffd36a);
+}
+
+html.user-background-yellow h1,
+html.user-background-yellow h2,
+html.user-background-yellow h3,
+html.user-background-yellow h4,
+html.user-background-yellow p,
+html.user-background-yellow .headlines,
+html.user-background-yellow .article-body,
+html.user-background-yellow #user-greeting,
+html.user-background-yellow .navbar .button {
+  color: #211800;
+}
+
+html.user-background-crystal body {
+  background-color: #082638;
+  background-image:
+    radial-gradient(circle at 18% 24%, rgb(229 252 255 / 62%) 0 1px, transparent 2px),
+    radial-gradient(circle at 72% 68%, rgb(151 235 255 / 48%) 0 1.5px, transparent 3px),
+    radial-gradient(ellipse at 14% 18%, rgb(91 206 238 / 30%), transparent 38%),
+    radial-gradient(ellipse at 86% 54%, rgb(25 119 153 / 34%), transparent 42%),
+    repeating-radial-gradient(ellipse at 22% 68%, transparent 0 36px, rgb(135 227 247 / 17%) 38px 40px, transparent 42px 78px),
+    conic-gradient(from 26deg at 50% 50%, rgb(196 243 255 / 12%) 0deg 54deg, transparent 54deg 150deg, rgb(115 206 231 / 10%) 150deg 202deg, transparent 202deg 300deg, rgb(225 250 255 / 12%) 300deg 330deg, transparent 330deg),
+    linear-gradient(135deg, transparent 35%, rgb(222 249 255 / 22%) 49%, transparent 62%),
+    linear-gradient(0deg, transparent 0 94%, rgb(184 238 255 / 38%) 96% 98%, transparent 100%),
+    linear-gradient(90deg, transparent 0 94%, rgb(184 238 255 / 34%) 96% 98%, transparent 100%),
+    linear-gradient(145deg, #10445a 0%, #082536 48%, #0b394c 100%);
+  background-size: 180px 150px, 240px 210px, auto, auto, 620px 520px, 260px 230px, 190px 190px, 190px 190px, 190px 190px, auto;
+  background-position: 0 0, 60px 40px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+  background-attachment: fixed;
+}
+
+html.light-mode.user-background-crystal body {
+  background-color: #b8eaf4;
+  background-image:
+    radial-gradient(circle at 18% 24%, rgb(255 255 255 / 92%) 0 1px, transparent 2px),
+    radial-gradient(circle at 72% 68%, rgb(54 151 179 / 38%) 0 1.5px, transparent 3px),
+    radial-gradient(ellipse at 14% 18%, rgb(255 255 255 / 72%), transparent 38%),
+    radial-gradient(ellipse at 86% 54%, rgb(73 174 200 / 25%), transparent 42%),
+    repeating-radial-gradient(ellipse at 22% 68%, transparent 0 36px, rgb(32 139 171 / 20%) 38px 40px, transparent 42px 78px),
+    conic-gradient(from 26deg at 50% 50%, rgb(255 255 255 / 50%) 0deg 54deg, transparent 54deg 150deg, rgb(66 160 185 / 13%) 150deg 202deg, transparent 202deg 300deg, rgb(255 255 255 / 48%) 300deg 330deg, transparent 330deg),
+    linear-gradient(135deg, transparent 35%, rgb(255 255 255 / 78%) 49%, transparent 62%),
+    linear-gradient(0deg, transparent 0 94%, rgb(255 255 255 / 88%) 96% 98%, transparent 100%),
+    linear-gradient(90deg, transparent 0 94%, rgb(255 255 255 / 80%) 96% 98%, transparent 100%),
+    linear-gradient(145deg, #e5fcff 0%, #a9deeb 48%, #c4e9f4 100%);
+  background-size: 180px 150px, 240px 210px, auto, auto, 620px 520px, 260px 230px, 190px 190px, 190px 190px, 190px 190px, auto;
+  background-position: 0 0, 60px 40px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+  background-attachment: fixed;
+}
+
 html.user-background-aurora #header,
 html.user-background-aurora header {
   background-image: linear-gradient(135deg, #102a2a, #101522 55%, #24142b);
@@ -1573,6 +1648,58 @@ html.light-mode.user-background-sunset #header,
 html.light-mode.user-background-sunset header {
   background-image: linear-gradient(135deg, #faeee4, #f8eaf0 55%, #e9edf8);
   border-bottom-color: rgb(184 117 97 / 24%);
+}
+
+html.user-background-yellow #header,
+html.user-background-yellow header {
+  background-image: linear-gradient(135deg, #ffe600, #ffd000 48%, #ffad00);
+  border-bottom: 1px solid rgb(117 76 0 / 35%);
+  box-shadow: none;
+}
+
+html.light-mode.user-background-yellow #header,
+html.light-mode.user-background-yellow header {
+  background-image: linear-gradient(135deg, #fff8a8, #ffed75 48%, #ffd36a);
+  border-bottom-color: rgb(117 76 0 / 25%);
+}
+
+html.user-background-crystal #header,
+html.user-background-crystal header {
+  background: linear-gradient(135deg, rgb(112 213 239 / 38%), rgb(16 47 67 / 78%) 52%, rgb(91 157 194 / 42%));
+  border-bottom: 1px solid rgb(162 236 255 / 45%);
+  box-shadow: 0 8px 28px rgb(34 177 218 / 12%);
+  backdrop-filter: blur(18px) saturate(145%);
+}
+
+html.light-mode.user-background-crystal #header,
+html.light-mode.user-background-crystal header {
+  background: linear-gradient(135deg, rgb(255 255 255 / 78%), rgb(175 226 240 / 70%) 52%, rgb(223 241 255 / 82%));
+  border-bottom-color: rgb(62 148 179 / 32%);
+}
+
+html.user-background-crystal .post-card,
+html.user-background-crystal .opinion-card,
+html.user-background-crystal .league-standings,
+html.user-background-crystal .news-story-card,
+html.user-background-crystal .match-card,
+html.user-background-crystal .side-drawer,
+html.user-background-crystal .profile .card {
+  background: linear-gradient(135deg, rgb(181 238 255 / 16%), rgb(77 157 190 / 10%) 55%, rgb(35 108 137 / 16%));
+  border-color: rgb(190 240 255 / 27%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 18%), inset 0 -1px 0 rgb(110 216 240 / 10%), 0 12px 30px rgb(0 0 0 / 18%);
+  backdrop-filter: blur(16px) saturate(145%);
+}
+
+html.light-mode.user-background-crystal .post-card,
+html.light-mode.user-background-crystal .opinion-card,
+html.light-mode.user-background-crystal .league-standings,
+html.light-mode.user-background-crystal .news-story-card,
+html.light-mode.user-background-crystal .match-card,
+html.light-mode.user-background-crystal .side-drawer,
+html.light-mode.user-background-crystal .profile .card {
+  background: linear-gradient(135deg, rgb(255 255 255 / 84%), rgb(193 234 246 / 60%) 55%, rgb(124 198 220 / 36%));
+  border-color: rgb(73 151 179 / 28%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 88%), inset 0 -1px 0 rgb(69 156 185 / 10%), 0 12px 28px rgb(58 131 156 / 12%);
 }
 
 .news-story-section-title {
@@ -1758,6 +1885,112 @@ html.light-mode .home-uganda-news .news-headline-skeleton {
 
 html.light-mode .home-uganda-news .news-headline-skeleton {
   background-image: linear-gradient(90deg, #e5e5e5 20%, #f5f5f5 50%, #e5e5e5 80%);
+}
+
+html.user-background-aurora:not(.light-mode) .post-card,
+html.user-background-aurora:not(.light-mode) .opinion-card,
+html.user-background-aurora:not(.light-mode) .news-story-card,
+html.user-background-aurora:not(.light-mode) .league-standings,
+html.user-background-aurora:not(.light-mode) .match-card,
+html.user-background-aurora:not(.light-mode) .side-drawer,
+html.user-background-aurora:not(.light-mode) .profile .card,
+html.user-background-aurora:not(.light-mode) .engage-panel,
+html.user-background-ocean:not(.light-mode) .post-card,
+html.user-background-ocean:not(.light-mode) .opinion-card,
+html.user-background-ocean:not(.light-mode) .news-story-card,
+html.user-background-ocean:not(.light-mode) .league-standings,
+html.user-background-ocean:not(.light-mode) .match-card,
+html.user-background-ocean:not(.light-mode) .side-drawer,
+html.user-background-ocean:not(.light-mode) .profile .card,
+html.user-background-ocean:not(.light-mode) .engage-panel,
+html.user-background-sunset:not(.light-mode) .post-card,
+html.user-background-sunset:not(.light-mode) .opinion-card,
+html.user-background-sunset:not(.light-mode) .news-story-card,
+html.user-background-sunset:not(.light-mode) .league-standings,
+html.user-background-sunset:not(.light-mode) .match-card,
+html.user-background-sunset:not(.light-mode) .side-drawer,
+html.user-background-sunset:not(.light-mode) .profile .card,
+html.user-background-sunset:not(.light-mode) .engage-panel {
+  background-color: rgb(5 10 16 / 78%);
+  border-color: rgb(255 255 255 / 18%);
+}
+
+html.light-mode.user-background-aurora .post-card,
+html.light-mode.user-background-aurora .opinion-card,
+html.light-mode.user-background-aurora .news-story-card,
+html.light-mode.user-background-aurora .league-standings,
+html.light-mode.user-background-aurora .match-card,
+html.light-mode.user-background-aurora .side-drawer,
+html.light-mode.user-background-aurora .profile .card,
+html.light-mode.user-background-aurora .engage-panel,
+html.light-mode.user-background-ocean .post-card,
+html.light-mode.user-background-ocean .opinion-card,
+html.light-mode.user-background-ocean .news-story-card,
+html.light-mode.user-background-ocean .league-standings,
+html.light-mode.user-background-ocean .match-card,
+html.light-mode.user-background-ocean .side-drawer,
+html.light-mode.user-background-ocean .profile .card,
+html.light-mode.user-background-ocean .engage-panel,
+html.light-mode.user-background-sunset .post-card,
+html.light-mode.user-background-sunset .opinion-card,
+html.light-mode.user-background-sunset .news-story-card,
+html.light-mode.user-background-sunset .league-standings,
+html.light-mode.user-background-sunset .match-card,
+html.light-mode.user-background-sunset .side-drawer,
+html.light-mode.user-background-sunset .profile .card,
+html.light-mode.user-background-sunset .engage-panel {
+  background-color: rgb(255 255 255 / 88%);
+  border-color: rgb(25 35 45 / 16%);
+  color: #20252b;
+}
+
+html.user-background-yellow body,
+html.user-background-yellow .post-card,
+html.user-background-yellow .opinion-card,
+html.user-background-yellow .news-story-card,
+html.user-background-yellow .league-standings,
+html.user-background-yellow .match-card,
+html.user-background-yellow .side-drawer,
+html.user-background-yellow .profile,
+html.user-background-yellow .profile .card,
+html.user-background-yellow .engage-panel,
+html.user-background-yellow .navbar .button,
+html.user-background-yellow #user-greeting {
+  color: #211800;
+}
+
+html.user-background-yellow .post-card,
+html.user-background-yellow .opinion-card,
+html.user-background-yellow .news-story-card,
+html.user-background-yellow .league-standings,
+html.user-background-yellow .match-card,
+html.user-background-yellow .side-drawer,
+html.user-background-yellow .profile .card,
+html.user-background-yellow .engage-panel {
+  background-color: rgb(255 255 255 / 84%);
+  border-color: rgb(91 63 0 / 24%);
+}
+
+html.user-background-yellow .navbar a.active {
+  border-bottom-color: #4a3500;
+  color: #211800;
+}
+
+html.user-background-yellow .profile .card p,
+html.user-background-yellow .profile .card b,
+html.user-background-yellow .profile .item-label,
+html.user-background-yellow .profile .email-top {
+  color: #3a2a00;
+}
+
+html.user-background-yellow .profile .btn:not(.signout) {
+  color: #211800;
+  border-color: #665000;
+}
+
+html.user-background-yellow .profile .btn:not(.signout):hover:not(:disabled) {
+  background: #211800;
+  color: #fff;
 }
 
 @media (max-width: 520px) {

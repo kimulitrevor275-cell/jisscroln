@@ -117,12 +117,18 @@
 
     .msg { min-height: 18px; margin: 8px 0 0 !important; font-size: 16px !important; color: #e07070 !important; }
 
-    .background-options { display: flex; flex-wrap: wrap; gap: 10px; }
+    .background-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+      gap: 10px;
+      width: 100%;
+    }
     .background-option {
       display: flex;
       align-items: center;
       gap: 9px;
-      min-width: 130px;
+      min-width: 0;
+      width: 100%;
       padding: 8px 12px;
       color: inherit;
       font: inherit;
@@ -138,6 +144,16 @@
     .background-preview--aurora { background: linear-gradient(135deg, #102a2a, #101522 55%, #24142b); }
     .background-preview--ocean { background: linear-gradient(135deg, #071b2c, #0e3244 55%, #081927); }
     .background-preview--sunset { background: linear-gradient(135deg, #2a1710, #321c2d 55%, #161b2e); }
+    .background-preview--yellow { background: linear-gradient(135deg, #fff000, #ffc400 55%, #ff8f00); }
+    .background-preview--crystal {
+      background-color: #0c3548;
+      background-image:
+        radial-gradient(circle at 25% 35%, rgb(255 255 255 / 85%) 0 1px, transparent 2px),
+        repeating-radial-gradient(ellipse at 70% 80%, transparent 0 8px, rgb(151 235 255 / 50%) 9px 10px, transparent 11px 16px),
+        conic-gradient(from 26deg, rgb(196 243 255 / 60%) 0deg 54deg, transparent 54deg 150deg, rgb(115 206 231 / 52%) 150deg 202deg, transparent 202deg 300deg, rgb(225 250 255 / 65%) 300deg 330deg, transparent 330deg),
+        linear-gradient(145deg, #b9f4ff, #2783a9 55%, #dffbff);
+      background-size: 30px 24px, 30px 24px, 24px 24px, auto;
+    }
     .background-preview--default { background: #000; border: 1px solid #777; }
     /* ── Phones ── */
     @media (max-width: 480px) {
@@ -175,6 +191,16 @@
     html.light-mode .background-preview--aurora { background: linear-gradient(135deg, #e1f3eb, #edf0fa 55%, #f5eafa); }
     html.light-mode .background-preview--ocean { background: linear-gradient(135deg, #e3f1fa, #e6f5f7 55%, #edf4fb); }
     html.light-mode .background-preview--sunset { background: linear-gradient(135deg, #faeee4, #f8eaf0 55%, #e9edf8); }
+    html.light-mode .background-preview--yellow { background: linear-gradient(135deg, #fff98a, #ffe45e 55%, #ffc857); }
+    html.light-mode .background-preview--crystal {
+      background-color: #b8eaf4;
+      background-image:
+        radial-gradient(circle at 25% 35%, rgb(255 255 255 / 96%) 0 1px, transparent 2px),
+        repeating-radial-gradient(ellipse at 70% 80%, transparent 0 8px, rgb(32 139 171 / 42%) 9px 10px, transparent 11px 16px),
+        conic-gradient(from 26deg, rgb(255 255 255 / 82%) 0deg 54deg, transparent 54deg 150deg, rgb(66 160 185 / 38%) 150deg 202deg, transparent 202deg 300deg, rgb(255 255 255 / 90%) 300deg 330deg, transparent 330deg),
+        linear-gradient(145deg, #e5fcff, #82c9dc 55%, #f5ffff);
+      background-size: 30px 24px, 30px 24px, 24px 24px, auto;
+    }
   </style>
 </head>
 <body>
@@ -206,8 +232,8 @@
     <section class="card" id="background-card" hidden>
       <div class="item">
         <h3>Site background</h3>
-        <p>Choose a background gradient to use.</p>
-        <div class="background-options" role="group" aria-label="Site background gradient">
+        <p>Choose a background theme to use.</p>
+        <div class="background-options" role="group" aria-label="Site background">
           <button class="background-option" type="button" data-background="aurora" aria-pressed="false">
             <span class="background-preview background-preview--aurora" aria-hidden="true"></span>Aurora
           </button>
@@ -216,6 +242,12 @@
           </button>
           <button class="background-option" type="button" data-background="sunset" aria-pressed="false">
             <span class="background-preview background-preview--sunset" aria-hidden="true"></span>Sunset
+          </button>
+          <button class="background-option" type="button" data-background="yellow" aria-pressed="false">
+            <span class="background-preview background-preview--yellow" aria-hidden="true"></span>Bright yellow
+          </button>
+          <button class="background-option" type="button" data-background="crystal" aria-pressed="false">
+            <span class="background-preview background-preview--crystal" aria-hidden="true"></span>Crystal ice &amp; water
           </button>
           <button class="background-option" type="button" data-background="" aria-pressed="false">
             <span class="background-preview background-preview--default" aria-hidden="true"></span>Default

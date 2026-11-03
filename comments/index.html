@@ -534,6 +534,124 @@
       background: linear-gradient(115deg, rgba(250, 238, 228, 0.86), rgba(248, 234, 240, 0.74) 58%, rgba(233, 237, 248, 0.58));
       border-top-color: rgba(184, 117, 97, 0.28);
     }
+
+    html.user-background-yellow {
+      --bg: #fff0a0;
+      --panel: rgb(255 255 255 / 92%);
+      --panel-2: rgb(255 255 255 / 84%);
+      --border: rgb(81 60 0 / 24%);
+      --text: #211800;
+      --muted: #574518;
+      --accent: #705200;
+      --accent-2: #164c85;
+    }
+    html.user-background-yellow body {
+      background: linear-gradient(135deg, #ffe600, #ffd000 48%, #ffad00);
+      color: var(--text);
+    }
+    html.user-background-yellow .page { background: transparent; }
+    html.user-background-yellow .content {
+      background: rgb(255 255 255 / 78%);
+      border-top: 1px solid var(--border);
+      border-radius: 12px 12px 0 0;
+    }
+    html.user-background-yellow .article-heading:not(.has-media) .article-overlay {
+      padding: 14px;
+      border-left: 3px solid #705200;
+      border-radius: 0 12px 12px 0;
+      background: rgb(255 255 255 / 90%);
+      box-shadow: 0 8px 24px rgb(65 47 0 / 16%);
+    }
+    html.user-background-yellow .article-heading:not(.has-media) .headline {
+      color: var(--text);
+    }
+
+    html.light-mode.user-background-yellow {
+      --bg: #fff8cc;
+      --panel: rgb(255 255 255 / 94%);
+      --panel-2: rgb(255 255 255 / 88%);
+      --border: rgb(81 60 0 / 20%);
+      --text: #211800;
+      --muted: #574518;
+      --accent: #705200;
+      --accent-2: #164c85;
+    }
+    html.light-mode.user-background-yellow body {
+      background: linear-gradient(135deg, #fff8a8, #ffed75 48%, #ffd36a);
+      color: var(--text);
+    }
+    html.light-mode.user-background-yellow .content {
+      background: rgb(255 255 255 / 86%);
+      border-top-color: var(--border);
+    }
+    html.light-mode.user-background-yellow .article-heading:not(.has-media) .article-overlay {
+      background: rgb(255 255 255 / 94%);
+    }
+
+    html.user-background-crystal body {
+      background-color: #082638;
+      background-image:
+        radial-gradient(circle at 18% 24%, rgb(229 252 255 / 62%) 0 1px, transparent 2px),
+        radial-gradient(circle at 72% 68%, rgb(151 235 255 / 48%) 0 1.5px, transparent 3px),
+        radial-gradient(ellipse at 14% 18%, rgb(91 206 238 / 30%), transparent 38%),
+        radial-gradient(ellipse at 86% 54%, rgb(25 119 153 / 34%), transparent 42%),
+        repeating-radial-gradient(ellipse at 22% 68%, transparent 0 36px, rgb(135 227 247 / 17%) 38px 40px, transparent 42px 78px),
+        conic-gradient(from 26deg at 50% 50%, rgb(196 243 255 / 12%) 0deg 54deg, transparent 54deg 150deg, rgb(115 206 231 / 10%) 150deg 202deg, transparent 202deg 300deg, rgb(225 250 255 / 12%) 300deg 330deg, transparent 330deg),
+        linear-gradient(135deg, transparent 35%, rgb(222 249 255 / 22%) 49%, transparent 62%),
+        linear-gradient(0deg, transparent 0 94%, rgb(184 238 255 / 38%) 96% 98%, transparent 100%),
+        linear-gradient(90deg, transparent 0 94%, rgb(184 238 255 / 34%) 96% 98%, transparent 100%),
+        linear-gradient(145deg, #10445a 0%, #082536 48%, #0b394c 100%);
+      background-size: 180px 150px, 240px 210px, auto, auto, 620px 520px, 260px 230px, 190px 190px, 190px 190px, 190px 190px, auto;
+      background-position: 0 0, 60px 40px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+      background-attachment: fixed;
+    }
+    html.user-background-crystal .page { background: transparent; }
+    html.user-background-crystal .content {
+      background: rgb(5 25 37 / 82%);
+      border-top: 1px solid rgb(190 240 255 / 27%);
+      border-radius: 12px 12px 0 0;
+      color: #f3fbff;
+    }
+    html.user-background-crystal .opinion-card {
+      background: transparent;
+      border-bottom-color: rgb(190 240 255 / 24%);
+    }
+    html.user-background-crystal .article-heading:not(.has-media) .article-overlay {
+      padding: 14px;
+      border-left: 3px solid rgb(190 240 255 / 65%);
+      border-radius: 0 12px 12px 0;
+      background: rgb(5 25 37 / 88%);
+    }
+
+    html.light-mode.user-background-crystal body {
+      background-color: #b8eaf4;
+      background-image:
+        radial-gradient(circle at 18% 24%, rgb(255 255 255 / 92%) 0 1px, transparent 2px),
+        radial-gradient(circle at 72% 68%, rgb(54 151 179 / 38%) 0 1.5px, transparent 3px),
+        radial-gradient(ellipse at 14% 18%, rgb(255 255 255 / 72%), transparent 38%),
+        radial-gradient(ellipse at 86% 54%, rgb(73 174 200 / 25%), transparent 42%),
+        repeating-radial-gradient(ellipse at 22% 68%, transparent 0 36px, rgb(32 139 171 / 20%) 38px 40px, transparent 42px 78px),
+        conic-gradient(from 26deg at 50% 50%, rgb(255 255 255 / 50%) 0deg 54deg, transparent 54deg 150deg, rgb(66 160 185 / 13%) 150deg 202deg, transparent 202deg 300deg, rgb(255 255 255 / 48%) 300deg 330deg, transparent 330deg),
+        linear-gradient(135deg, transparent 35%, rgb(255 255 255 / 78%) 49%, transparent 62%),
+        linear-gradient(0deg, transparent 0 94%, rgb(255 255 255 / 88%) 96% 98%, transparent 100%),
+        linear-gradient(90deg, transparent 0 94%, rgb(255 255 255 / 80%) 96% 98%, transparent 100%),
+        linear-gradient(145deg, #e5fcff 0%, #a9deeb 48%, #c4e9f4 100%);
+      background-size: 180px 150px, 240px 210px, auto, auto, 620px 520px, 260px 230px, 190px 190px, 190px 190px, 190px 190px, auto;
+      background-position: 0 0, 60px 40px, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+      background-attachment: fixed;
+    }
+    html.light-mode.user-background-crystal .content {
+      background: rgb(255 255 255 / 88%);
+      border-top-color: rgb(73 151 179 / 28%);
+      color: #202b30;
+    }
+    html.light-mode.user-background-crystal .opinion-card {
+      border-bottom-color: rgb(73 151 179 / 24%);
+    }
+    html.light-mode.user-background-crystal .article-heading:not(.has-media) .article-overlay {
+      border-left-color: #34839d;
+      background: rgb(255 255 255 / 90%);
+    }
   </style>
 </head>
 <body>

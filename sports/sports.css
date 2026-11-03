@@ -12,17 +12,17 @@
   --bg: #000;
   --surface: #14161a;
   --surface-hover: #1b1e23;
-  --border: #b1b5b9;
-  --text: white;
-  --dim: #aab0b5;
-  --muted: #7d8590;
+  --border: #30343a;
+  --text: #e7e8ea;
+  --dim: #a3a7ad;
+  --muted: #777e87;
   --thead: #0f1114;
-  --accent: #1d9cf0fe;
+  --accent: #729ec4;
   --accent-ink: #000;
-  --live: #f4212e;
-  --ucl: #1d9bf0;
-  --uel: #ff7a00;
-  --rel: #f4212e;
+  --live: #d4777d;
+  --ucl: #7f91aa;
+  --uel: #a4937b;
+  --rel: #b9787e;
 }
 
 html.light-mode {
@@ -35,6 +35,11 @@ html.light-mode {
   --muted: #777;
   --thead: #f0f0f0;
   --accent-ink: #fff;
+  --accent: #1d9cf0fe;
+  --live: #f4212e;
+  --ucl: #1d9bf0;
+  --uel: #ff7a00;
+  --rel: #f4212e;
 }
 
 .footstat-section,
@@ -81,26 +86,26 @@ html.light-mode {
 
 #status-pills {
   display: flex;
-  gap: 22px;
-  margin: 0 0 12px;
+  gap: 5px;
+  margin: 0 0 6px;
   padding: 0;
-  border-bottom: 1px solid #262626;
+  border-bottom: 1px solid var(--border);
   background: none;
 }
 
 #status-pills .tab {
   position: relative;
-  padding: 10px 2px;
-  font: 600 17px/1 'Outfit', sans-serif;
-  color: #8a8a8a;
+  padding: 3px 7px;
+  font: 500 13px/1.2 'Outfit', sans-serif;
+  color: var(--dim);
   background: none;
   border: none;
   border-radius: 0;
   cursor: pointer;
 }
-#status-pills .tab:hover { color: #fff; background: none; }
+#status-pills .tab:hover { color: var(--text); background: none; }
 
-#status-pills .tab.active { color: #fff; background: none; }
+#status-pills .tab.active { color: var(--text); background: none; }
 #status-pills .tab.active::after {
   content: "";
   position: absolute;
@@ -108,28 +113,28 @@ html.light-mode {
   right: 0;
   bottom: -1px;
   height: 3px;
-  background: #5b8cff;
+  background: var(--accent);
   border-radius: 3px 3px 0 0;
 }
 
 /* the count: small, plain, no bubble */
 #status-pills .tab span {
-  margin-left: 4px;
-  font-size: 18px;
+  margin-left: 3px;
+  font-size: 13px;
   font-weight: 500;
-  color: #6f6f6f;
+  color: var(--muted);
 }
-#status-pills .tab.active span { color: #5b8cff; }
+#status-pills .tab.active span { color: var(--accent); }
 
 /* live: red dot that pulses when matches are on */
 #status-pills .tab.has-live::before {
   content: "";
   display: inline-block;
-  width: 7px;
-  height: 7px;
-  margin-right: 6px;
+  width: 10px;
+  height: 10px;
+  margin-right: 4px;
   vertical-align: middle;
-  background: #e07070;
+  background: var(--live);
   border-radius: 50%;
   animation: livepulse 1.5s ease-in-out infinite;
 }
@@ -285,10 +290,26 @@ html.light-mode .match-status { background: rgba(0, 0, 0, 0.06); }
   font-weight: 500;
 }
 
+#matches-tabs .tabs {
+  gap: 5px;
+  margin: 4px 0 6px;
+  padding: 2px 6px;
+}
+
+#matches-tabs .tab {
+  padding: 3px 7px;
+  border-width: 1px;
+  font: 400 12px/1.2 "Outfit", sans-serif;
+}
+
+#matches-tabs .tab.active {
+  font-weight: 500;
+}
+
 .league-standings {
-  margin: 0 4px;
+  margin:  4px;
   background: var(--surface);
-  border:1.3px solid var(--border);
+  border:1.1px solid var(--border);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -300,19 +321,21 @@ html.light-mode .match-status { background: rgba(0, 0, 0, 0.06); }
   border-bottom: 1px solid var(--border);
 }
 
-/* scrolls both ways; header + team column stay pinned */
 .standings-table {
-  max-height: 300px;
-  overflow: auto;
+  max-width: 100%;
+  max-height: 195px;
+  overflow-x: hidden;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
 }
-.standings-table::-webkit-scrollbar { width: 6px; height: 6px; }
+.standings-table::-webkit-scrollbar { width: 6px; }
 .standings-table::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
 .standings-table table {
   width: 100%;
+  max-width: 100%;
   min-width: 0;
   table-layout: fixed;
   border-collapse: separate;
@@ -343,27 +366,19 @@ html.light-mode .match-status { background: rgba(0, 0, 0, 0.06); }
 }
 
 .standings-table .col-team {
-  position: sticky;
-  left: 26px;
-  z-index: 2;
   text-align: left;
-  width: 34%;
+  width: 32%;
   min-width: 0;
   overflow: hidden;
 }
 .standings-table .col-pos {
-  position: sticky;
-  left: 0;
-  z-index: 2;
-  width: 26px;
-  min-width: 26px;
-  padding-left: 7px;
+  width: 5%;
+  min-width: 0;
+  padding-left: 2px;
   border-left: 3px solid transparent;
   font-weight: 600;
   color: var(--text);
 }
-.standings-table thead .col-team,
-.standings-table thead .col-pos { z-index: 4; }
 
 .team-cell { display: flex; align-items: center; gap: 5px; min-width: 0; }
 .team-logo-small {
