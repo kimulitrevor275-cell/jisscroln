@@ -1,15 +1,8 @@
 // Needs jis.js loaded first
 // (API, showSkeleton, renderBody, attachSeeMore, renderRateboxAndEngagement, initEngagement)
 
-// ─────────────────────────────────────────
-//  KEEP BACKEND AWAKE
-// ─────────────────────────────────────────
-
 fetch(API + "/").catch(function () {});
-
-// ─────────────────────────────────────────
-//  RENDER ENGINE
-// ─────────────────────────────────────────
+var trendsNewsArticles = [];
 
 function renderPost(post) {
   var postId = post.id;
@@ -49,11 +42,8 @@ function renderPosts(posts) {
     attachSeeMore(post.id);
     initEngagement(post.id); // buttons + ratings + opinions
   });
+  renderTrendsNewsInFeed();
 }
-
-// ─────────────────────────────────────────
-//  FETCH AND RENDER
-// ─────────────────────────────────────────
 
 showSkeleton("content", 3);
 
@@ -132,22 +122,84 @@ function getNewsCommentsUrl(article) {
   return '/comments/?' + params.toString();
 }
 
+function renderTrendsNewsInFeed() {
+  const content = document.getElementById('content');
+  if (!content) return;
+
+  content.querySelectorAll('[data-news-feed-item]').forEach(item => item.remove());
+  const posts = Array.from(content.querySelectorAll(':scope > [data-comments-post-id]:not([data-news-feed-item])'));
+  let newsIndex = 0;
+  posts.forEach((post, index) => {
+    if (index % 2 !== 0 || newsIndex >= trendsNewsArticles.length) return;
+    post.insertAdjacentElement('afterend', createTrendsNewsCard(trendsNewsArticles[newsIndex++]));
+  });
+  while (newsIndex < trendsNewsArticles.length) {
+    content.appendChild(createTrendsNewsCard(trendsNewsArticles[newsIndex++]));
+  }
+}
+
+function createTrendsNewsCard(article) {
+  const imageUrl = getSafeNewsUrl(article.image || article.urlToImage);
+  const sourceUrl = getSafeNewsUrl(article.link || article.url);
+  const commentsUrl = getNewsCommentsUrl(article);
+  const card = document.createElement('article');
+  card.className = 'post-card news-story-card';
+  card.setAttribute('role', 'link');
+  card.tabIndex = 0;
+  card.setAttribute('data-news-feed-item', '');
+  card.setAttribute('data-comments-post-id', new URL(commentsUrl, window.location.origin).searchParams.get('post_id'));
+  card.setAttribute('data-comments-url', commentsUrl);
+
+  const title = document.createElement('h2');
+  title.className = 'news-story-title';
+  title.textContent = getNewsTitle(article);
+  card.appendChild(title);
+  if (imageUrl !== '#') {
+    const image = document.createElement('img');
+    image.className = 'news-story-image';
+    image.src = imageUrl;
+    image.alt = '';
+    image.loading = 'lazy';
+    image.addEventListener('error', () => image.remove(), { once: true });
+    card.appendChild(image);
+  }
+  const summaryText = getNewsContent(article).trim();
+  if (summaryText) {
+    const summary = document.createElement('p');
+    summary.className = 'news-story-summary';
+    summary.textContent = summaryText;
+    card.appendChild(summary);
+  }
+  const source = document.createElement('p');
+  source.className = 'news-story-source';
+  source.appendChild(document.createTextNode('Source: ' + getNewsSource(article)));
+  if (sourceUrl !== '#') {
+    const sourceLink = document.createElement('a');
+    sourceLink.href = sourceUrl;
+    sourceLink.target = '_blank';
+    sourceLink.rel = 'noopener noreferrer';
+    sourceLink.textContent = 'Read full story';
+    source.append(' · ', sourceLink);
+  }
+  card.appendChild(source);
+  return card;
+}
+
 document.addEventListener('click', function (event) {
   if (!(event.target instanceof Element) || event.target.closest('a')) return;
-  const card = event.target.closest('.news-headline-card, .news-card-compact');
+  const card = event.target.closest('.news-story-card, .news-headline-card, .news-card-compact');
   if (!card || !card.dataset.commentsUrl) return;
   window.location.href = card.dataset.commentsUrl;
 });
 
 document.addEventListener('keydown', function (event) {
   if ((event.key !== 'Enter' && event.key !== ' ') || !(event.target instanceof Element)) return;
-  const card = event.target.closest('.news-headline-card, .news-card-compact');
+  const card = event.target.closest('.news-story-card, .news-headline-card, .news-card-compact');
   if (!card || event.target.closest('a')) return;
   event.preventDefault();
   card.click();
 });
 
-// Permanent section at top
 async function renderNewsModulePermanent() {
   const container = document.getElementById('uganda-news');
   if (!container) return;
@@ -159,6 +211,8 @@ async function renderNewsModulePermanent() {
     const { articles } = await response.json();
     
     if (!Array.isArray(articles) || articles.length === 0) {
+      trendsNewsArticles = [];
+      renderTrendsNewsInFeed();
       container.textContent = 'No news';
       container.setAttribute('aria-busy', 'false');
       return;
@@ -171,15 +225,12 @@ async function renderNewsModulePermanent() {
       const sourceMarkup = sourceUrl !== '#'
         ? `<a href="${escapeHtml(sourceUrl)}" tabindex="${isDuplicate ? '-1' : '0'}" target="_blank" rel="noopener noreferrer">${escapeHtml(source)}</a>`
         : escapeHtml(source);
-
       return `
-        <article class="news-headline-card" role="link" tabindex="${isDuplicate ? '-1' : '0'}" data-comments-url="${escapeHtml(getNewsCommentsUrl(article))}">
+        <article class="news-headline-card" role="link" tabindex="${isDuplicate ? '-1' : '0'}" ${isDuplicate ? 'aria-hidden="true"' : ''} data-comments-url="${escapeHtml(getNewsCommentsUrl(article))}">
           ${imageUrl !== '#' ? `<img class="news-headline-image" src="${escapeHtml(imageUrl)}" alt="" loading="lazy">` : ''}
           <div class="news-headline-content">
             <h3 class="news-headline-title">${escapeHtml(getNewsTitle(article))}</h3>
-            <div class="news-headline-meta">
-              <span>Source: ${sourceMarkup}</span>
-            </div>
+            <div class="news-headline-meta"><span>Source: ${sourceMarkup}</span></div>
           </div>
         </article>
       `;
@@ -187,11 +238,14 @@ async function renderNewsModulePermanent() {
     const visibleArticles = articles.filter(article =>
       getSafeNewsUrl(article.image || article.urlToImage) !== '#'
     );
+    trendsNewsArticles = visibleArticles;
+    renderTrendsNewsInFeed();
     if (!visibleArticles.length) {
       container.textContent = 'No image headlines available.';
       container.setAttribute('aria-busy', 'false');
       return;
     }
+
     const pages = [];
     for (let index = 0; index < visibleArticles.length; index += 3) {
       pages.push(visibleArticles.slice(index, index + 3));
@@ -201,13 +255,12 @@ async function renderNewsModulePermanent() {
         ${page.map(article => renderHeadlineCard(article, isDuplicate)).join('')}
       </div>
     `;
-    const originalPages = pages.map(page => renderPage(page, false)).join('');
     const duplicatePages = pages.length > 1
       ? pages.map(page => renderPage(page, true)).join('')
       : '';
     container.innerHTML = `
       <div class="news-module" role="region" aria-label="Uganda news headlines" tabindex="0">
-        <div class="news-track">${originalPages}${duplicatePages}</div>
+        <div class="news-track">${pages.map(page => renderPage(page, false)).join('')}${duplicatePages}</div>
       </div>
     `;
     container.setAttribute('aria-busy', 'false');
@@ -216,48 +269,42 @@ async function renderNewsModulePermanent() {
       const newsModule = container.querySelector('.news-module');
       const headlinePages = Array.from(newsModule.querySelectorAll('.news-page'));
       let paused = false;
-      const getCurrentPage = function () {
-        return headlinePages.reduce(function (closestIndex, page, index) {
-          const closestDistance = Math.abs(headlinePages[closestIndex].offsetLeft - newsModule.scrollLeft);
-          const pageDistance = Math.abs(page.offsetLeft - newsModule.scrollLeft);
-          return pageDistance < closestDistance ? index : closestIndex;
-        }, 0);
-      };
-      const scrollToPage = function (pageIndex) {
-        const page = headlinePages[pageIndex];
-        if (page) newsModule.scrollTo({ left: page.offsetLeft, behavior: 'smooth' });
-      };
-      const advanceHeadlines = function () {
+      const getCurrentPage = () => headlinePages.reduce((closestIndex, page, index) => {
+        const closestDistance = Math.abs(headlinePages[closestIndex].offsetLeft - newsModule.scrollLeft);
+        const pageDistance = Math.abs(page.offsetLeft - newsModule.scrollLeft);
+        return pageDistance < closestDistance ? index : closestIndex;
+      }, 0);
+      const timer = window.setInterval(() => {
         if (paused || document.hidden) return;
         const currentPage = getCurrentPage();
-        const totalPages = headlinePages.length;
-        if (currentPage >= totalPages - 1) {
+        if (currentPage >= pages.length - 1) {
           newsModule.scrollTo({ left: 0, behavior: 'auto' });
-          return;
+        } else {
+          newsModule.scrollTo({ left: headlinePages[currentPage + 1].offsetLeft, behavior: 'smooth' });
         }
-        scrollToPage(currentPage + 1);
-      };
-      const timer = window.setInterval(advanceHeadlines, 8000);
-      newsModule.addEventListener('pointerenter', function () { paused = true; });
-      newsModule.addEventListener('pointerleave', function () { paused = false; });
-      newsModule.addEventListener('pointerdown', function () { paused = true; });
-      newsModule.addEventListener('pointerup', function () {
-        window.setTimeout(function () { paused = false; }, 2500);
+      }, 8000);
+      newsModule.addEventListener('pointerenter', () => { paused = true; });
+      newsModule.addEventListener('pointerleave', () => { paused = false; });
+      newsModule.addEventListener('pointerdown', () => { paused = true; });
+      newsModule.addEventListener('pointerup', () => {
+        window.setTimeout(() => { paused = false; }, 2500);
       });
-      newsModule.addEventListener('focusin', function () { paused = true; });
-      newsModule.addEventListener('focusout', function (event) {
+      newsModule.addEventListener('focusin', () => { paused = true; });
+      newsModule.addEventListener('focusout', event => {
         if (!newsModule.contains(event.relatedTarget)) paused = false;
       });
-      window.addEventListener('pagehide', function () { window.clearInterval(timer); }, { once: true });
+      window.addEventListener('pagehide', () => window.clearInterval(timer), { once: true });
     }
+
   } catch (error) {
     console.error('News fetch error:', error);
     container.textContent = `Sorry we couldn't  load Uganda headlines. Please try again later.`;
     container.setAttribute('aria-busy', 'false');
+    trendsNewsArticles = [];
+    renderTrendsNewsInFeed();
   }
 }
 
-// Compact card for interrupting articles
 async function getNewsCardsForInterrupt() {
   try {
     const response = await fetch(`${BACKEND}/news/uganda`);
@@ -280,7 +327,6 @@ async function getNewsCardsForInterrupt() {
   }
 }
 
-// When rendering articles
 async function renderArticlesFeed(articles) {
   const container = document.getElementById('articles-container');
   const newsCards = await getNewsCardsForInterrupt();
@@ -290,7 +336,6 @@ async function renderArticlesFeed(articles) {
   articles.forEach((article, index) => {
     html += `<!-- your article card HTML -->`;
     
-    // Insert news card every 3 articles
     if ((index + 1) % 3 === 0 && newsIndex < newsCards.length) {
       html += newsCards[newsIndex];
       newsIndex++;
@@ -300,8 +345,6 @@ async function renderArticlesFeed(articles) {
   container.innerHTML = html;
 }
 
-// Call on page load
 document.addEventListener('DOMContentLoaded', () => {
   renderNewsModulePermanent();
-  // renderArticlesFeed(articles); // Call with your articles data
 });

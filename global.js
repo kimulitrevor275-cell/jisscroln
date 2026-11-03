@@ -5,18 +5,17 @@ window.addEventListener('scroll', () => {
   const currentScrollY = window.scrollY;
 
   if (currentScrollY > lastScrollY + 50) {
-    // Scrolling down past 50px threshold
+
     header.classList.add('hide');
   } else if (currentScrollY < lastScrollY - 50) {
-    // Scrolling up past 50px threshold
+
     header.classList.remove('hide');
   }
 
   lastScrollY = currentScrollY;
 });
-// notify("Opinion posted", "success")
-// notify("Could not reach server", "error", 6000)   // type, then ms on screen (0 = stays until closed)
-// Styles (.toast-region, .toast, ...) live in global.css.
+
+
 (function () {
   var region = null;
 
@@ -35,7 +34,7 @@ window.addEventListener('scroll', () => {
     duration = duration === undefined ? 4000 : duration;
     var host = getRegion();
 
-    // don't stack identical messages
+
     var existing = Array.from(host.children).find(function (t) {
       return t.dataset.msg === message;
     });
@@ -52,7 +51,7 @@ window.addEventListener('scroll', () => {
 
     var text = document.createElement("span");
     text.className = "toast-text";
-    text.textContent = message;               // textContent, so no HTML injection
+    text.textContent = message;          
 
     var close = document.createElement("button");
     close.type = "button";
@@ -78,7 +77,7 @@ window.addEventListener('scroll', () => {
     toast.addEventListener("mouseleave", start);
     start();
 
-    // keep at most 3 on screen
+
     while (host.children.length > 3) host.firstChild.remove();
   };
 })();

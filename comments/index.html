@@ -617,7 +617,8 @@
 
     const params = new URLSearchParams(window.location.search);
     const requestedId = params.get('post_id') || params.get('id') || params.get('article') || '';
-    const requestedNews = params.get('news') === 'uganda';
+    const requestedNews = ['uganda', 'sports'].includes(params.get('news'));
+    const requestedNewsType = requestedNews ? params.get('news') : '';
 
     const $ = function (id) { return document.getElementById(id); };
     const articleHeading = document.querySelector('.article-heading');
@@ -961,9 +962,9 @@ function setStatus(message, type) {
       return allArticles.find(function (a) { return String(a.id) === String(requestedId); }) || null;
     }
 
-    async function loadUgandaNews() {
+    async function loadNewsStory() {
       const headline = params.get('headline');
-      if (!requestedId || !headline) throw new Error('This Uganda news link is incomplete.');
+      if (!requestedId || !headline) throw new Error('This news link is incomplete.');
 
       const imageUrl = getSafeHttpUrl(params.get('image'));
       const sourceUrl = getSafeHttpUrl(params.get('source_url'));
@@ -993,8 +994,8 @@ function setStatus(message, type) {
       let newsContent = params.get('content') || '';
       if (!newsContent) {
         try {
-          const response = await apiFetch('/news/uganda');
-          if (!response.ok) throw new Error('Unable to load Uganda news content.');
+          const response = await apiFetch('/news/' + requestedNewsType);
+          if (!response.ok) throw new Error('Unable to load news content.');
           const data = await response.json();
           const articles = Array.isArray(data.articles) ? data.articles : [];
           const match = articles.find(function (item) {
@@ -1006,7 +1007,7 @@ function setStatus(message, type) {
                 .replace(/\s*\[\+\d+\s+chars\]\s*$/, '')
             : '';
         } catch (error) {
-          console.error('Could not load Uganda news content:', error);
+          console.error('Could not load news content:', error);
         }
       }
 
@@ -1045,7 +1046,7 @@ function setStatus(message, type) {
     async function loadArticle() {
       try {
         if (requestedNews) {
-          await loadUgandaNews();
+          await loadNewsStory();
           return;
         }
 

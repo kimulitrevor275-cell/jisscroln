@@ -358,13 +358,6 @@ html.light-mode .news-headline-meta a {
   color: #1a73e8;
 }
 
-#header #user-greeting .greeting-name svg {
-  width: 14px;
-  height: 14px;
-  flex: 0 0 14px;
-  margin-left: 3px;
-}
-
 html.light-mode .news-card-compact {
   background: #fff;
   color: #222;

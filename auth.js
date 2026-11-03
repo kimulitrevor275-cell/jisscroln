@@ -12,9 +12,7 @@ function onReady(fn) {
   }
 }
 
-// ─────────────────────────────────────────
 //  LIGHT MODE
-// ─────────────────────────────────────────
 
 var LIGHT_MODE_STORAGE_KEY = "jisscrol-theme";
 var LM_ICON_FOR_DARK = "/pics/lm.png";
@@ -55,12 +53,15 @@ function renderSideBackgroundPicker(user) {
 
   var info = picker.querySelector(".side-background-info");
   var action = picker.querySelector(".side-background-action");
+  var heading = picker.querySelector("h2");
   picker.hidden = false;
+  heading.textContent = currentBackgroundUser ? "Premium features" : "Get premium";
+  picker.setAttribute("aria-label", heading.textContent);
   info.hidden = Boolean(currentBackgroundUser);
   action.hidden = Boolean(currentBackgroundUser);
   if (!currentBackgroundUser) {
     action.href = user && user.id ? "/profile.html" : "/login/";
-    action.textContent = user && user.id ? "Verify your email" : "Get premium";
+    action.textContent = user && user.id ? "Verify your email" : "Sign in or create an account";
   }
 
   var selected = "";
@@ -162,9 +163,7 @@ if (!window._lightModeListenersInitialized) {
   window._lightModeListenersInitialized = true;
 }
 
-// ─────────────────────────────────────────
 //  AUTH HELPERS
-// ─────────────────────────────────────────
 
 function getGreeting() {
   var h = new Date().getHours();
@@ -190,9 +189,7 @@ function _makeBadge(tier, size) {
   </svg>`;
 }
 
-// ─────────────────────────────────────────
 //  SESSION + GREETING
-// ─────────────────────────────────────────
 var username = sessionStorage.getItem("jis_username") || "Anonymous";
 
 // The toggle. Returns "" if the page already has its own #lightmode elsewhere.
@@ -374,17 +371,13 @@ sb.auth.getSession().then(function (r) {
   }
 });
 
-// ─────────────────────────────────────────
 //  API
-// ─────────────────────────────────────────
 
 var API = "https://jisscrol-opinions.onrender.com";
 var voted = {};
 var ratings = {};
 
-// ─────────────────────────────────────────
 //  TEXT HELPERS
-// ─────────────────────────────────────────
 
 function escapeHtml(str) {
   if (!str) return "";
@@ -672,7 +665,9 @@ document.addEventListener("click", function (event) {
 
   var postId = card.getAttribute("data-comments-post-id");
   if (!postId) return;
-  window.location.href = "/comments/?post_id=" + encodeURIComponent(postId);
+  window.location.href =
+    card.getAttribute("data-comments-url") ||
+    "/comments/?post_id=" + encodeURIComponent(postId);
 });
 
 function submitRating(postId, vote) {
@@ -738,9 +733,7 @@ function updateRatingBar(postId) {
   rbp.textContent = bad;
 }
 
-// ─────────────────────────────────────────
 //  OPINIONS
-// ─────────────────────────────────────────
 
 function submitOpinion(postId) {
   var input = document.getElementById("oi-" + postId);
@@ -1005,9 +998,7 @@ function showTickerSkeleton() {
   document.head.appendChild(style);
 })();
 
-// ─────────────────────────────────────────
 //  SEARCH — floating icon that opens the /search/ page
-// ─────────────────────────────────────────
 
 (function () {
   // no floating icon on the search page itself
@@ -1053,15 +1044,11 @@ function attachSeeMore(postId) {
   });
 }
 
-// ─────────────────────────────────────────
 //  BODY TEXT (See More / See Less)
-// ─────────────────────────────────────────
 
 var BODY_LIMIT = 300;
 
-// ─────────────────────────────────────────
 //  ARTICLE MEDIA
-// ─────────────────────────────────────────
 // The backend classifies media. Each article carries:
 //   post.media = [{ type: "image" | "video" | "embed", url, provider, embedUrl }]
 // so nothing here sniffs URLs or file extensions.

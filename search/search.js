@@ -31,6 +31,26 @@
     results.setAttribute("aria-busy", "false");
   }
 
+  function showSearchSkeleton() {
+    var skeletonList = document.createElement("div");
+    skeletonList.className = "search-skeleton-list";
+    skeletonList.setAttribute("aria-hidden", "true");
+
+    for (var index = 0; index < 5; index += 1) {
+      var row = document.createElement("div");
+      row.className = "search-skeleton-row";
+      var firstLine = document.createElement("span");
+      firstLine.className = "search-skeleton-line";
+      var secondLine = document.createElement("span");
+      secondLine.className = "search-skeleton-line search-skeleton-line-short";
+      row.append(firstLine, secondLine);
+      skeletonList.appendChild(row);
+    }
+
+    results.replaceChildren(skeletonList);
+    results.setAttribute("aria-busy", "true");
+  }
+
   function safeImageUrl(value) {
     if (typeof value !== "string" || !value.trim()) return "";
     try {
@@ -184,7 +204,7 @@
       media,
       "search-result",
       "search-result-image-placeholder",
-      categoryText.toLowerCase().includes("song") ? "♫" : "<img>",
+      categoryText.toLowerCase().includes("song") ? "♫" : "J",
     );
 
     var copy = document.createElement("span");
@@ -235,6 +255,7 @@
 
   function discoveryArticleCard(article) {
     var category = String(article.category || "Story");
+    if (category.toLowerCase() === "newpage") category = "Article";
     var link = document.createElement("a");
     link.className = "discovery-card";
     link.href = articleCommentsUrl(article);
@@ -244,7 +265,7 @@
       articleCover(article),
       "discovery-card",
       "discovery-card-image-placeholder",
-      "JiScroL STORIES",
+      "J",
     );
 
     var copy = document.createElement("span");
@@ -352,6 +373,7 @@
       requestId += 1;
       if (activeRequest) activeRequest.abort();
       activeRequest = null;
+      form.classList.remove("is-loading");
       window.history.replaceState(null, "", window.location.pathname);
       return;
     }
@@ -364,10 +386,10 @@
     var currentRequestId = ++requestId;
     if (activeRequest) activeRequest.abort();
     activeRequest = new AbortController();
+    form.classList.add("is-loading");
     results.setAttribute("aria-busy", "true");
     if (resultsTitle) resultsTitle.textContent = 'Results for "' + query + '"';
-    showMessage("Searching...");
-    results.setAttribute("aria-busy", "true");
+    showSearchSkeleton();
 
     fetch(API + "/search?q=" + encodeURIComponent(query), {
       signal: activeRequest.signal,
@@ -380,6 +402,7 @@
       })
       .then(function (data) {
         if (currentRequestId !== requestId) return;
+        form.classList.remove("is-loading");
         if (
           !data ||
           !Array.isArray(data.articles) ||
@@ -392,10 +415,11 @@
         var fragment = document.createDocumentFragment();
         appendSection(fragment, "Articles", data.articles, function (article) {
           var category = String(article.category || "article");
+          var displayCategory = category.toLowerCase() === "newpage" ? "Article" : category;
           return resultCard(
             articleCommentsUrl(article),
             articleCover(article),
-            category,
+            displayCategory,
             String(article.headline || "Untitled article"),
           );
         });
@@ -428,6 +452,7 @@
       })
       .catch(function (error) {
         if (currentRequestId !== requestId || error.name === "AbortError") return;
+        form.classList.remove("is-loading");
         console.error("Search failed:", error);
         showMessage("Search is unavailable. Please try again.");
       });

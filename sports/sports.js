@@ -4,12 +4,130 @@ function keepSportsApiAwake() {
   });
 }
 
+function getSportsNewsUrl(value) {
+  if (typeof value !== "string" || !value.trim()) return "";
+  try {
+    var url = new URL(value, window.location.origin);
+    return url.protocol === "http:" || url.protocol === "https:" ? url.href : "";
+  } catch (error) {
+    return "";
+  }
+}
+
+var sportsNewsArticles = [];
+var sportsPosts = null;
+
+function getSportsNewsDiscussionId(article) {
+  var sourceUrl = getSportsNewsUrl(article.link || article.url || article.sourceUrl);
+  var title = String(article.title || article.headline || article.name || "Untitled");
+  var identity = sourceUrl + "|" + title;
+  var hash = 0x811c9dc5;
+  for (var index = 0; index < identity.length; index += 1) {
+    hash = Math.imul(hash ^ identity.charCodeAt(index), 0x01000193);
+  }
+  return "sports-news-" + (hash >>> 0).toString(16);
+}
+
+function getSportsNewsCommentsUrl(article) {
+  var sourceUrl = getSportsNewsUrl(article.link || article.url || article.sourceUrl);
+  var title = String(article.title || article.headline || article.name || "Untitled");
+  var imageUrl = getSportsNewsUrl(article.image || article.urlToImage || article.img);
+  var sourceValue = article.source && typeof article.source === "object"
+    ? article.source.name
+    : article.source;
+  return "/comments/?" + new URLSearchParams({
+    news: "sports",
+    post_id: getSportsNewsDiscussionId(article),
+    headline: title,
+    source: String(sourceValue || article.author || "Unknown"),
+    image: imageUrl,
+    source_url: sourceUrl,
+    content: String(article.popularity || article.description || article.summary || "").slice(0, 1200)
+  }).toString();
+}
+
+function createSportsNewsPost(article) {
+  var title = String(article.title || article.headline || article.name || "Untitled");
+  var imageUrl = getSportsNewsUrl(article.image || article.urlToImage || article.img);
+  var articleUrl = getSportsNewsUrl(article.link || article.url || article.sourceUrl);
+  var item = document.createElement("article");
+  item.className = "post-card sports-news-article";
+  item.setAttribute("data-comments-post-id", getSportsNewsDiscussionId(article));
+  item.setAttribute("data-comments-url", getSportsNewsCommentsUrl(article));
+
+  var heading = document.createElement("h2");
+  heading.textContent = title;
+  item.appendChild(heading);
+
+  if (imageUrl) {
+    var image = document.createElement("img");
+    image.className = "sports-news-image";
+    image.src = imageUrl;
+    image.alt = "";
+    image.loading = "lazy";
+    image.addEventListener("error", function () { image.remove(); }, { once: true });
+    item.appendChild(image);
+  }
+
+  var summaryText = String(article.popularity || article.description || article.summary || "").trim();
+  if (summaryText) {
+    var summary = document.createElement("p");
+    summary.className = "sports-news-summary";
+    summary.textContent = summaryText;
+    item.appendChild(summary);
+  }
+
+  var sourceValue = article.source && typeof article.source === "object"
+    ? article.source.name
+    : article.source;
+  var source = String(sourceValue || article.author || "").trim();
+  if (source || articleUrl) {
+    var meta = document.createElement("p");
+    meta.className = "sports-news-source";
+    meta.textContent = source ? "Source: " + source : "";
+    if (articleUrl) {
+      var sourceLink = document.createElement("a");
+      sourceLink.href = articleUrl;
+      sourceLink.target = "_blank";
+      sourceLink.rel = "noopener noreferrer";
+      sourceLink.textContent = "Read full story";
+      if (source) meta.append(" · ");
+      meta.appendChild(sourceLink);
+    }
+    item.appendChild(meta);
+  }
+  return item;
+}
+
+function renderSportsNews(articles) {
+  sportsNewsArticles = articles.filter(function (article) {
+    return article && typeof article === "object" &&
+      String(article.title || article.headline || article.name || "").trim();
+  });
+  renderSportsFeed();
+}
+
+function loadSportsNews() {
+  fetch("https://jisscrol-opinions.onrender.com/news/sports")
+    .then(function (response) {
+      if (!response.ok) throw new Error("Sports news request failed: " + response.status);
+      return response.json();
+    })
+    .then(function (data) {
+      if (!data || !Array.isArray(data.articles)) {
+        throw new Error("Sports news returned an invalid response.");
+      }
+      renderSportsNews(data.articles);
+    })
+    .catch(function (error) {
+      console.error("Failed to load sports news:", error);
+      renderSportsFeed();
+    });
+}
+
 keepSportsApiAwake();
 setInterval(keepSportsApiAwake, 5 * 60 * 1000);
-
-// ─────────────────────────────────────────
-//  ARTICLES (unchanged)
-// ─────────────────────────────────────────
+loadSportsNews();
 
 function renderSportsPost(post) {
   var postId = post.id;
@@ -30,17 +148,22 @@ function renderSportsPost(post) {
 }
 
 function renderSports(posts) {
+  sportsPosts = Array.isArray(posts) ? posts : [];
+  renderSportsFeed();
+}
+
+function renderSportsFeed() {
   var sportsEl = document.getElementById("sports");
-  if (!sportsEl) return;
+  if (!sportsEl || sportsPosts === null) return;
 
-  sportsEl.innerHTML = "";
-
-  if (!Array.isArray(posts) || posts.length === 0) {
+  sportsEl.replaceChildren();
+  if (sportsPosts.length === 0 && sportsNewsArticles.length === 0) {
     sportsEl.textContent = "No sports found.";
     return;
   }
 
-  posts.forEach(function (post) {
+  var newsIndex = 0;
+  sportsPosts.forEach(function (post, index) {
     var card = document.createElement("article");
     card.className = "post-card";
     card.setAttribute("data-comments-post-id", post.id);
@@ -49,12 +172,18 @@ function renderSports(posts) {
 
     attachSeeMore(post.id);
     initEngagement(post.id); // buttons + ratings + opinions
-  });
-}
 
-// ─────────────────────────────────────────
-//  SHARED HELPERS
-// ─────────────────────────────────────────
+    if (index % 2 === 0 && newsIndex < sportsNewsArticles.length) {
+      sportsEl.appendChild(createSportsNewsPost(sportsNewsArticles[newsIndex]));
+      newsIndex += 1;
+    }
+  });
+
+  while (newsIndex < sportsNewsArticles.length) {
+    sportsEl.appendChild(createSportsNewsPost(sportsNewsArticles[newsIndex]));
+    newsIndex += 1;
+  }
+}
 
 const BACKEND = 'https://jisscrol-opinions.onrender.com';
 
@@ -78,9 +207,6 @@ function statusInfo(status) {
   return { label: 'Upcoming', cls: '' };
 }
 
-// ══════════════════════════════════════
-//  MATCHES  (Live / Played / Upcoming  +  league tabs)
-// ══════════════════════════════════════
 let footData = { live: [], played: [], upcoming: [], delayed: false };
 let activeStatus = null;     // 'live' | 'played' | 'upcoming'
 let activeMatchTab = null;   // league code
@@ -213,9 +339,6 @@ document.addEventListener('click', (e) => {
 document.addEventListener('DOMContentLoaded', loadFootball);
 setInterval(loadFootball, 60000);   // reads your own cached endpoint, so it's cheap
 
-// ══════════════════════════════════════
-//  STANDINGS (unchanged)
-// ══════════════════════════════════════
 let leagues = [];
 let activeLeague = 0;
 
@@ -318,10 +441,6 @@ document.addEventListener('click', (e) => {
 document.addEventListener('DOMContentLoaded', loadStandings);
 setInterval(loadStandings, 3600000);
 
-// ─────────────────────────────────────────
-//  FETCH AND RENDER ARTICLES (unchanged)
-// ─────────────────────────────────────────
-
 showSkeleton("sports", 3);
 
 fetch(API + "/articles?category=sports")
@@ -332,6 +451,10 @@ fetch(API + "/articles?category=sports")
   .then(renderSports)
   .catch(function (error) {
     console.error("Failed to load sports:", error);
-    var sportsEl = document.getElementById("sports");
-    if (sportsEl) sportsEl.textContent = "Could not load sports. Please try again later.";
+    sportsPosts = [];
+    renderSportsFeed();
+    if (sportsNewsArticles.length === 0) {
+      var sportsEl = document.getElementById("sports");
+      if (sportsEl) sportsEl.textContent = "Could not load sports. Please try again later.";
+    }
   });

@@ -129,7 +129,7 @@ padding-top: 3px;
   padding: 8px;
 padding-top: 0;
   padding-bottom: 3.5px;
-  font-size: clamp(12px, 1vw, 24px);
+  font-size: clamp(10px, 0.8vw, 20px);
   color: rgb(117, 115, 115);
   cursor: pointer;
   transition: color 0.3s ease;
@@ -165,6 +165,13 @@ padding-top: 0;
   display: inline-flex;
   align-items: center;
   font-family: "lexend" ,sans-serif;
+}
+#user-greeting .greeting-name > svg {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+  margin-left: 3px;
+  vertical-align: middle;
 }
 .gicons{
   display: flex;
@@ -958,7 +965,7 @@ padding: 0;
   flex: 1;
   margin: 0;
   display: flex;
-  height: 7px;
+  height: 5px;
   border-radius: 4px;
   overflow: hidden;
   background: #222;
@@ -969,7 +976,7 @@ padding: 0;
 
 @media (max-width: 599px) {
   .rate-bar-wrap {
-    height: 7px;
+    height: 5px;
   }
 }
 
@@ -1247,7 +1254,7 @@ html.light-mode .body-link, .see-more, a{
 }
 html.light-mode #header,
 html.light-mode header {
-  background: white;
+  background: #f5f5f5;
 }
 
 html.light-mode h1,
@@ -1531,57 +1538,243 @@ html.light-mode.user-background-sunset body {
 
 html.user-background-aurora #header,
 html.user-background-aurora header {
-  background-image:
-    radial-gradient(ellipse at 12% 0%, rgb(25 135 118 / 28%), transparent 48%),
-    linear-gradient(110deg, rgb(13 31 34 / 96%), rgb(20 23 39 / 96%) 58%, rgb(40 23 47 / 96%));
-  border-bottom: 1px solid rgb(112 218 192 / 35%);
-  box-shadow: 0 8px 24px rgb(3 12 16 / 24%);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  backdrop-filter: blur(14px) saturate(1.2);
+  background-image: linear-gradient(135deg, #102a2a, #101522 55%, #24142b);
+  border-bottom: 1px solid rgb(112 218 192 / 24%);
+  box-shadow: none;
 }
 
 html.user-background-ocean #header,
 html.user-background-ocean header {
-  background-image:
-    radial-gradient(ellipse at 90% 0%, rgb(39 152 183 / 24%), transparent 50%),
-    linear-gradient(110deg, rgb(7 27 44 / 97%), rgb(12 48 65 / 96%) 58%, rgb(8 28 44 / 97%));
-  border-bottom: 1px solid rgb(100 202 225 / 34%);
-  box-shadow: 0 8px 24px rgb(3 12 16 / 24%);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  backdrop-filter: blur(14px) saturate(1.2);
+  background-image: linear-gradient(135deg, #071b2c, #0e3244 55%, #081927);
+  border-bottom: 1px solid rgb(100 202 225 / 24%);
+  box-shadow: none;
 }
 
 html.user-background-sunset #header,
 html.user-background-sunset header {
-  background-image:
-    radial-gradient(ellipse at 12% 0%, rgb(192 102 66 / 26%), transparent 48%),
-    linear-gradient(110deg, rgb(42 25 21 / 97%), rgb(48 28 45 / 96%) 58%, rgb(25 30 49 / 97%));
-  border-bottom: 1px solid rgb(229 166 128 / 34%);
-  box-shadow: 0 8px 24px rgb(20 10 16 / 22%);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  backdrop-filter: blur(14px) saturate(1.2);
+  background-image: linear-gradient(135deg, #2a1710, #321c2d 55%, #161b2e);
+  border-bottom: 1px solid rgb(229 166 128 / 24%);
+  box-shadow: none;
 }
 
 html.light-mode.user-background-aurora #header,
 html.light-mode.user-background-aurora header {
-  background-image:
-    radial-gradient(ellipse at 12% 0%, rgb(112 199 173 / 28%), transparent 48%),
-    linear-gradient(110deg, rgb(237 248 242 / 96%), rgb(239 241 250 / 96%) 58%, rgb(248 239 250 / 96%));
-  border-bottom: 1px solid rgb(77 157 137 / 32%);
+  background-image: linear-gradient(135deg, #e1f3eb, #edf0fa 55%, #f5eafa);
+  border-bottom-color: rgb(77 157 137 / 24%);
 }
 
 html.light-mode.user-background-ocean #header,
 html.light-mode.user-background-ocean header {
-  background-image:
-    radial-gradient(ellipse at 90% 0%, rgb(99 184 207 / 26%), transparent 50%),
-    linear-gradient(110deg, rgb(235 245 252 / 97%), rgb(232 248 249 / 96%) 58%, rgb(240 246 253 / 97%));
-  border-bottom: 1px solid rgb(66 145 171 / 30%);
+  background-image: linear-gradient(135deg, #e3f1fa, #e6f5f7 55%, #edf4fb);
+  border-bottom-color: rgb(66 145 171 / 24%);
 }
 
 html.light-mode.user-background-sunset #header,
 html.light-mode.user-background-sunset header {
-  background-image:
-    radial-gradient(ellipse at 12% 0%, rgb(224 153 113 / 25%), transparent 48%),
-    linear-gradient(110deg, rgb(252 241 232 / 97%), rgb(250 237 244 / 96%) 58%, rgb(237 241 251 / 97%));
-  border-bottom: 1px solid rgb(184 117 97 / 30%);
+  background-image: linear-gradient(135deg, #faeee4, #f8eaf0 55%, #e9edf8);
+  border-bottom-color: rgb(184 117 97 / 24%);
+}
+
+.news-story-section-title {
+  margin: 0 0 10px;
+  color: inherit;
+  font: 500 clamp(20px, 2.4vw, 28px)/1.3 "Outfit", sans-serif;
+}
+
+.home-uganda-news {
+  margin: 20px 0 25px;
+}
+
+.home-uganda-news .news-module {
+  container-type: inline-size;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.home-uganda-news .news-module::-webkit-scrollbar {
+  display: none;
+}
+
+.home-uganda-news .news-track {
+  display: flex;
+  width: max-content;
+}
+
+.home-uganda-news .news-page {
+  display: grid;
+  flex: 0 0 98cqw;
+  width: 98cqw;
+  grid-template-rows: repeat(3, minmax(88px, auto));
+  align-content: start;
+  scroll-snap-align: start;
+}
+
+.home-uganda-news .news-headline-card,
+.home-uganda-news .news-headline-skeleton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 88px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgb(127 127 127 / 38%);
+}
+
+.home-uganda-news .news-headline-card {
+  cursor: pointer;
+  color: inherit;
+}
+
+.home-uganda-news .news-headline-card:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.home-uganda-news .news-headline-image,
+.home-uganda-news .news-skeleton-image {
+  flex: 0 0 clamp(96px, 18vw, 180px);
+  width: clamp(96px, 18vw, 180px);
+  height: 80px;
+  margin: 0;
+  object-fit: cover;
+}
+
+.home-uganda-news .news-headline-content,
+.home-uganda-news .news-skeleton-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.home-uganda-news .news-headline-title {
+  margin: 0;
+  font: 500 clamp(16px, 2vw, 24px)/1.35 "Outfit", sans-serif;
+}
+
+.home-uganda-news .news-headline-meta {
+  margin-top: 3px;
+  font: 400 clamp(12px, 1vw, 16px)/1.4 "Lexend", sans-serif;
+}
+
+.home-uganda-news .news-headline-meta a {
+  color: #8bb8fc;
+  text-decoration: underline;
+}
+
+.home-uganda-news .news-headline-skeleton {
+  background: linear-gradient(90deg, #222 20%, #383838 50%, #222 80%);
+  background-size: 200% 100%;
+  animation: news-story-shimmer 1.25s ease-in-out infinite;
+}
+
+.home-uganda-news .news-skeleton-image {
+  display: block;
+  background: rgb(255 255 255 / 10%);
+}
+
+.home-uganda-news .news-skeleton-content {
+  display: grid;
+  gap: 9px;
+}
+
+.home-uganda-news .news-skeleton-line,
+.home-uganda-news .news-skeleton-meta {
+  display: block;
+  height: 10px;
+  border-radius: 5px;
+  background: rgb(255 255 255 / 12%);
+}
+
+.home-uganda-news .news-skeleton-line-short {
+  width: 62%;
+}
+
+.home-uganda-news .news-skeleton-meta {
+  width: 46%;
+  height: 8px;
+}
+
+.news-story-card {
+  min-width: 0;
+  margin: 0 0 16px;
+  padding: 12px 4px 16px;
+  border-bottom: 1px solid rgb(127 127 127 / 38%);
+  color: inherit;
+  cursor: pointer;
+}
+
+.news-story-card:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.news-story-card .news-story-title {
+  margin: 0 0 6px;
+}
+
+.news-story-card:hover .news-story-title {
+  color: var(--accent, #1d9cf0);
+}
+
+.news-story-image {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: none;
+  margin: 8px 0 4px;
+}
+
+.news-story-summary {
+  max-width: 720px;
+  margin: 6px 0;
+  color: inherit;
+  opacity: .8;
+  font: 400 15px/1.5 "Lexend", Arial, sans-serif;
+}
+
+.news-story-source {
+  margin: 8px 0 0;
+  color: inherit;
+  opacity: .68;
+  font: 400 13px/1.4 "Lexend", Arial, sans-serif;
+}
+
+.news-story-source a {
+  color: var(--accent, #1d9cf0);
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+html.light-mode .home-uganda-news .news-headline-card,
+html.light-mode .home-uganda-news .news-headline-skeleton {
+  border-bottom-color: #ddd;
+}
+
+html.light-mode .home-uganda-news .news-headline-skeleton {
+  background-image: linear-gradient(90deg, #e5e5e5 20%, #f5f5f5 50%, #e5e5e5 80%);
+}
+
+@media (max-width: 520px) {
+  .home-uganda-news .news-headline-card {
+    gap: 10px;
+  }
+}
+
+@keyframes news-story-shimmer {
+  to { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-uganda-news .news-headline-skeleton,
+  .home-uganda-news .news-skeleton-image,
+  .home-uganda-news .news-skeleton-line,
+  .home-uganda-news .news-skeleton-meta {
+    animation: none;
+  }
 }
