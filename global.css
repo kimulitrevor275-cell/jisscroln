@@ -14,6 +14,7 @@ body {
   color: #e8e8e8;
   width: 100%;
   overflow-x: hidden;
+  overflow: none;
   padding: 8px;
   font-size: clamp(20px, 3vw, 25px);
   flex-wrap: wrap;
