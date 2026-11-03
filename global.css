@@ -1710,12 +1710,19 @@ html.light-mode.user-background-crystal .profile .card {
 }
 
 .home-uganda-news {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   margin: 20px 0 25px;
 }
 
 .home-uganda-news .news-module {
+  box-sizing: border-box;
   container-type: inline-size;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
@@ -1731,12 +1738,15 @@ html.light-mode.user-background-crystal .profile .card {
 .home-uganda-news .news-track {
   display: flex;
   width: max-content;
+  min-width: 100%;
 }
 
 .home-uganda-news .news-page {
   display: grid;
-  flex: 0 0 98cqw;
-  width: 98cqw;
+  box-sizing: border-box;
+  flex: 0 0 100cqw;
+  width: 100cqw;
+  min-width: 0;
   grid-template-rows: repeat(3, minmax(88px, auto));
   align-content: start;
   scroll-snap-align: start;
@@ -1765,8 +1775,8 @@ html.light-mode.user-background-crystal .profile .card {
 
 .home-uganda-news .news-headline-image,
 .home-uganda-news .news-skeleton-image {
-  flex: 0 0 clamp(96px, 18vw, 180px);
-  width: clamp(96px, 18vw, 180px);
+  flex: 0 0 clamp(72px, 22vw, 160px);
+  width: clamp(72px, 22vw, 160px);
   height: 80px;
   margin: 0;
   object-fit: cover;
@@ -1781,6 +1791,7 @@ html.light-mode.user-background-crystal .profile .card {
 .home-uganda-news .news-headline-title {
   margin: 0;
   font: 500 clamp(16px, 2vw, 24px)/1.35 "Outfit", sans-serif;
+  overflow-wrap: anywhere;
 }
 
 .home-uganda-news .news-headline-meta {

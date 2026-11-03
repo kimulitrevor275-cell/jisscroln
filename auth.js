@@ -1024,6 +1024,7 @@ function showTickerSkeleton() {
       cursor: pointer;
       z-index: 999;
       user-select: none;
+      flex-wrap: wrap;
     }
   `;
   document.head.appendChild(style);
