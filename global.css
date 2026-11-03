@@ -1710,12 +1710,15 @@ html.light-mode.user-background-crystal .profile .card {
 }
 
 .home-uganda-news {
+  min-width: 0;
+  max-width: 100%;
   margin: 20px 0 25px;
 }
 
 .home-uganda-news .news-module {
   container-type: inline-size;
   width: 100%;
+  max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
@@ -1850,8 +1853,11 @@ html.light-mode.user-background-crystal .profile .card {
 
 .news-story-image {
   display: block;
-  width: auto;
+  width: min(100%, 720px);
   height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: var(--surface, #111);
   max-width: 100%;
   max-height: none;
   margin: 8px 0 4px;

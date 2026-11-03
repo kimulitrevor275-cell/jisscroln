@@ -1009,11 +1009,21 @@ function showTickerSkeleton() {
   var style = document.createElement("style");
   style.textContent = `
     #jis-search-icon {
-      position:fixed; bottom:10px; right:10px; font-size: 14px;
-      width:35px; height:50px; padding:0; border:none; background: transparent;
-      display:flex; align-items:center; justify-content:center;
-      cursor:pointer; 
-      z-index:999; user-select:none;
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 14px;
+      width: 35px;
+      height: 50px;
+      padding: 0;
+      border: none;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 999;
+      user-select: none;
     }
   `;
   document.head.appendChild(style);
