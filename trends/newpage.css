@@ -1,16 +1,9 @@
-/* content.css — page-specific rules for sports.html / newpage.html.
-   Assumes style.css (shared: reset, body, hr, headings, paragraphs,
-   images, post-card, rate-box, engage-panel, opinion-card, etc.) is
-   loaded on the same page. Nothing here duplicates a rule that file
-   already covers — only what's unique to these pages lives below. */
 
-/* ── CONTENT WRAPPER ── */
 #content {
   margin-top: clamp(40px, 5vw, 100px);
   width: 100%;
 }
 
-/* ── READ-MORE / BACK-TO-HOME LINKS ── */
 #dlinks {
   display: flex;
   flex-wrap: wrap;
@@ -18,23 +11,6 @@
   margin: 16px 0;
 }
 
-#a {
-  flex: 1;
-  min-width: 120px;
-  text-decoration: none;
-  font-size: clamp(16px, 3vw, 20px);
-  background-color: #0a0a0a;
-  color: gray;
-  padding: 6px;
-  border-radius: 200px;
-  border: 0.5px solid gray;
-  font-family: 'Inter', sans-serif;
-  text-align: center;
-  transition: background-color 0.15s ease, color 0.15s ease;
-}
-#a:hover { background-color: dimgray; color: white; }
-
-/* ── TRENDING STRIP ── */
 #trending {
   padding: 10px;
   width: 100%;
@@ -45,16 +21,15 @@
   margin: 40px 0;
 }
 
-/* ── FOOTER SPACING ── */
 #fo {
   margin-bottom: 60px;
 }
 
-/* Desktop */
+
 @media (min-width: 1024px) {
   #dlinks { gap: 24px; }
   #a { font-size: 20px; }
-}c
+}
 .news-section-permanent {
   padding: 0;
   margin-bottom: 25px;
@@ -243,7 +218,7 @@
 
 .news-headline-meta a,
 .news-card-compact-source a {
-  color: rgb(110, 203, 234);
+  color: rgb(110, 156, 234);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
