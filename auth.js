@@ -659,7 +659,7 @@ document.addEventListener("click", function (event) {
     !card ||
     target.closest(
       "a, button, textarea, input, select, [contenteditable='true'], " +
-        ".see-more, .body-hashtag, .post-video, iframe, video, .rate-btns, .engage-panel",
+        ".see-more, .body-hashtag, .post-video, iframe, video, .rate-btns, .engage-panel, .article-read-link",
     )
   ) {
     return;
@@ -1098,6 +1098,24 @@ function renderArticleImages(post) {
   }
 
   return "";
+}
+
+function renderArticleReadLink(post) {
+  if (!post || !post.read_link) return "";
+
+  try {
+    var value = String(post.read_link).trim();
+    if (!/^[a-z][a-z\d+.-]*:/i.test(value)) value = "https://" + value;
+    var url = new URL(value);
+    if (url.protocol !== "http:" && url.protocol !== "https:") return "";
+
+    var displayText = String(post.read_text || "Read more");
+    var safeUrl = escapeHtml(url.href);
+    return `<div class="article-read-link"><a href="${safeUrl}" target="_blank" rel="noopener noreferrer">${escapeHtml(displayText)}</a><details><summary aria-label="Show destination URL"></summary><a class="article-read-link-url" href="${safeUrl}" target="_blank" rel="noopener noreferrer">${safeUrl}</a></details></div>`;
+  } catch (error) {
+    console.warn("Invalid article read link:", error);
+    return "";
+  }
 }
 
 function renderArticleMediaItem(item, framed, id) {

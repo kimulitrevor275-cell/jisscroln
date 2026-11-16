@@ -8,13 +8,14 @@ function renderPost(post) {
   var postId = post.id;
 
   return `
-    ${post.label && String(post.label).trim() ? `<b id="label">${post.label}</b>` : ""}
+    ${post.label && String(post.label).trim() ? `<b id="label">...${post.label}</b>` : ""}
     <h2>${post.headline || ""}${
       post.link
         ? ` <a href="${post.link}" target="_blank" rel="noopener noreferrer">view ↗</a>`
         : ""
     }</h2>
     ${renderArticleImages(post)}
+    ${renderArticleReadLink(post)}
     ${renderBody(post)}
     ${renderRateboxAndEngagement(postId)}
     ${post.time ? `<b id="time">${post.time}</b>` : ""}

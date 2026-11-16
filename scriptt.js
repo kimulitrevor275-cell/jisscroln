@@ -333,11 +333,27 @@ document.addEventListener("keydown", function (event) {
 
 function renderPost(post) {
   var postId = post.id;
+  var readLink = "";
+  if (post.read_link) {
+    try {
+      var readLinkValue = String(post.read_link).trim();
+      if (!/^[a-z][a-z\d+.-]*:/i.test(readLinkValue)) {
+        readLinkValue = "https://" + readLinkValue;
+      }
+      var readUrl = new URL(readLinkValue);
+      if (readUrl.protocol === "http:" || readUrl.protocol === "https:") {
+        readLink = `<p class="article-read-link"><a href="${escapeHtml(readUrl.href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(post.read_text || "Read more")}</a></p>`;
+      }
+    } catch (error) {
+      console.warn("Invalid article read link:", error);
+    }
+  }
 
   return `
     ${post.label && String(post.label).trim() ? `<b id="label">${post.label}</b>` : ""}
     <h2 class ="headlines">${post.headline}${post.link ? ` <a href="${post.link}" target="_blank" rel="noopener">view↗</a>` : ""}</h2>
     ${renderArticleImages(post)}
+    ${readLink}
     ${renderBody(post)}
     ${renderRateboxAndEngagement(postId)}
     <b id="time">${post.time}</b>
