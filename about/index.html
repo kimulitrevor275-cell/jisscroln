@@ -91,10 +91,10 @@
 
     .page-controls {
       display: flex;
-      align-items: center;
+width: 100%;
       justify-content: space-between;
       gap: 16px;
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
 
     #lightmode {
@@ -103,13 +103,12 @@
       object-fit: contain;
       cursor: pointer;
     }
-
-    /* subtle grain texture overlay */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      
       pointer-events: none;
       z-index: 0;
       opacity: 0.4;
@@ -118,9 +117,10 @@
     .page-wrapper {
       position: relative;
       z-index: 1;
-      max-width: 760px;
+      max-width: 100%;
       margin: 0 auto;
-      padding: 64px 32px 100px;
+      padding: 20px;
+      padding-top: 0;
     }
 
     .back-link {
@@ -128,7 +128,7 @@
       margin-bottom: 40px;
       font-size: 1rem;
       letter-spacing: 0.08em;
-      color: gray;
+      color: rgb(24, 23, 23);
       text-decoration: none;
       transition: color 0.2s;
     }
@@ -138,7 +138,8 @@
     .page-header { margin-bottom: 48px; animation: fadeUp 0.7s ease both; }
 
     .brand-label {
-      font-size: 11px;
+      width: 40px;
+      font-size: 28px;
       font-weight: 500;
       letter-spacing: 0.22em;
       text-transform: uppercase;
@@ -149,7 +150,7 @@
 
     .page-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.8rem, 7vw, 4.5rem);
+      font-size: clamp(2rem, 7vw, 4.5rem);
       font-weight: 300;
       line-height: 1.05;
       letter-spacing: -0.01em;
@@ -167,9 +168,9 @@
 
     .updated {
       margin-top: 16px;
-      font-size: 1rem;
+      font-size: 0.60rem;
       letter-spacing: 0.06em;
-      color: gray;
+      color: rgb(198, 197, 197);
     }
 
     /* Contents */
@@ -296,16 +297,10 @@
 <body>
   <div class="page-wrapper">
 
-    <div class="page-controls">
-      <a class="back-link" href="/index.html">← Back to JiScroL</a>
-      <img id="lightmode" src="/pics/darkmode.png" alt="Toggle color theme" role="button" tabindex="0" aria-pressed="true">
-    </div>
 
     <header class="page-header">
-      <span class="brand-label"><img src="/pics/logog.svg" alt="JiScroL" style="width: 100px; height: auto;"></span>
       <h1 class="page-title">
-        <span class="title-line">About</span>
-        <span class="title-line title-accent">This Platform</span>
+        <span class="title-line">About This Platform</span>
       </h1>
       <div class="divider"></div>
       <p class="updated">Last updated: October 2026</p>

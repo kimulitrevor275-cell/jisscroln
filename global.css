@@ -209,7 +209,7 @@ html.light-mode .side-toggle { color: #161616; }
   margin: 0;
   margin-bottom: 5px;
   font-family: serif;
-  font-size: clamp(15px, 3vw, 30px);
+  font-size: clamp(13px, 2vw, 26px);
   border-radius: 4px;
   padding: 2px; 
   padding-left: 6px;
@@ -226,7 +226,7 @@ html.light-mode .side-toggle { color: #161616; }
 }
 #label::first-letter{
   color: rgb(52, 114, 247);
-  font-size: clamp(18px, 3vw, 30px);
+  font-size: clamp(15px, 2vw, 25px);
 }
 .chart-dots {
   display: flex;

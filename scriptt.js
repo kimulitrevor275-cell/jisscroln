@@ -350,7 +350,7 @@ function renderPost(post) {
   }
 
   return `
-    ${post.label && String(post.label).trim() ? `<b id="label">${post.label}</b>` : ""}
+    ${post.label && String(post.label).trim() ? `<b id="label">...${post.label}</b>` : ""}
     <h2 class ="headlines">${post.headline}${post.link ? ` <a href="${post.link}" target="_blank" rel="noopener">view↗</a>` : ""}</h2>
     ${renderArticleImages(post)}
     ${readLink}

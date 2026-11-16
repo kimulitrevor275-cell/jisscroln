@@ -1531,10 +1531,10 @@ function renderBody(post) {
 
   var LINKS = {
     terms: "about.html",
-    email: "thejisscrol@gmail.com",           // confirm this address
-    x: "https://x.com/boyslovepor",
+    email: "contact.jiscrol@gmail.com",           // confirm this address
+    x: "https://x.com/JiScroL",  // put your real X/Twitter handle
     whatsapp: "https://wa.me/256765247503",
-    tiktok: "https://tiktok.com/@yourhandle"  // put your real handle
+    tiktok: "https://tiktok.com/@jiscrol"  // put your real handle
   };
 
   var ICONS = {
