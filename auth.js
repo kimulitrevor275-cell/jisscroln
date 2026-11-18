@@ -1001,54 +1001,10 @@ function showTickerSkeleton() {
 })();
 
 //  SEARCH — floating icon that opens the /search/ page
-
-(function () {
-  // no floating icon on the search page itself
-  if (/^\/search(?:\/|$)/.test(window.location.pathname)) return;
-
-  var style = document.createElement("style");
-  style.textContent = `
-    #jis-search-icon {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      font-size: 14px;
-      width: 35px;
-      height: 50px;
-      padding: 0;
-      border: none;
-      background: transparent;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 999;
-      user-select: none;
-      flex-wrap: wrap;
-    }
-  `;
-  document.head.appendChild(style);
-
-  // lets #hashtags in post text open the search page
-  window.openJiSearch = function (q) {
-    q = String(q || "").replace(/^#/, "");
-    window.location.href = "/search/" + (q ? "?q=" + encodeURIComponent(q) : "");
-  };
-
-  onReady(function () {
-    var icon = document.createElement("button");
-    icon.id = "jis-search-icon";
-    icon.type = "button";
-    icon.setAttribute("aria-label", "Open search page");
-    icon.innerHTML =
-      '<img src="/pics/search.svg" alt="" style="background: transparent;width:50px;height:50px;border:none;margin:0">';
-    icon.addEventListener("click", function () {
-      window.location.href = "/search/";
-    });
-    document.body.appendChild(icon);
-  });
-})();
-
+window.openJiSearch = function (q) {
+  q = String(q || "").replace(/^#/, "");
+  window.location.href = "/search/" + (q ? "?q=" + encodeURIComponent(q) : "");
+};
 function attachSeeMore(postId) {
   var seeMore = document.getElementById("sm-" + postId);
   if (!seeMore) return;
@@ -1567,4 +1523,61 @@ function renderBody(post) {
       contact +
       '<nav class="social" aria-label="Social links">' + social + "</nav>" +
     "</footer>";
+})();(function () {
+  var API = "https://jisscrol-opinions.onrender.com";
+
+  var root = document.getElementById("discover");
+  if (!root) return;
+
+  var chipsEl = document.getElementById("dc-chips");
+  var shuffleBtn = document.getElementById("dc-shuffle");
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
+  function showMessage(text) {
+    chipsEl.innerHTML = "";
+    chipsEl.appendChild(el("div", "dc-empty", text));
+  }
+
+  function renderChips(list) {
+    chipsEl.innerHTML = "";
+    list.forEach(function (k, i) {
+      var name = k.name || k.keyword;
+      var a = el("a", "dc-chip", name);
+      a.href = "/search/?q=" + encodeURIComponent(name);   // tap -> results on the search page
+      a.style.animationDelay = (i * 25) + "ms";
+      chipsEl.appendChild(a);
+    });
+  }
+
+  function loadChips() {
+    fetch(API + "/articles/discover?limit=30")
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function (list) {
+        if (!Array.isArray(list) || !list.length) return showMessage("No keywords yet.");
+        renderChips(list);
+      })
+      .catch(function (err) {
+        console.error("discover chips failed:", err);
+        showMessage("Couldn't load keywords.");
+      });
+  }
+
+  if (shuffleBtn) {
+    shuffleBtn.addEventListener("click", function () {
+      shuffleBtn.classList.add("spin");
+      setTimeout(function () { shuffleBtn.classList.remove("spin"); }, 400);
+      loadChips();   // new random pick of keywords
+    });
+  }
+
+  loadChips();
 })();

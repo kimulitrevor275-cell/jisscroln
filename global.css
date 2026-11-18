@@ -22,7 +22,45 @@ body {
   font-size: clamp(20px, 3vw, 25px);
   flex-wrap: wrap;
 }
-.ptitle{
+#discover { padding: 16px 12px 90px; color: #eee; }
+
+.dc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.dc-head h2 { margin: 0; font-size: 20px; letter-spacing: .3px; }
+
+.dc-shuffle {
+  width: 34px; height: 34px; display: grid; place-items: center;
+  border-radius: 50%; border: 1px solid #2a2a2e; background: #141416; color: #bbb;
+  cursor: pointer; transition: transform .35s, color .2s, border-color .2s;
+}
+.dc-shuffle svg { width: 17px; height: 17px; }
+.dc-shuffle:hover { color: #fff; border-color: #444; }
+.dc-shuffle.spin { transform: rotate(360deg); }
+
+/* small keyword tags that wrap onto several lines */
+.dc-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+
+.dc-chip {
+  display: inline-block;
+  padding: 6px 11px;
+  border-radius: 999px;
+  border: 1px solid #2a2a2e;
+  background: #141416;
+  color: #d8d8dc;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  animation: dcIn .25s ease both;
+  transition: background .2s, color .2s, border-color .2s, transform .15s;
+}
+.dc-chip:hover { background: #fff; color: #0b0b0c; border-color: #fff; }
+.dc-chip:active { transform: scale(.95); }
+
+.dc-empty { padding: 20px 0; color: #7d7d86; }
+
+@keyframes dcIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+#ptitle{
   font-size: 10px;
   margin-right: 3px;
 }
@@ -54,15 +92,11 @@ body {
 }
 #user-greeting a { padding: 0; }
 
-.navbar { gap: clamp(2px, 2vw, 50px); }
-.navbar .button {
-  font-size: clamp(16px, 4vw, 46px);
-  padding: 8px 6px;
+.navbar svg {
+  display: block;
+  width: 20px;
+  height: 20px;
 }
-.navbar svg { display: block; 
-  width: clamp(17px,2.5vw,22px);
-   height: 23px; 
-  }
 h2,.headline{
   font-family: 'outfit', serif;
   font-size: clamp(1.3rem, 2.3vw, 3rem);
@@ -115,42 +149,88 @@ header {
 }
 
 .navbar {
-  margin: 0px;
+  
+  background: rgb(255 255 255 / 10%);
+  border: 1.8px solid rgb(255 255 255 / 24%);
+  border-radius: 999px;
+  padding: 5px;
+  margin: 0;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  gap: clamp(8px, 1.6vw, 20px);
+  gap: clamp(2px, 0.8vw, 8px);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 10%), 0 8px 24px rgb(0 0 0 / 24%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
 }
 
 .navbar .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
+  min-height: 42px;
   background-color: transparent;
   text-decoration: none;
   flex-direction: column;
-  padding: 8px;
-padding-top: 0;
-  padding-bottom: 3.5px;
-  font-size: clamp(10px, 0.8vw, 20px);
-  color: rgb(117, 115, 115);
+  padding: 4px 10px;
+  font-size: clamp(11px, 2.8vw, 14px);
+
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  color: #d4d4d8;
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease, background-color 0.2s ease;
   font-weight: 600;
-  font-family:  "lexend", sans-serif;
+  font-family: "Lexend", sans-serif;
   border:none;
-  border-radius: 0;
+  border-radius: 20px;
 }
 
-.navbar a.active {
- font-weight: 700;
-  border-bottom: 2.4px solid white;
-  color:rgb(255, 255, 255);
+.navbar .button.active {
+  background-color: hsla(219, 80%, 72%, 0.961);
+  color: #18181b;
+  font-weight: 00;
+  font-size: clamp(14px, 2.8vw, 14px);
+  
+  box-shadow: 0 2px 8px rgb(0 0 0 / 18%);
 }
 
-.navbar .button:hover {
-  background: black;
-  color: gray;
+.navbar .button:hover:not(.active) {
+  background-color: rgb(255 255 255 / 16%);
+  color: #fff;
+}
+
+.navbar .button:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
+}
+#jis-search-icon {
+  position: fixed;
+  bottom: 19px;
+  right: 17px;
+  z-index: 999;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: 50px;
+  font-size: 14px;
+  user-select: none;
+}
+
+#jis-search-icon .search-link {
+  display: block;
+}
+
+#jis-search-icon .search-link img {
+  display: block;
+  width: 50px;
+  height: 40px;
+  margin: 0;
+  border: none;
+  background: transparent;
 }
 #user-greeting {
   margin: 5px;
@@ -1355,13 +1435,25 @@ html.light-mode #label {
   box-shadow: 3px 2px 3px hsl(0, 1%, 46%);
 }
 
-html.light-mode .navbar a.active {
-  border-bottom-color: #143af8;
-  color: #143af8;
+html.light-mode .navbar {
+  background: rgb(255 255 255 / 42%);
+  border-color: rgba(173, 169, 169, 0.72);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 74%), 0 8px 24px rgb(0 0 0 / 12%);
 }
 
-html.light-mode .navbar .button:hover {
-  background: #eee;
+html.light-mode .navbar .button {
+  color: #52525b;
+}
+
+html.light-mode .navbar .button.active {
+  background-color: rgb(24 24 27 / 86%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
+}
+
+html.light-mode .navbar .button:hover:not(.active) {
+  background-color: #e4e4e7;
+  color: #18181b;
 }
 
 html.light-mode .about_us,
@@ -2040,9 +2132,9 @@ html.user-background-yellow .engage-panel {
   border-color: rgb(91 63 0 / 24%);
 }
 
-html.user-background-yellow .navbar a.active {
-  border-bottom-color: #4a3500;
-  color: #211800;
+html.user-background-yellow .navbar .button.active {
+  background-color: rgb(74 53 0 / 84%);
+  color: #fff;
 }
 
 html.user-background-yellow .profile .card p,
