@@ -23,13 +23,13 @@ body {
   flex-wrap: wrap;
 }
 
-#discover { color: #eee; padding-bottom: 10px; }
+#discover { color: #eee; padding-bottom: 4px; }
 
-.dc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-.dc-head h2 { margin: 0; font-size: 20px; letter-spacing: .3px; }
+.dc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.dc-head h2 { margin: 0; font-size: 11px; letter-spacing: .3px; }
 
 .dc-shuffle {
-  width: 25px; height: 25px; display: grid; place-items: center;
+  width: 18px; height: 18px; display: grid; place-items: center;
   border-radius: 50%; border: 1px solid #2a2a2e; background: #141416; color: #bbb;
   cursor: pointer; transition: transform .35s, color .2s, border-color .2s;
 }
@@ -37,7 +37,7 @@ body {
 .dc-shuffle:hover { color: #fff; border-color: #444; }
 .dc-shuffle.spin { transform: rotate(360deg); }
 
-.dc-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.dc-chips { display: flex; flex-wrap: wrap; gap: 5px; }
 
 .dc-chip {
   display: inline-block;
@@ -490,8 +490,8 @@ p {
 .ticker-wrap {
   width: 100%;
   overflow: hidden;
-  margin: 8px 0;
-  padding: 2px 0;
+  margin: 4px 0;
+  padding: 1px 0;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
           mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
 }
@@ -506,8 +506,8 @@ p {
 .ticker-group {
   display: flex;
   flex-shrink: 0;
-  gap: 15px;
-  padding-right: 10px;  
+  gap: 10px;
+  padding-right: 6px;  
 }
 
 #ticker span {
@@ -551,7 +551,6 @@ p {
   display: flex;
   gap: 5px;
   padding: 8px;
-  counter-reset: poll;                 /* numbers the cards */
 }
 
 .poll-card{
@@ -566,7 +565,6 @@ p {
   border-radius: 10px;
   border-top-right-radius: 20px;                    
   border-bottom: 3px solid #5b8cff;    
-  counter-increment: poll;
 }
 
 .poll-card img{
@@ -579,19 +577,6 @@ p {
   border-radius: 0;
 }
 
-
-.poll-card::before{
-  content: counter(poll, decimal-leading-zero);
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  padding: 3px 10px;
-  font: 600 12px/1.4 'Outfit', sans-serif;
-  letter-spacing: 0.1em;
-  color: #fff;
-  background: #5b8cff;
-}
 
 .polltext {
   position: absolute;
@@ -612,7 +597,6 @@ p {
   pointer-events: none;
 }
 html.light-mode .poll-card { border-bottom-color: #2438d8; }
-html.light-mode .poll-card::before { background: #2438d8; }
 
 img {
   
@@ -1489,6 +1473,10 @@ html.light-mode .about_us,
 html.light-mode .post-card {
   background-color: transparent;
   color: #222;
+}
+
+html.light-mode .news-story-card,
+html.light-mode .sports-news-article {
   border-left: 4px dotted black;
 }
 html.light-mode #Email {

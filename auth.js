@@ -1490,7 +1490,7 @@ function renderBody(post) {
   if (!host) return;
 
   var LINKS = {
-    terms: "about.html",
+    terms: "/about/",
     email: "contact.jiscrol@gmail.com",           // confirm this address
     x: "https://x.com/JiScroL",  // put your real X/Twitter handle
     whatsapp: "https://wa.me/256765247503",
