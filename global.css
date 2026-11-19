@@ -29,7 +29,7 @@ body {
 .dc-head h2 { margin: 0; font-size: 20px; letter-spacing: .3px; }
 
 .dc-shuffle {
-  width: 34px; height: 34px; display: grid; place-items: center;
+  width: 25px; height: 25px; display: grid; place-items: center;
   border-radius: 50%; border: 1px solid #2a2a2e; background: #141416; color: #bbb;
   cursor: pointer; transition: transform .35s, color .2s, border-color .2s;
 }
@@ -120,22 +120,17 @@ h2,.headline{
   background: #000; 
   box-shadow: #f5f2f2 5px;
   flex-wrap: nowrap;
-  transition: transform 0.3s ease;
-}
-
-#header.hide {
-  transform: translateY(-100%);
 }
 header {
-  position: sticky;
-  top: 0;
   width: 100%;
   background-color: black;
   z-index: 100;
   flex-shrink: 0;
   margin: 0;
+  padding-right: 0;
+  padding-left: 0;
   margin-bottom: 8px;
-
+  padding: 12px;
   
 }
 
@@ -169,7 +164,7 @@ header {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 8px;
+  gap: 3px;
   min-height: 42px;
   padding: 4px 10px;
   background-color: transparent;
@@ -215,6 +210,11 @@ header {
   height: 50px;
   font-size: 14px;
   user-select: none;
+  transition: transform 0.3s ease;
+}
+
+#jis-search-icon.hide {
+  transform: translateY(calc(100% + 20px));
 }
 
 #jis-search-icon .search-link {
@@ -224,7 +224,7 @@ header {
 #jis-search-icon .search-link img {
   display: block;
   width: 50px;
-  height: 40px;
+  height: 35px;
   margin: 0;
   border: none;
   background: transparent;
@@ -266,8 +266,8 @@ html.light-mode .side-toggle { color: #161616; }
 #lightmode , .profileicon, .smenue {
   margin: 0;
   flex-shrink: 0;
-  width: 29px;
-  height: 28px;
+  width: 25px;
+  height: 25px;
   object-fit: contain;
   cursor: pointer;
   border: none;
@@ -641,6 +641,34 @@ img:hover { border-color: #444; }
   margin: 6px 0 4px;
 }
 
+.article-byline {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  white-space: nowrap;
+  color: #a1a1a2;
+  font: 500 11px/1.2 "Outfit", sans-serif;
+}
+.article-meta-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 3px 0 8px;
+  white-space: nowrap;
+}
+.article-meta-line #time {
+  margin: 0;
+}
+.article-byline img {
+  display: block;
+  width: 16px;
+  height: 12px;
+  margin: 0;
+  object-fit: contain;
+  opacity: 0.8;
+}
+
 .article-read-link {
   margin: 0 0 4px;
   text-align: center;
@@ -1000,7 +1028,7 @@ html.light-mode .post-video-error {
   margin: 0px;
   color: white;
   font-family: 'Outfit', sans-serif;
-  font-size: clamp(16px, 1vw, 20px);
+  font-size: clamp(14px, 1vw, 20px);
   cursor: pointer;
 padding: 0;
 }
@@ -1045,8 +1073,8 @@ padding: 0;
 }
 
 .btn-good img, .btn-bad img, .commentbtn {
-  width: 22px;
-  height: 30px;
+  width: 20px;
+  height: 28px;
   border: none;
   border-radius: 0;
   margin: 0;
@@ -1100,7 +1128,7 @@ padding: 0;
   flex: 1;
   margin: 0;
   display: flex;
-  height: 5px;
+  height: 4px;
   border-radius: 4px;
   overflow: hidden;
   background: #222;
@@ -1944,8 +1972,33 @@ html.light-mode.user-background-crystal .profile .card {
 }
 
 .home-uganda-news .news-headline-meta {
-  margin-top: 3px;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 5px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: rgb(255 255 255 / 6%);
   font: 400 clamp(12px, 1vw, 16px)/1.4 "Lexend", sans-serif;
+}
+
+.news-source-dot {
+  display: inline-block;
+  padding: 0 4px;
+  color: var(--accent, #72a7f7);
+  font-size: 1.15em;
+  font-weight: 700;
+}
+
+.news-story-source {
+  display: inline-block;
+  max-width: 100%;
+  margin: 4px 0 6px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgb(255 255 255 / 6%);
+  color: inherit;
+  opacity: .9;
+  font: 400 13px/1.4 "Lexend", Arial, sans-serif;
 }
 
 .home-uganda-news .news-headline-meta a {
@@ -2025,13 +2078,6 @@ html.light-mode.user-background-crystal .profile .card {
   font: 400 15px/1.5 "Lexend", Arial, sans-serif;
 }
 
-.news-story-source {
-  margin: 8px 0 0;
-  color: inherit;
-  opacity: .68;
-  font: 400 13px/1.4 "Lexend", Arial, sans-serif;
-}
-
 .news-story-source a {
   color: var(--accent, #1d9cf0);
   opacity: 1;
@@ -2042,6 +2088,11 @@ html.light-mode.user-background-crystal .profile .card {
 html.light-mode .home-uganda-news .news-headline-card,
 html.light-mode .home-uganda-news .news-headline-skeleton {
   border-bottom-color: #ddd;
+}
+
+html.light-mode .home-uganda-news .news-headline-meta,
+html.light-mode .news-story-source {
+  background: rgb(0 0 0 / 5%);
 }
 
 html.light-mode .home-uganda-news .news-headline-skeleton {

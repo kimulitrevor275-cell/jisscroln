@@ -1,15 +1,13 @@
-const header = document.getElementById('header');
+const navigation = document.getElementById('jis-search-icon');
 let lastScrollY = 0;
 
 window.addEventListener('scroll', () => {
   const currentScrollY = window.scrollY;
 
   if (currentScrollY > lastScrollY + 50) {
-
-    header.classList.add('hide');
+    if (navigation) navigation.classList.add('hide');
   } else if (currentScrollY < lastScrollY - 50) {
-
-    header.classList.remove('hide');
+    if (navigation) navigation.classList.remove('hide');
   }
 
   lastScrollY = currentScrollY;

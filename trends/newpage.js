@@ -14,11 +14,14 @@ function renderPost(post) {
         ? ` <a href="${post.link}" target="_blank" rel="noopener noreferrer">view ↗</a>`
         : ""
     }</h2>
+    <div class="article-meta-line">
+      ${post.time ? `<b id="time">${post.time}</b>` : ""}
+      ${renderArticleByline()}
+    </div>
     ${renderArticleImages(post)}
     ${renderArticleReadLink(post)}
     ${renderBody(post)}
     ${renderRateboxAndEngagement(postId)}
-    ${post.time ? `<b id="time">${post.time}</b>` : ""}
     <hr>
   `;
 }
@@ -155,6 +158,22 @@ function createTrendsNewsCard(article) {
   title.className = 'news-story-title';
   title.textContent = getNewsTitle(article);
   card.appendChild(title);
+  const source = document.createElement('p');
+  source.className = 'news-story-source';
+  source.appendChild(document.createTextNode('Source: ' + getNewsSource(article)));
+  if (sourceUrl !== '#') {
+    const sourceLink = document.createElement('a');
+    sourceLink.href = sourceUrl;
+    sourceLink.target = '_blank';
+    sourceLink.rel = 'noopener noreferrer';
+    sourceLink.textContent = 'Read full story';
+    const separator = document.createElement('span');
+    separator.className = 'news-source-dot';
+    separator.setAttribute('aria-hidden', 'true');
+    separator.textContent = '·';
+    source.append(' ', separator, ' ', sourceLink);
+  }
+  card.appendChild(source);
   if (imageUrl !== '#') {
     const image = document.createElement('img');
     image.className = 'news-story-image';
@@ -171,18 +190,6 @@ function createTrendsNewsCard(article) {
     summary.textContent = summaryText;
     card.appendChild(summary);
   }
-  const source = document.createElement('p');
-  source.className = 'news-story-source';
-  source.appendChild(document.createTextNode('Source: ' + getNewsSource(article)));
-  if (sourceUrl !== '#') {
-    const sourceLink = document.createElement('a');
-    sourceLink.href = sourceUrl;
-    sourceLink.target = '_blank';
-    sourceLink.rel = 'noopener noreferrer';
-    sourceLink.textContent = 'Read full story';
-    source.append(' · ', sourceLink);
-  }
-  card.appendChild(source);
   return card;
 }
 

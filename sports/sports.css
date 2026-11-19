@@ -463,8 +463,14 @@ html.light-mode .match-status { background: rgba(0, 0, 0, 0.06); }
 }
 
 .sports-news-source {
-  margin: 8px 0 0;
+  display: inline-block;
+  max-width: 100%;
+  margin: 4px 0 6px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgb(255 255 255 / 6%);
   color: var(--muted);
+  opacity: .9;
   font: 400 13px/1.4 "Lexend", Arial, sans-serif;
 }
 

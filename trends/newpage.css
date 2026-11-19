@@ -197,8 +197,13 @@
 .news-headline-meta {
   display: flex;
   flex-wrap: wrap;
+  width: fit-content;
+  max-width: 100%;
   gap: 6px;
-  margin-top: 3px;
+  margin-top: 5px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: rgb(255 255 255 / 6%);
 }
 
 .news-headline-meta span {
@@ -273,6 +278,9 @@
   font-size: 11px;
   color: #999;
   margin-top: auto;
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: rgb(255 255 255 / 6%);
 }
 html .news-headline-meta a{
   color: rgb(139, 184, 252);
@@ -346,6 +354,11 @@ html.light-mode .news-card-compact:hover {
 
 html.light-mode .news-card-compact-source {
   color: #666;
+  background: rgb(0 0 0 / 5%);
+}
+
+html.light-mode .news-headline-meta {
+  background: rgb(0 0 0 / 5%);
 }
 
 html.light-mode .news-headline-card:focus-visible,

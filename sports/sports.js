@@ -59,6 +59,32 @@ function createSportsNewsPost(article) {
   heading.textContent = title;
   item.appendChild(heading);
 
+  var sourceValue = article.source && typeof article.source === "object"
+    ? article.source.name
+    : article.source;
+  var source = String(sourceValue || article.author || "").trim();
+  if (source || articleUrl) {
+    var meta = document.createElement("p");
+    meta.className = "sports-news-source";
+    meta.textContent = source ? "Source: " + source : "";
+    if (articleUrl) {
+      var sourceLink = document.createElement("a");
+      sourceLink.href = articleUrl;
+      sourceLink.target = "_blank";
+      sourceLink.rel = "noopener noreferrer";
+      sourceLink.textContent = "Read full story";
+      if (source) {
+        var separator = document.createElement("span");
+        separator.className = "news-source-dot";
+        separator.setAttribute("aria-hidden", "true");
+        separator.textContent = "·";
+        meta.append(" ", separator, " ");
+      }
+      meta.appendChild(sourceLink);
+    }
+    item.appendChild(meta);
+  }
+
   if (imageUrl) {
     var image = document.createElement("img");
     image.className = "sports-news-image";
@@ -77,25 +103,6 @@ function createSportsNewsPost(article) {
     item.appendChild(summary);
   }
 
-  var sourceValue = article.source && typeof article.source === "object"
-    ? article.source.name
-    : article.source;
-  var source = String(sourceValue || article.author || "").trim();
-  if (source || articleUrl) {
-    var meta = document.createElement("p");
-    meta.className = "sports-news-source";
-    meta.textContent = source ? "Source: " + source : "";
-    if (articleUrl) {
-      var sourceLink = document.createElement("a");
-      sourceLink.href = articleUrl;
-      sourceLink.target = "_blank";
-      sourceLink.rel = "noopener noreferrer";
-      sourceLink.textContent = "Read full story";
-      if (source) meta.append(" · ");
-      meta.appendChild(sourceLink);
-    }
-    item.appendChild(meta);
-  }
   return item;
 }
 
@@ -139,11 +146,15 @@ function renderSportsPost(post) {
         ? ` <a href="${post.link}" target="_blank" rel="noopener noreferrer">view ↗</a>`
         : ""
     }</h2>
+    <div class="article-meta-line">
+      ${post.time ? `<b id="time">${post.time}</b>` : ""}
+      ${renderArticleByline()}
+    </div>
     ${renderArticleImages(post)}
     ${renderArticleReadLink(post)}
      ${renderBody(post)}
     ${renderRateboxAndEngagement(postId)}
-    ${post.time ? `<b id="time">${post.time}</b><hr>` : ""}
+    ${post.time ? "<hr>" : ""}
     
   `;
 }

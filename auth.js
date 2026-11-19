@@ -1056,6 +1056,10 @@ function renderArticleImages(post) {
   return "";
 }
 
+function renderArticleByline() {
+  return '<div class="article-byline"><img src="/pics/logog.svg" alt="" aria-hidden="true"><span>By JiScroL</span></div>';
+}
+
 function renderArticleReadLink(post) {
   if (!post || !post.read_link) return "";
 

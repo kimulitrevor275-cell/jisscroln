@@ -281,6 +281,22 @@ function createHomeNewsCard(article) {
   title.className = "news-story-title";
   title.textContent = String(article.title || article.headline || "Untitled");
   card.appendChild(title);
+  var sourceRow = document.createElement("p");
+  sourceRow.className = "news-story-source";
+  sourceRow.appendChild(document.createTextNode("Source: " + String(source || "Unknown")));
+  if (sourceUrl) {
+    var sourceLink = document.createElement("a");
+    sourceLink.href = sourceUrl;
+    sourceLink.target = "_blank";
+    sourceLink.rel = "noopener noreferrer";
+    sourceLink.textContent = "Read full story";
+    var separator = document.createElement("span");
+    separator.className = "news-source-dot";
+    separator.setAttribute("aria-hidden", "true");
+    separator.textContent = "·";
+    sourceRow.append(" ", separator, " ", sourceLink);
+  }
+  card.appendChild(sourceRow);
   if (imageUrl) {
     var image = document.createElement("img");
     image.className = "news-story-image";
@@ -299,18 +315,6 @@ function createHomeNewsCard(article) {
     summary.textContent = summaryText;
     card.appendChild(summary);
   }
-  var sourceRow = document.createElement("p");
-  sourceRow.className = "news-story-source";
-  sourceRow.appendChild(document.createTextNode("Source: " + String(source || "Unknown")));
-  if (sourceUrl) {
-    var sourceLink = document.createElement("a");
-    sourceLink.href = sourceUrl;
-    sourceLink.target = "_blank";
-    sourceLink.rel = "noopener noreferrer";
-    sourceLink.textContent = "Read full story";
-    sourceRow.append(" · ", sourceLink);
-  }
-  card.appendChild(sourceRow);
   return card;
 }
 
@@ -352,11 +356,14 @@ function renderPost(post) {
   return `
     ${post.label && String(post.label).trim() ? `<b id="label">...${post.label}</b>` : ""}
     <h2 class ="headlines">${post.headline}${post.link ? ` <a href="${post.link}" target="_blank" rel="noopener">view↗</a>` : ""}</h2>
+    <div class="article-meta-line">
+      <b id="time">${post.time}</b>
+      ${renderArticleByline()}
+    </div>
     ${renderArticleImages(post)}
     ${readLink}
     ${renderBody(post)}
     ${renderRateboxAndEngagement(postId)}
-    <b id="time">${post.time}</b>
     <hr>
   `;
 }
