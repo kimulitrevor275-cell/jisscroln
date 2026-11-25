@@ -251,7 +251,7 @@
       var $ = function (id) { return document.getElementById(id); };
       var say = function (id, text) { $(id).textContent = text; };
 
-      // Friendly message for any error; falls back if the shared helper isn't loaded.
+      
       var friendly = function (error, fallback) {
         return typeof window.niceError === "function" ? window.niceError(error, fallback) : fallback;
       };
@@ -267,11 +267,9 @@
           .then(function (res) { btn.disabled = false; return res; });
       }
 
-      /* ── State ───────────────────────────────── */
       var user = null;
       var currentName = "";
 
-      /* ── Identity: name and badge ────────────── */
       function setName(name) {
         currentName = name;
         $("name-text").textContent = name;
@@ -298,7 +296,6 @@
         renderBackgroundSettings();
       }
 
-      // auth.js fetches the tier in the background; redraw the badge when it arrives.
       function waitForTier() {
         var waited = 0;
         var timer = setInterval(function () {
@@ -372,7 +369,7 @@
         var a = $("pw1").value;
         var b = $("pw2").value;
         if (a.length < 8) { say("pw-msg", "Use at least 8 characters."); return; }
-        if (a !== b) { say("pw-msg", "Those passwords don't match."); return; }
+        if (a !== b) { say("pw-msg", "Passwords don't match."); return; }
 
         submit($("pw-save"), function () {
           return sb.auth.updateUser({ password: a });
@@ -424,7 +421,7 @@
       /* ── Sign out ────────────────────────────── */
       $("signout-btn").addEventListener("click", function () { signOut(); });
 
-      /* ── Init ────────────────────────────────── */
+      
       sb.auth.getSession().then(function (r) {
         var session = r.data.session;
         if (!session) { window.location.href = "/login/"; return; }

@@ -163,8 +163,6 @@ if (!window._lightModeListenersInitialized) {
   window._lightModeListenersInitialized = true;
 }
 
-//  AUTH HELPERS
-
 function getGreeting() {
   var h = new Date().getHours();
   if (h < 12) return "Good Morning";
@@ -189,23 +187,21 @@ function _makeBadge(tier, size) {
   </svg>`;
 }
 
-//  SESSION + GREETING
+//  SESSION + GREETINg
 var username = sessionStorage.getItem("jis_username") || "Anonymous";
 
-// The toggle. Returns "" if the page already has its own #lightmode elsewhere.
+
 function lightModeToggleMarkup(greetingElement) {
   var existing = document.getElementById("lightmode");
   if (existing && !greetingElement.contains(existing)) return "";
-
   var enabled = document.documentElement.classList.contains("light-mode");
   return `<img id="lightmode" src="${lmIconSrc()}" alt="Toggle light mode" aria-label="${enabled ? "Switch to dark mode" : "Switch to light mode"}" role="button" tabindex="0" aria-pressed="${enabled}">`;
 }
 
-// The profile icon is separate so it never disappears with the toggle
 function profileIconMarkup() {
   return `<a href="/profile.html"><img class="profileicon" src="/pics/11.svg" alt="Profile" style="border:none;"></a>`;
 }
-// Menu items. Edit this list to add or remove links.
+// Menu items.
 var SIDE_LINKS = [
   { label: "About",           href: "/about/#who" },
   { label: "Privacy",         href: "/about/#privacy" },
@@ -283,7 +279,8 @@ function initSideMenu() {
     }
   }
 
-  // delegation: works even if the button is injected later by sideMarkup()
+  // works even if the button is injected later by sideMarkup()
+
   document.addEventListener("click", function (e) {
     var backgroundButton = e.target.closest(".side-background-option");
     if (backgroundButton) return selectUserBackground(backgroundButton.dataset.background);
@@ -513,7 +510,7 @@ function formatTime(iso) {
   var d = new Date(iso);
   return (
     d.toLocaleDateString("en-GB", {
-      day: "2-digit",
+      day: "-digit",
       month: "short",
       year: "2-digit",
     }) +
@@ -575,8 +572,6 @@ function renderEngagementPanel(postId) {
     </div>
   `;
 }
-
-// Both together: this is the one you call
 
 function renderRateboxAndEngagement(postId) {
   return renderRatingsBar(postId) + renderEngagementPanel(postId);
@@ -644,6 +639,7 @@ function attachEngagementEvents(postId) {
 }
 
 // One call that does everything for a post: events + ratings + opinions
+
 function initEngagement(postId) {
   attachEngagementEvents(postId);
   loadRatings(postId);
@@ -714,7 +710,6 @@ function loadRatings(postId) {
     });
 }
 
-// Bar width still uses the ratio; only the raw counts are shown as text
 function updateRatingBar(postId) {
   if (!ratings[postId]) ratings[postId] = { good: 0, bad: 0 };
   var good = ratings[postId].good;
@@ -735,7 +730,6 @@ function updateRatingBar(postId) {
   rbp.textContent = bad;
 }
 
-//  OPINIONS
 
 function submitOpinion(postId) {
   var input = document.getElementById("oi-" + postId);
@@ -872,7 +866,10 @@ function showPollSkeleton() {
 function showTickerSkeleton() {
   var el = document.getElementById("ticker");
   if (!el) return;
-  el.innerHTML = '<div class="skeleton skeleton-ticker"></div>';
+  el.innerHTML = `
+  
+  <div class="skeleton skeleton-ticker"></div>
+`;
 }
 
 (function () {
@@ -999,8 +996,50 @@ function showTickerSkeleton() {
 
   document.head.appendChild(style);
 })();
+const API_BASE = 'https://jisscrol-opinions.onrender.com';
+const SITE_URL = 'https://jisscroln.vercel.app';
 
-//  SEARCH — floating icon that opens the /search/ page
+function renderArticleByline(article = {}) {
+  return `<div class="article-byline"><img src="/pics/logog.svg" alt="" aria-hidden="true"><span>By JiScroL</span>
+    <button class="hiconbtn share-btn" type="button" aria-label="Share article"
+            data-id="${escapeHtml(article.id ?? '')}"
+            data-headline="${escapeHtml(article.headline || '')}">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4m-6.6 7 6.6 4.4"/></svg>
+    </button>
+    
+  </div>`;
+}
+
+function buildShareUrl(articleId) {
+  if (!articleId) return window.location.href;
+  return `${SITE_URL}/share/${encodeURIComponent(articleId)}`;
+}
+
+async function shareArticle(articleId, headline) {
+  const shareUrl = buildShareUrl(articleId);
+  const shareTitle = headline ? String(headline).slice(0, 100) : document.title;
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: shareTitle, url: shareUrl });
+    } else if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(shareUrl);
+      if (typeof setStatus === 'function') setStatus('Link copied to clipboard.', 'success');
+    } else {
+      window.prompt('Copy this link:', shareUrl);
+    }
+  } catch (error) {
+    if (error?.name === 'AbortError') return;
+    window.prompt('Copy this link:', shareUrl);
+  }
+}
+
+document.addEventListener('click', function (e) {
+  const btn = e.target.closest('.share-btn');
+  if (!btn) return;
+  e.preventDefault();
+  shareArticle(btn.dataset.id, btn.dataset.headline);
+});
+
 window.openJiSearch = function (q) {
   q = String(q || "").replace(/^#/, "");
   window.location.href = "/search/" + (q ? "?q=" + encodeURIComponent(q) : "");
@@ -1012,18 +1051,9 @@ function attachSeeMore(postId) {
     toggleBody(postId, seeMore.getAttribute("data-body"));
   });
 }
-
-//  BODY TEXT (See More / See Less)
-
 var BODY_LIMIT = 300;
 
 //  ARTICLE MEDIA
-// The backend classifies media. Each article carries:
-//   post.media = [{ type: "image" | "video" | "embed", url, provider, embedUrl }]
-// so nothing here sniffs URLs or file extensions.
-
-// Fallback for old API responses that only have img/img2/img_type/img2_type.
-// (Embeds can't be rebuilt here without embedUrl, so they degrade to images.)
 
 function legacyMediaFromPost(post) {
   var items = [];
@@ -1055,10 +1085,10 @@ function renderArticleImages(post) {
 
   return "";
 }
-
-function renderArticleByline() {
-  return '<div class="article-byline"><img src="/pics/logog.svg" alt="" aria-hidden="true"><span>By JiScroL</span></div>';
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
+
 
 function renderArticleReadLink(post) {
   if (!post || !post.read_link) return "";
@@ -1102,9 +1132,6 @@ function renderArticleMediaItem(item, framed, id) {
   return `<img src="${src}" alt="photo"${idAttr}>`;
 }
 
-// The main <video> has NO autoplay attribute on purpose: the
-// IntersectionObserver below starts the one that is on screen.
-// (With autoplay, every video on the page started at once.)
 function renderVideoEmbed(item, fillFrame) {
   if (item.type === "video") {
     var safeSrc = escapeHtml(item.url);
@@ -1571,7 +1598,7 @@ function renderBody(post) {
       })
       .catch(function (err) {
         console.error("discover chips failed:", err);
-        showMessage("Couldn't load keywords.");
+        showMessage("");
       });
   }
 

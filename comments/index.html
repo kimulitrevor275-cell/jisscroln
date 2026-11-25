@@ -731,6 +731,7 @@
   (function () {
     const API_BASE = 'https://jisscrol-opinions.onrender.com';
     const SITE_URL = 'https://jisscroln.vercel.app';
+    
     const MAX_COMMENT_LENGTH = 500;
 
     const params = new URLSearchParams(window.location.search);
@@ -764,7 +765,6 @@
     let currentVote = null;
     let isPosting = false;
 
-    /* ---------- helpers ---------- */
 
     function escapeHtml(str) {
       return String(str || '')

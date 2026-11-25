@@ -358,7 +358,7 @@ function renderPost(post) {
     <h2 class ="headlines">${post.headline}${post.link ? ` <a href="${post.link}" target="_blank" rel="noopener">view↗</a>` : ""}</h2>
     <div class="article-meta-line">
       <b id="time">${post.time}</b>
-      ${renderArticleByline()}
+      ${renderArticleByline(post)}
     </div>
     ${renderArticleImages(post)}
     ${readLink}

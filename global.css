@@ -29,11 +29,11 @@ body {
 .dc-head h2 { margin: 0; font-size: 11px; letter-spacing: .3px; }
 
 .dc-shuffle {
-  width: 18px; height: 18px; display: grid; place-items: center;
-  border-radius: 50%; border: 1px solid #2a2a2e; background: #141416; color: #bbb;
+  width: 19px; height: 19px; display: flex; place-items: center;
+  border-radius: 50%; border: 1.5px solid #546ef2; background: transparent; color: #bbb;
   cursor: pointer; transition: transform .35s, color .2s, border-color .2s;
 }
-.dc-shuffle svg { width: 17px; height: 17px; }
+.dc-shuffle svg { width: 17px; height: 17px; margin: 2px; }
 .dc-shuffle:hover { color: #fff; border-color: #444; }
 .dc-shuffle.spin { transform: rotate(360deg); }
 
@@ -634,6 +634,36 @@ img:hover { border-color: #444; }
   color: #a1a1a2;
   font: 500 11px/1.2 "Outfit", sans-serif;
 }
+.article-byline span{
+  margin-right: 10px;
+}
+    .hiconbtn {
+      display: flex;
+      place-items: center;
+      width: 20px;
+      height: 20px ;
+      padding: 3px;
+      border-radius: 3px;
+      border: 1.3px solid rgba(255,255,255,0.32);
+      background: transparent;
+      color: gray;
+      cursor: pointer;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.36);
+      backdrop-filter: blur(2px);
+      transition: background-color 150ms ease, transform 150ms ease;
+    }
+    .hiconbtn:hover { background: rgba(12,12,12,0.92); transform: scale(1.05); }
+    .hiconbtn:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 3px; }
+    .hiconbtn svg {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
 .article-meta-line {
   display: flex;
   align-items: center;

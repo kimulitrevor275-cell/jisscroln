@@ -148,7 +148,7 @@ function renderSportsPost(post) {
     }</h2>
     <div class="article-meta-line">
       ${post.time ? `<b id="time">${post.time}</b>` : ""}
-      ${renderArticleByline()}
+      ${renderArticleByline(post)}
     </div>
     ${renderArticleImages(post)}
     ${renderArticleReadLink(post)}
