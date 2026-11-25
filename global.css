@@ -472,7 +472,7 @@ p {
 .see-more {
   color:  #8cb2ec;
   cursor: pointer;
-  font-size: clamp(16px, 0.5vw, 30px);
+  font-size: clamp(14px, 0.4vw, 24px);
   display: inline-block;
   font-family: 'lexend', sans-serif;
 }
@@ -1444,7 +1444,7 @@ html.light-mode body {
   color: #222;
 }
 html.light-mode .body-link, .see-more, a{
-  color: #4c6afd;
+  color: #6da7fd;
 }
 html.light-mode #header,
 html.light-mode header {

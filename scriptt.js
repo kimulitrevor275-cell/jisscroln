@@ -149,7 +149,7 @@ function renderHomeUgandaNews(anchor) {
   section.innerHTML = `
     <h2 class="news-story-section-title">Today - What's happening</h2>
     <div class="news-module is-loading" aria-busy="true">
-      ${Array.from({ length: 3 }, function () {
+      ${Array.from({ length: 2 }, function () {
         return `<div class="news-headline-skeleton" aria-hidden="true">
           <div class="news-skeleton-image"></div>
           <div class="news-skeleton-content">
@@ -204,8 +204,8 @@ function renderHomeUgandaNews(anchor) {
       }
 
       var pages = [];
-      for (var index = 0; index < articles.length; index += 3) {
-        pages.push(articles.slice(index, index + 3));
+      for (var index = 0; index < articles.length; index += 2) {
+        pages.push(articles.slice(index, index + 2));
       }
       var renderPage = function (page, isDuplicate) {
         return `<div class="news-page"${isDuplicate ? ' aria-hidden="true"' : ""}>` +

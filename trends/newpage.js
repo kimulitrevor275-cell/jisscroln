@@ -1,5 +1,3 @@
-// Needs jis.js loaded first
-// (API, showSkeleton, renderBody, attachSeeMore, renderRateboxAndEngagement, initEngagement)
 
 fetch(API + "/").catch(function () {});
 var trendsNewsArticles = [];
@@ -256,7 +254,7 @@ async function renderNewsModulePermanent() {
 
     const pages = [];
     for (let index = 0; index < visibleArticles.length; index += 3) {
-      pages.push(visibleArticles.slice(index, index + 3));
+      pages.push(visibleArticles.slice(index, index + 2));
     }
     const renderPage = (page, isDuplicate) => `
       <div class="news-page"${isDuplicate ? ' aria-hidden="true"' : ''}>
