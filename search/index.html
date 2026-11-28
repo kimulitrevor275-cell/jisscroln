@@ -16,19 +16,19 @@
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
-  <main class="search-page">
-    <section class="search-intro" aria-label="Search">
+  <main class="searchPage">
+    <section class="searchIntro" aria-label="Search">
       <form id="site-search-form" role="search">
-        <label class="visually-hidden" for="site-search-input">Search articles, stories, and songs</label>
+        <label class="visuallyHidden" for="site-search-input">Search articles, stories, and songs</label>
         
         <input id="site-search-input" name="q" type="search" placeholder="Search anything..." autocomplete="off" maxlength="120">
         <button type="submit">
-          <svg class="search-button-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg>
+          <svg class="searchButtonIcon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg>
           <span>Search</span>
         </button>
       </form>
       <section id="search-results-section" aria-label="Search results" hidden>
-        <div class="results-heading">
+        <div class="resultsHeading">
           <h2 id="results-title">Results</h2>
         </div>
         <div id="site-search-results" aria-live="polite" aria-busy="false"></div>
@@ -36,29 +36,29 @@
     </section>
 
     <section id="search-discovery" aria-label="Discover articles and music">
-      <div class="discovery-section">
-        <div class="discovery-heading">
+      <div class="discoverySection">
+        <div class="discoveryHeading">
           <a href="/trends/">Trending stories <span aria-hidden="true"></span></a>
         </div>
-        <div id="featured-articles" class="featured-article-grid" aria-live="polite" aria-busy="true">
-          <div class="discovery-skeleton-list" aria-hidden="true">
-            <div class="discovery-skeleton-row"><span class="discovery-skeleton-thumb"></span><span class="discovery-skeleton-copy"><i></i><i></i></span></div>
-            <div class="discovery-skeleton-row"><span class="discovery-skeleton-thumb"></span><span class="discovery-skeleton-copy"><i></i><i></i></span></div>
-            <div class="discovery-skeleton-row"><span class="discovery-skeleton-thumb"></span><span class="discovery-skeleton-copy"><i></i><i></i></span></div>
+        <div id="featured-articles" class="featuredArticleGrid" aria-live="polite" aria-busy="true">
+          <div class="discoverySkeletonList" aria-hidden="true">
+            <div class="discoverySkeletonRow"><span class="discoverySkeletonThumb"></span><span class="discoverySkeletonCopy"><i></i><i></i></span></div>
+            <div class="discoverySkeletonRow"><span class="discoverySkeletonThumb"></span><span class="discoverySkeletonCopy"><i></i><i></i></span></div>
+            <div class="discoverySkeletonRow"><span class="discoverySkeletonThumb"></span><span class="discoverySkeletonCopy"><i></i><i></i></span></div>
           </div>
         </div>
       </div>
 
-      <div class="discovery-section music-discovery">
-        <div class="discovery-heading">
+      <div class="discoverySection music-discovery">
+        <div class="discoveryHeading">
 
           <a href="/others/">Latest music <span aria-hidden="true"></span></a>
         </div>
-        <div id="featured-songs" class="featured-song-grid" aria-live="polite" aria-busy="true">
-          <div class="discovery-skeleton-list" aria-hidden="true">
-            <div class="discovery-skeleton-row"><span class="discovery-skeleton-thumb"></span><span class="discovery-skeleton-copy"><i></i><i></i></span></div>
-            <div class="discovery-skeleton-row"><span class="discovery-skeleton-thumb"></span><span class="discovery-skeleton-copy"><i></i><i></i></span></div>
-            <div class="discovery-skeleton-row"><span class="discovery-skeleton-thumb"></span><span class="discovery-skeleton-copy"><i></i><i></i></span></div>
+        <div id="featured-songs" class="featuredSongGrid" aria-live="polite" aria-busy="true">
+          <div class="discoverySkeletonList" aria-hidden="true">
+            <div class="discoverySkeletonRow"><span class="discoverySkeletonThumb"></span><span class="discoverySkeletonCopy"><i></i><i></i></span></div>
+            <div class="discoverySkeletonRow"><span class="discoverySkeletonThumb"></span><span class="discoverySkeletonCopy"><i></i><i></i></span></div>
+            <div class="discoverySkeletonRow"><span class="discoverySkeletonThumb"></span><span class="discoverySkeletonCopy"><i></i><i></i></span></div>
           </div>
         </div>
       </div>

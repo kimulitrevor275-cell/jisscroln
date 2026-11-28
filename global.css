@@ -4,6 +4,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
 
 @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&display=swap');
+
+:root {
+  --site-accent: #2da8fa;
+  --site-accent-hover: #55b7ff;
+  --site-accent-rgb: 45 168 250;
+}
+
+html.light-mode {
+  --site-accent: #0878b9;
+  --site-accent-hover: #075f91;
+  --site-accent-rgb: 8 120 185;
+}
+
 /* ── RESET ── */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -112,10 +125,9 @@ h2,.headline{
 #header {
   position: sticky;
   top: 0;
-  right: 0;
-  left: 0;
-  width: 100%;
+  width: auto;
   margin-top: 0;
+  padding: 12px 0;
   z-index: 100;
   background: #000; 
   box-shadow: #f5f2f2 5px;
@@ -181,11 +193,11 @@ header {
 }
 
 .navbar .button.active {
-  background-color: hsla(209, 90%, 60%, 0.18);
-  border-color: hsla(209, 90%, 70%, 0.35);
+  background-color: rgb(var(--site-accent-rgb) / 18%);
+  border-color: rgb(var(--site-accent-rgb) / 35%);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: #2da8fa;
+  color: var(--site-accent);
 }
 
 .navbar .button:hover:not(.active) {
@@ -230,7 +242,7 @@ header {
   background: transparent;
 }
 #user-greeting {
-  margin: 5px;
+  margin: 0;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -422,7 +434,7 @@ h1 {
   font-size: clamp(20px, 3vw, 30px) !important;
   letter-spacing: 0.03em;
   color: white;
-  margin: 0;
+  margin: 15px 0;
   margin-bottom: 5px;
   margin-top: 10px;
 
@@ -637,10 +649,12 @@ img:hover { border-color: #444; }
 .article-byline span{
   margin-right: 10px;
 }
-    .hiconbtn {
+    .hiconbtn, .btnBookmark {
       display: flex;
-      place-items: center;
+      align-items: center;
+      justify-content: center;
       width: 20px;
+      margin-right: 5px;
       height: 20px ;
       padding: 3px;
       border-radius: 3px;
@@ -652,7 +666,7 @@ img:hover { border-color: #444; }
       backdrop-filter: blur(2px);
       transition: background-color 150ms ease, transform 150ms ease;
     }
-    .hiconbtn:hover { background: rgba(12,12,12,0.92); transform: scale(1.05); }
+    .hiconbtn:hover { background: rgba(12,12,12,0.92); transform: scale(1.05);  color: white;}
     .hiconbtn:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 3px; }
     .hiconbtn svg {
       width: 24px;
@@ -663,6 +677,46 @@ img:hover { border-color: #444; }
       stroke-linecap: round;
       stroke-linejoin: round;
     }
+
+
+.btnBookmark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.btnBookmark:hover {
+
+  border-color: rgb(var(--site-accent-rgb) / 55%);
+  color: var(--site-accent);
+}
+
+.btnBookmark.saved {
+  border-color: rgb(var(--site-accent-rgb) / 40%);
+  background: rgb(var(--site-accent-rgb) / 12%);
+  color: var(--site-accent);
+}
+
+.btnBookmark.saved svg { fill: currentColor; }
+.article-byline .btnBookmark { width: 20px; height: 20px; padding: 3px; border-radius: 3px; }
+.article-byline .btnBookmark svg { width: 20px; height: 20px; }
+
+html.light-mode .btnBookmark {
+  border-color: rgb(0 0 0 / 16%);
+  background: rgb(0 0 0 / 4%);
+  color: #666;
+}
+
+html.light-mode .btnBookmark:hover {
+  border-color: rgb(var(--site-accent-rgb) / 55%);
+  color: var(--site-accent);
+}
+
+html.light-mode .btnBookmark.saved {
+  border-color: rgb(var(--site-accent-rgb) / 32%);
+  background: rgb(var(--site-accent-rgb) / 10%);
+  color: var(--site-accent);
+}
 
 .article-meta-line {
   display: flex;

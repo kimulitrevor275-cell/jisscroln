@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bookmarks| JiScroL</title>
+  <script src="/theme.js"></script>
+  <link rel="stylesheet" href="/global.css">
+  <style>
+    :root {
+      --saved-bg: #0b0c0e;
+      --saved-surface: #141619;
+      --saved-border: rgb(255 255 255 / 10%);
+      --saved-text: #f3f4f6;
+      --saved-muted: #9da3ad;
+      --saved-accent: var(--site-accent);
+      --saved-accent-hover: var(--site-accent-hover);
+      --saved-accent-rgb: var(--site-accent-rgb);
+    }
+
+    html.light-mode {
+      --saved-bg: #f5f6f7;
+      --saved-surface: #fff;
+      --saved-border: rgb(20 30 40 / 12%);
+      --saved-text: #20242a;
+      --saved-muted: #626b76;
+      --saved-accent: var(--site-accent);
+      --saved-accent-hover: var(--site-accent-hover);
+      --saved-accent-rgb: var(--site-accent-rgb);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 8px;
+      background: var(--saved-bg);
+      color: var(--saved-text);
+      font: 16px/1.5 'Inter', Arial, sans-serif;
+    }
+
+    html.light-mode body { background: var(--saved-bg); color: var(--saved-text); }
+
+    .savedBack {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0;
+      padding: 8px;
+      border: 1.4px solid rgb(var(--saved-accent-rgb) / 30%);
+      border-radius: 999px;
+      background: none;
+      color: var(--saved-accent);
+      font: 600 13px/1.2 'Lexend', sans-serif;
+      text-decoration: none;
+      transition: background-color .18s ease, color .18s ease, border-color .18s ease;
+    }
+
+    .savedBack svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .savedBack:hover { border-color: var(--saved-accent); background: rgb(var(--saved-accent-rgb) / 17%); color: var(--saved-accent-hover); }
+    .savedBack:focus-visible, .savedCard a.title:focus-visible { outline: 2px solid #38bdf8; outline-offset: 4px; }
+
+    .savedWrap {
+      width: 100%;
+      margin: clamp(24px, 5vh, 48px) 0 0;
+      padding: 0 0 48px;
+    }
+
+    .savedHeader {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .savedWrap h1 {
+      display: block;
+      margin: 0;
+      color: var(--saved-accent);
+      font: 700 clamp(24px, 3vw, 38px)/1.15 'Tinos', Georgia, serif;
+    }
+
+    html.light-mode .savedWrap h1 { color: var(--saved-accent) !important; }
+    .saved-description { margin: 8px 0 24px; color: var(--saved-muted); font-size: 14px; }
+
+    .savedCard {
+      display: flex;
+      min-width: 0;
+      min-height: 88px;
+      align-items: center;
+      gap: 14px;
+      margin: 0 0 10px;
+      padding: 16px;
+      border: 1px solid var(--saved-border);
+      border-radius: 12px;
+      background: var(--saved-surface);
+      transition: border-color .18s ease, transform .18s ease;
+    }
+
+    .savedCard:hover { transform: translateY(-1px); border-color: rgb(var(--saved-accent-rgb) / 42%); }
+    .savedCard img.thumb { width: 96px; height: 68px; flex: 0 0 96px; object-fit: cover; border-radius: 8px; background: var(--saved-bg); }
+    .savedCard .btnBookmark { width: 36px; height: 36px; flex: 0 0 36px; margin-right: 0; padding: 8px; }
+    .savedCard .btnBookmark svg { width: 16px; height: 16px; flex: 0 0 16px; }
+    .savedCard .btnBookmark:hover {  color: var(--saved-accent); }
+    .savedCard .btnBookmark.saved { 
+    
+        border-color: none; 
+        background: none; 
+        color: var(--saved-accent); }
+
+    .savedCard a.title {
+      min-width: 0;
+      color: var(--saved-text);
+      font: 500 16px/1.4 'Outfit', sans-serif;
+      text-decoration: none;
+    }
+
+    .savedCard a.title:hover { color: var(--saved-accent); }
+    .savedCopy { display: grid; flex: 1; min-width: 0; gap: 5px; }
+    .savedPostTime { display: flex; align-items: center; gap: 6px; margin: 0; color: var(--saved-muted); font: 400 12px/1.35 'Inter', Arial, sans-serif; }
+    .savedPostTime svg { width: 13px; height: 13px; flex: 0 0 13px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .savedEmpty, .savedMsg { margin: 0; padding: 20px; border: 1px solid var(--saved-border); border-radius: 12px; background: var(--saved-surface); color: var(--saved-muted); }
+    .savedLoading { display: grid; gap: 10px; }
+    .savedSkeleton {
+      display: flex;
+      min-height: 88px;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      border: 1px solid var(--saved-border);
+      border-radius: 12px;
+      background: var(--saved-surface);
+    }
+    .savedSkeletonThumb, .savedSkeletonLine, .savedSkeletonBookmark {
+      background: linear-gradient(90deg, rgb(255 255 255 / 5%) 25%, rgb(255 255 255 / 11%) 50%, rgb(255 255 255 / 5%) 75%);
+      background-size: 200% 100%;
+      animation: savedShimmer 1.4s ease-in-out infinite;
+    }
+    html.light-mode .savedSkeletonThumb,
+    html.light-mode .savedSkeletonLine,
+    html.light-mode .savedSkeletonBookmark {
+      background-image: linear-gradient(90deg, rgb(0 0 0 / 5%) 25%, rgb(0 0 0 / 11%) 50%, rgb(0 0 0 / 5%) 75%);
+    }
+    .savedSkeletonThumb { width: 96px; height: 68px; flex: 0 0 96px; border-radius: 8px; }
+    .savedSkeletonCopy { display: grid; flex: 1; gap: 10px; }
+    .savedSkeletonLine { width: min(65%, 360px); height: 14px; border-radius: 4px; }
+    .savedSkeletonLine:last-child { width: min(35%, 180px); height: 10px; }
+    .savedSkeletonBookmark { width: 20px; height: 20px; flex: 0 0 20px; border-radius: 4px; }
+    @keyframes savedShimmer { to { background-position: -200% 0; } }
+    .savedMsg a { color: var(--saved-accent); }
+    .savedMsg a:focus-visible { outline: 2px solid #38bdf8; outline-offset: 3px; }
+
+    .savedMore {
+      display: block;
+      min-height: 42px;
+      margin: 18px 0 0;
+      padding: 0 18px;
+      border: 1px solid var(--saved-border);
+      border-radius: 999px;
+      background: var(--saved-surface);
+      color: var(--saved-text);
+      font: 500 14px 'Outfit', sans-serif;
+      cursor: pointer;
+    }
+
+    .savedMore:hover { border-color: var(--saved-accent); color: var(--saved-accent); }
+    .savedMore:focus-visible { outline: 2px solid #38bdf8; outline-offset: 3px; }
+    .savedMore[hidden] { display: none; }
+
+    @media (max-width: 520px) {
+      .savedWrap { margin-top: 20px; }
+      .savedCard { gap: 10px; padding: 10px; }
+      .savedCard img.thumb { width: 76px; height: 60px; flex-basis: 76px; }
+      .savedCard a.title { font-size: 14px; }
+      .savedPostTime { font-size: 11px; }
+      .savedSkeleton { gap: 10px; padding: 10px; }
+      .savedSkeletonThumb { width: 76px; height: 60px; flex-basis: 76px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .savedBack, .savedCard, .btnBookmark { transition: none; }
+      .savedSkeletonThumb, .savedSkeletonLine, .savedSkeletonBookmark { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="savedWrap">
+    <div class="savedHeader">
+      <a class="savedBack" href="/" aria-label="Back to JiScroL home">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m7 7-7-7 7-7"/></svg>
+        Back
+      </a>
+      <h1>Bookmarks</h1>
+    </div>
+    
+    <div id="saved-list" aria-live="polite" aria-busy="true">
+      <div class="savedLoading" role="status" aria-label="Loading bookmarks">
+        <div class="savedSkeleton" aria-hidden="true"><div class="savedSkeletonThumb"></div><div class="savedSkeletonCopy"><div class="savedSkeletonLine"></div><div class="savedSkeletonLine"></div></div><div class="savedSkeletonBookmark"></div></div>
+        <div class="savedSkeleton" aria-hidden="true"><div class="savedSkeletonThumb"></div><div class="savedSkeletonCopy"><div class="savedSkeletonLine"></div><div class="savedSkeletonLine"></div></div><div class="savedSkeletonBookmark"></div></div>
+        <div class="savedSkeleton" aria-hidden="true"><div class="savedSkeletonThumb"></div><div class="savedSkeletonCopy"><div class="savedSkeletonLine"></div><div class="savedSkeletonLine"></div></div><div class="savedSkeletonBookmark"></div></div>
+      </div>
+    </div>
+    <button id="savedMore" class="savedMore" hidden>Load more</button>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/global.js"></script>
+  <script src="/auth.js"></script>
+  <script>
+    var savedList = document.getElementById("saved-list");
+    var moreBtn = document.getElementById("savedMore");
+    var lastCreatedAt = null;
+    var loadingSaved = false;
+
+    function cardMarkup(row) {
+      var a = row.articles;
+      if (!a) return "";
+      var title = a.headline || a.title || "Untitled";
+      var img = a.img || a.image || "";
+      var rawTime = a.time || "";
+      var parsedTime = rawTime ? new Date(rawTime) : null;
+      var hasDateTime = parsedTime && !Number.isNaN(parsedTime.getTime());
+      var postTime = rawTime ? String(rawTime) : "";
+      var timeMarkup = postTime
+        ? '<p class="savedPostTime">' +
+            '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>' +
+            '<time' + (hasDateTime ? ' datetime="' + parsedTime.toISOString() + '"' : "") + '>' +
+              escapeHtml(postTime) +
+            '</time>' +
+          '</p>'
+        : "";
+      return (
+        '<div class="savedCard">' +
+          (img ? '<img class="thumb" src="' + escapeHtml(img) + '" alt="">' : "") +
+          '<div class="savedCopy">' +
+            '<a class="title" href="/comments/?post_id=' + encodeURIComponent(a.id) + '">' +
+              escapeHtml(title) +
+            "</a>" +
+            timeMarkup +
+          "</div>" +
+          bookmarkButtonMarkup(a.id) +
+        "</div>"
+      );
+    }
+
+    function loadSaved() {
+      if (loadingSaved) return;
+      loadingSaved = true;
+      moreBtn.disabled = true;
+      savedList.setAttribute("aria-busy", "true");
+      if (lastCreatedAt) {
+        savedList.insertAdjacentHTML("beforeend",
+          '<div class="savedLoading" role="status" aria-label="Loading more bookmarks">' +
+            '<div class="savedSkeleton" aria-hidden="true"><div class="savedSkeletonThumb"></div><div class="savedSkeletonCopy"><div class="savedSkeletonLine"></div><div class="savedSkeletonLine"></div></div><div class="savedSkeletonBookmark"></div></div>' +
+          '</div>');
+      }
+      getAccessToken().then(function (token) {
+        if (!token) {
+          savedList.innerHTML = '<p class="savedMsg">Log in to see your saved articles. <a href="/login/">Login</a></p>';
+          savedList.setAttribute("aria-busy", "false");
+          return;
+        }
+        var url = API + "/bookmarks?limit=20" +
+          (lastCreatedAt ? "&before=" + encodeURIComponent(lastCreatedAt) : "");
+
+        return fetch(url, { headers: { Authorization: "Bearer " + token } })
+          .then(function (res) {
+            if (!res.ok) throw new Error("HTTP " + res.status);
+            return res.json();
+          })
+          .then(function (rows) {
+            var loading = savedList.querySelector(".savedLoading");
+            if (loading) loading.remove();
+            if (!rows.length && !lastCreatedAt) {
+              savedList.innerHTML = '<p class="savedEmpty">Nothing saved yet. Bookmark a story to keep it here. <a href="/">Browse stories</a></p>';
+              savedList.setAttribute("aria-busy", "false");
+              return;
+            }
+            savedList.insertAdjacentHTML("beforeend", rows.map(cardMarkup).join(""));
+            if (rows.length) lastCreatedAt = rows[rows.length - 1].created_at;
+            moreBtn.hidden = rows.length < 20;
+            savedList.setAttribute("aria-busy", "false");
+            // make sure the icons on these cards show as saved
+            loadBookmarks();
+          })
+          .catch(showSavedLoadError);
+      }).catch(showSavedLoadError).then(function () {
+        loadingSaved = false;
+        moreBtn.disabled = false;
+      });
+    }
+
+    function showSavedLoadError() {
+      var loading = savedList.querySelector(".savedLoading");
+      if (loading) loading.remove();
+      if (!lastCreatedAt) savedList.innerHTML = '<p class="savedMsg">Couldn\'t load your saved articles. Try again.</p>';
+      else savedList.insertAdjacentHTML("beforeend", '<p class="savedMsg">Couldn\'t load more saved articles. Try again.</p>');
+      savedList.setAttribute("aria-busy", "false");
+    }
+
+    moreBtn.addEventListener("click", loadSaved);
+    onReady(loadSaved);
+  </script>
+</body>
+</html>

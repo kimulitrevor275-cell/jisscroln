@@ -17,7 +17,7 @@
     var searching = Boolean(query);
     discovery.hidden = searching;
     resultsSection.hidden = !searching;
-    document.querySelector(".search-intro").classList.toggle("is-searching", searching);
+    document.querySelector(".searchIntro").classList.toggle("is-searching", searching);
     if (searching && resultsTitle) {
       resultsTitle.textContent = 'Results for "' + query + '"';
     }
@@ -77,12 +77,12 @@
 
   function appendCover(container, media, className, placeholderClass, placeholderText) {
     var wrap = document.createElement("span");
-    wrap.className = className + "-media-wrap";
+    wrap.className = className + "MediaWrap";
 
     function showPlaceholder(element) {
-      var backdrop = wrap.querySelector("." + className + "-backdrop");
+      var backdrop = wrap.querySelector("." + className + "Backdrop");
       if (backdrop) backdrop.remove();
-      var mark = wrap.querySelector("." + className + "-cover-mark");
+      var mark = wrap.querySelector("." + className + "CoverMark");
       if (mark) mark.remove();
       element.replaceWith(createCoverPlaceholder(placeholderClass, placeholderText));
     }
@@ -104,12 +104,12 @@
         backdrop.alt = "";
         backdrop.setAttribute("aria-hidden", "true");
       }
-      backdrop.className = className + "-backdrop";
+      backdrop.className = className + "Backdrop";
       backdrop.src = url;
       backdrop.addEventListener("error", function () {
         if (type === "video" && posterUrl && backdrop.src !== posterUrl) {
           var poster = document.createElement("img");
-          poster.className = className + "-backdrop";
+          poster.className = className + "Backdrop";
           poster.src = posterUrl;
           poster.alt = "";
           poster.setAttribute("aria-hidden", "true");
@@ -126,7 +126,7 @@
 
     function addCoverMark() {
       var mark = document.createElement("img");
-      mark.className = className + "-cover-mark";
+      mark.className = className + "CoverMark";
       mark.src = "/pics/logog.svg";
       mark.alt = "";
       mark.setAttribute("aria-hidden", "true");
@@ -139,7 +139,7 @@
         if (videoUrl) {
           var posterUrl = media.poster ? safeImageUrl(media.poster) : "";
           var video = document.createElement("video");
-          video.className = className + "-video";
+          video.className = className + "Video";
           video.src = videoUrl;
           video.muted = true;
           video.autoplay = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -153,7 +153,7 @@
               var posterUrl = safeImageUrl(media.poster);
               if (posterUrl) {
                 var poster = document.createElement("img");
-                poster.className = className + "-image";
+                poster.className = className + "Image";
                 poster.src = posterUrl;
                 poster.alt = "";
                 poster.loading = "lazy";
@@ -174,7 +174,7 @@
         var imageUrl = safeImageUrl(media.url);
         if (imageUrl) {
           var image = document.createElement("img");
-          image.className = className + "-image";
+          image.className = className + "Image";
           image.src = imageUrl;
           image.alt = "";
           image.loading = "lazy";
@@ -202,7 +202,7 @@
     appendCover(
       link,
       media,
-      "search-result",
+      "searchResult",
       "search-result-image-placeholder",
       categoryText.toLowerCase().includes("song") ? "♫" : "J",
     );

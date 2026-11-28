@@ -202,7 +202,9 @@ function profileIconMarkup() {
   return `<a href="/profile.html"><img class="profileicon" src="/pics/11.svg" alt="Profile" style="border:none;"></a>`;
 }
 // Menu items.
+// Menu items.
 var SIDE_LINKS = [
+  { label: "Bookmarks",           href: "/saved/" },
   { label: "About",           href: "/about/#who" },
   { label: "Privacy",         href: "/about/#privacy" },
   { label: "Terms of use",    href: "/about/#terms" },
@@ -998,7 +1000,6 @@ function showTickerSkeleton() {
 })();
 const API_BASE = 'https://jisscrol-opinions.onrender.com';
 const SITE_URL = 'https://jisscroln.vercel.app';
-
 function renderArticleByline(article = {}) {
   return `<div class="article-byline"><img src="/pics/logog.svg" alt="" aria-hidden="true"><span>By JiScroL</span>
     <button class="hiconbtn share-btn" type="button" aria-label="Share article"
@@ -1006,10 +1007,106 @@ function renderArticleByline(article = {}) {
             data-headline="${escapeHtml(article.headline || '')}">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4m-6.6 7 6.6 4.4"/></svg>
     </button>
-    
+    <div>
+    ${article.id ? bookmarkButtonMarkup(article.id) : ''}
+    </div>
   </div>`;
 }
+var bookmarkedIds = new Set();
+var bookmarkPending = {};
 
+function getAccessToken() {
+  return sb.auth.getSession().then(function (r) {
+    return r.data.session ? r.data.session.access_token : null;
+  });
+}
+
+function bookmarkButtonMarkup(articleId) {
+  var saved = bookmarkedIds.has(articleId);
+  return (
+    '<button type="button" class="btnBookmark' + (saved ? " saved" : "") + '"' +
+    ' data-bookmark-id="' + escapeHtml(articleId) + '"' +
+    ' aria-pressed="' + saved + '"' +
+    ' aria-label="' + (saved ? "Remove bookmark" : "Save article") + '">' +
+      '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+        '<path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/>' +
+      "</svg>" +
+    "</button>"
+  );
+}
+
+function syncBookmarkButtons() {
+  document.querySelectorAll(".btnBookmark").forEach(function (btn) {
+    var saved = bookmarkedIds.has(btn.dataset.bookmarkId);
+    btn.classList.toggle("saved", saved);
+    btn.setAttribute("aria-pressed", String(saved));
+    btn.setAttribute("aria-label", saved ? "Remove bookmark" : "Save article");
+  });
+}
+
+function loadBookmarks() {
+  getAccessToken().then(function (token) {
+    if (!token) return;
+    fetch(API + "/bookmarks/ids", {
+      headers: { Authorization: "Bearer " + token },
+    })
+      .then(function (res) { return res.ok ? res.json() : []; })
+      .then(function (ids) {
+        bookmarkedIds = new Set(ids);
+        syncBookmarkButtons();
+      })
+      .catch(function () {});
+  });
+}
+
+function toggleBookmark(articleId) {
+  if (bookmarkPending[articleId]) return;
+
+  getAccessToken().then(function (token) {
+    if (!token) {
+      if (typeof window.notify === "function") {
+        window.notify("Log in to save articles.", "info");
+      }
+      return;
+    }
+
+    var wasSaved = bookmarkedIds.has(articleId);
+    if (wasSaved) bookmarkedIds.delete(articleId);
+    else bookmarkedIds.add(articleId);
+    syncBookmarkButtons();
+    bookmarkPending[articleId] = true;
+
+    fetch(API + "/articles/" + encodeURIComponent(articleId) + "/bookmark", {
+      method: wasSaved ? "DELETE" : "PUT",
+      headers: { Authorization: "Bearer " + token },
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        if (typeof window.notify === "function") {
+          window.notify(wasSaved ? "Removed from saved" : "Saved", "success", 1800);
+        }
+      })
+      .catch(function () {
+        if (wasSaved) bookmarkedIds.add(articleId);
+        else bookmarkedIds.delete(articleId);
+        syncBookmarkButtons();
+        if (typeof window.notify === "function") {
+          window.notify("Couldn't update your saved list.", "error");
+        }
+      })
+      .finally(function () {
+        delete bookmarkPending[articleId];
+      });
+  });
+}
+
+document.addEventListener("click", function (event) {
+  var btn = event.target.closest && event.target.closest(".btnBookmark");
+  if (!btn) return;
+  event.preventDefault();
+  event.stopPropagation();
+  toggleBookmark(btn.dataset.bookmarkId);
+});
 function buildShareUrl(articleId) {
   if (!articleId) return window.location.href;
   return `${SITE_URL}/share/${encodeURIComponent(articleId)}`;
